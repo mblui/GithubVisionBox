@@ -12,7 +12,7 @@ from time import process_time, time
 from timeit import default_timer as timer
 from termcolor import colored
 
-#hoi
+#hoi TEST if autoupdate works
 # Load separate python programs
 from UserInputs import *
 from find_orientation_and_CoM import *
