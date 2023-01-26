@@ -104,6 +104,7 @@ try:
         
         ## Added by Mart #-----------------------------------------------------#
         loc_specific_jetson = loc_def_jetson + ".jpg"
+        print(loc_specific_jetson)
         print(cv2.imwrite(loc_specific_jetson, images))
         tic = time.perf_counter()
         subprocess.run(["scp", loc_specific_jetson, loc_def_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
