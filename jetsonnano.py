@@ -11,7 +11,7 @@ import numpy as np
 import cv2
 import subprocess, time 
 
-loc_def_raspberry  = "dgslr@192.168.23.251:/home/dgslr/ProgramFiles/SCP_images/download"  
+loc_def_raspberry  = "dgslr@192.168.23.251:/home/dgslr/ProgramFiles/SCP_images/"  
 loc_def_jetson = "/home/rddgs/Desktop/Link to examples/SCP_SharedData/"
 
 
@@ -104,8 +104,10 @@ try:
         
         ## Added by Mart #-----------------------------------------------------#
         loc_specific_jetson = loc_def_jetson + "tempImg"+".jpg"
-        print(loc_specific_jetson)
-        print(cv2.imwrite(loc_specific_jetson, images))
+        loc_specific_raspberry = loc_def_raspberry + "img" + str(i) + ".jpg"
+        print(loc_specific_raspberry)
+        if not cv2.imwrite(loc_specific_jetson, images):
+            break
         tic = time.perf_counter()
         subprocess.run(["scp", loc_specific_jetson, loc_def_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
         toc = time.perf_counter()
