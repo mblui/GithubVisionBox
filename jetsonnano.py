@@ -66,9 +66,13 @@ clipping_distance = clipping_distance_in_meters / depth_scale
 align_to = rs.stream.color
 align = rs.align(align_to)
 
+# Count number of images
+i = int(0)
+
 # Streaming loop
 try:
     while True:
+        i=i+1
         # Get frameset of color and depth
         frames = pipeline.wait_for_frames()
         # frames.get_depth_frame() is a 640x360 depth image
