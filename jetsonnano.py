@@ -105,15 +105,15 @@ try:
         images = np.hstack((bg_removed, depth_colormap))
         
         ## Added by Mart #-----------------------------------------------------#
-        loc_specific_jetson = loc_def_jetson + "tempImg"+".jpg"
-        loc_specific_raspberry = loc_def_raspberry + "img" + str(i) + ".jpg"
-        print(loc_specific_raspberry)
-        if not cv2.imwrite(loc_specific_jetson, images):
-            break
-        tic = time.perf_counter()
-        subprocess.run(["scp", loc_specific_jetson, loc_specific_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
-        toc = time.perf_counter()
-        img_tranfer = np.append(img_tranfer, toc-tic)
+        #loc_specific_jetson = loc_def_jetson + "tempImg"+".jpg"
+        #loc_specific_raspberry = loc_def_raspberry + "img" + str(i) + ".jpg"
+        #print(loc_specific_raspberry)
+        #if not cv2.imwrite(loc_specific_jetson, images):
+        #    break
+        #tic = time.perf_counter()
+        #subprocess.run(["scp", loc_specific_jetson, loc_specific_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
+        #toc = time.perf_counter()
+        #img_tranfer = np.append(img_tranfer, toc-tic)
         #----------------------------------------------------------------------#
 
         cv2.namedWindow('Align Example', cv2.WINDOW_NORMAL)
