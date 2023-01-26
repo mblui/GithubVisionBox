@@ -5,12 +5,18 @@
 ##              Align Depth to Color               ##
 #####################################################
 
-# First import the library
+# First import the library's
 import pyrealsense2 as rs
-# Import Numpy for easy array manipulation
 import numpy as np
-# Import OpenCV for easy image rendering
 import cv2
+import subprocess, time 
+
+loc_def_raspberry  = "dgslr@192.168.23.251:/home/dgslr/ProgramFiles/SCP_images/download"  
+loc_def_jetson = "/home/rddgs/Desktop/SCP_SharedData/"
+
+
+#create variable to store image transfer speeds 
+img_tranfer = np.array([])
 
 # Create a pipeline
 pipeline = rs.pipeline()
@@ -51,7 +57,7 @@ print("Depth Scale is: " , depth_scale)
 
 # We will be removing the background of objects more than
 #  clipping_distance_in_meters meters away
-clipping_distance_in_meters = 1 #1 meter
+clipping_distance_in_meters = 5 #1 meter
 clipping_distance = clipping_distance_in_meters / depth_scale
 
 # Create an align object
@@ -91,6 +97,15 @@ try:
         #   depth on right
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
         images = np.hstack((bg_removed, depth_colormap))
+        
+        ## Added by Mart #-----------------------------------------------------#
+        loc_specific_jetson = loc_def_jetson + ".jpg"
+        print(imwrite(loc_specific_jetson, images))
+        tic = time.perf_counter()
+        subprocess.run(["scp", loc_specific_jetson, loc_def_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
+        toc = time.perf_counter()
+        img_tranfer = np.append(img_tranfer, toc-tic)
+        #----------------------------------------------------------------------#
 
         cv2.namedWindow('Align Example', cv2.WINDOW_NORMAL)
         cv2.imshow('Align Example', images)
@@ -101,3 +116,4 @@ try:
             break
 finally:
     pipeline.stop()
+    print(f"Downloaded {i:0.1f} files in average {np.average(img_tranfer):0.3f} s (min/max:{np.min(img_tranfer):0.3f} /{np.max(img_tranfer):0.3f}")
