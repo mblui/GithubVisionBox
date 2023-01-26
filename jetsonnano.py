@@ -5,6 +5,8 @@
 ##              Align Depth to Color               ##
 #####################################################
 
+# Test EVI
+
 # First import the library's
 import pyrealsense2 as rs
 import numpy as np
