@@ -109,7 +109,7 @@ try:
         if not cv2.imwrite(loc_specific_jetson, images):
             break
         tic = time.perf_counter()
-        subprocess.run(["scp", loc_specific_jetson, loc_def_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
+        subprocess.run(["scp", loc_specific_jetson, loc_specific_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
         toc = time.perf_counter()
         img_tranfer = np.append(img_tranfer, toc-tic)
         #----------------------------------------------------------------------#
