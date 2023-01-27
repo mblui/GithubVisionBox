@@ -33,21 +33,22 @@ pipeline_profile = config.resolve(pipeline_wrapper)
 device = pipeline_profile.get_device()
 device_product_line = str(device.get_info(rs.camera_info.product_line))
 
-found_rgb = False
-for s in device.sensors:
-    if s.get_info(rs.camera_info.name) == 'RGB Camera':
-        found_rgb = True
-        break
-if not found_rgb:
-    print("The demo requires Depth camera with Color sensor")
-    exit(0)
+# Depth Sensor Settings
+depth_sensor = device.query_sensors()[0]
+depth_sensor.set_option(rs.option.laser_power, 360)			# Infrared Laser Power [0-360 mW]
+depth_sensor.set_option(rs.option.depth_units, 0.001)		# Small depth unit = better depth resolution, but less range
+depth_sensor.set_option(rs.option.enable_auto_exposure, 1)
 
-config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
+RGB_sensor = device.query_sensors()[1]
+RGB_sensor.set_option(rs.option.brightness, 0)
+RGB_sensor.set_option(rs.option.contrast, 50)
+RGB_sensor.set_option(rs.option.gamma, 300)
+RGB_sensor.set_option(rs.option.hue, 0)
+RGB_sensor.set_option(rs.option.saturation, 50)
+RGB_sensor.set_option(rs.option.sharpness, 50)
 
-if device_product_line == 'L500':
-    config.enable_stream(rs.stream.color, 960, 540, rs.format.bgr8, 30)
-else:
-    config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
+config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 15)
+config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 15)
 
 # Start streaming
 profile = pipeline.start(config)
@@ -59,7 +60,7 @@ print("Depth Scale is: " , depth_scale)
 
 # We will be removing the background of objects more than
 #  clipping_distance_in_meters meters away
-clipping_distance_in_meters = 5 #1 meter
+clipping_distance_in_meters = 15 #1 meter
 clipping_distance = clipping_distance_in_meters / depth_scale
 
 # Create an align object
@@ -96,7 +97,7 @@ try:
         # Remove background - Set pixels further than clipping_distance to grey
         grey_color = 153
         depth_image_3d = np.dstack((depth_image,depth_image,depth_image)) #depth image is 1 channel, color is 3 channels
-        bg_removed = np.where((depth_image_3d > clipping_distance) | (depth_image_3d <= 0), grey_color, color_image)
+        bg_removed = color_image #np.where((depth_image_3d > clipping_distance) | (depth_image_3d <= 0), grey_color, color_image)
 
         # Render images:
         #   depth align to color on left
@@ -105,24 +106,23 @@ try:
         images = np.hstack((bg_removed, depth_colormap))
         
         ## Added by Mart #-----------------------------------------------------#
-        #loc_specific_jetson = loc_def_jetson + "tempImg"+".jpg"
-        #loc_specific_raspberry = loc_def_raspberry + "img" + str(i) + ".jpg"
-        #print(loc_specific_raspberry)
-        #if not cv2.imwrite(loc_specific_jetson, images):
-        #    break
-        #tic = time.perf_counter()
-        #subprocess.run(["scp", loc_specific_jetson, loc_specific_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
-        #toc = time.perf_counter()
-        #img_tranfer = np.append(img_tranfer, toc-tic)
+        loc_specific_jetson = loc_def_jetson + "tempImg"+".jpg"
+        loc_specific_raspberry = loc_def_raspberry + "img" + str(i) + ".jpg"
+	tic = time.perf_counter()
+	if not cv2.imwrite(loc_specific_jetson, images):
+            break
+	tic = time.perf_counter()
+        subprocess.run(["scp", loc_specific_jetson, loc_specific_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
+        toc = time.perf_counter()
+        img_tranfer = np.append(img_tranfer, toc-tic)
         #----------------------------------------------------------------------#
 
-        cv2.namedWindow('Align Example', cv2.WINDOW_NORMAL)
-        cv2.imshow('Align Example', images)
+        #cv2.namedWindow('Align Example', cv2.WINDOW_NORMAL)
+        #cv2.imshow('Align Example', images)
         key = cv2.waitKey(1)
         # Press esc or 'q' to close the image window
         if key & 0xFF == ord('q') or key == 27:
-            cv2.destroyAllWindows()
-            break
+           break
 finally:
     pipeline.stop()
     print(f"Downloaded {i:0.1f} files in average {np.average(img_tranfer):0.3f} s (min/max:{np.min(img_tranfer):0.3f} /{np.max(img_tranfer):0.3f}")
