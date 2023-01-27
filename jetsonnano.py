@@ -104,12 +104,14 @@ try:
         #   depth on right
         depth_colormap = cv2.applyColorMap(cv2.convertScaleAbs(depth_image, alpha=0.03), cv2.COLORMAP_JET)
         images = np.hstack((bg_removed, depth_colormap))
-        
+
         ## Added by Mart #-----------------------------------------------------#
         loc_specific_jetson = loc_def_jetson + "tempImg"+".jpg"
         loc_specific_raspberry = loc_def_raspberry + "img" + str(i) + ".jpg"
         tic = time.perf_counter()
-        if not cv2.imwrite(loc_specific_jetson, images):
+        imgg = cv2.resize(images, (100,100),interpolation= cv2.INTER_LINEAR)
+
+        if not cv2.imwrite(loc_specific_jetson, imgg):
             break
         tic = time.perf_counter()
         subprocess.run(["scp", loc_specific_jetson, loc_specific_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
