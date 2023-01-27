@@ -19,6 +19,8 @@ loc_def_jetson = "/home/rddgs/Desktop/Link to examples/SCP_SharedData/"
 
 #create variable to store image transfer speeds 
 img_tranfer = np.array([])
+cycletime = np.array([])
+img_safe = np.array([])
 
 # Create a pipeline
 pipeline = rs.pipeline()
@@ -47,8 +49,8 @@ RGB_sensor.set_option(rs.option.hue, 0)
 RGB_sensor.set_option(rs.option.saturation, 50)
 RGB_sensor.set_option(rs.option.sharpness, 50)
 
-config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 15)
-config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 15)
+config.enable_stream(rs.stream.depth, 1280, 720, rs.format.z16, 30)
+config.enable_stream(rs.stream.color, 1280, 720, rs.format.bgr8, 30)
 
 # Start streaming
 profile = pipeline.start(config)
@@ -75,6 +77,7 @@ i = int(0)
 # Streaming loop
 try:
     while True:
+        tic1 = time.perf_counter()
         i=i+1
         # Get frameset of color and depth
         frames = pipeline.wait_for_frames()
@@ -108,21 +111,31 @@ try:
         ## Added by Mart #-----------------------------------------------------#
         loc_specific_jetson = loc_def_jetson + "tempImg"+".jpg"
         loc_specific_raspberry = loc_def_raspberry + "img" + str(i) + ".jpg"
-	tic = time.perf_counter()
-	if not cv2.imwrite(loc_specific_jetson, images):
+        tic = time.perf_counter()
+        tic2 = time.perf_counter()
+        if (not cv2.imwrite(loc_specific_jetson, images)):
             break
-	tic = time.perf_counter()
+        toc2 = time.perf_counter()
+        img_safe = np.append(img_safe, toc2-tic2)
+
+        tic = time.perf_counter()
         subprocess.run(["scp", loc_specific_jetson, loc_specific_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
         toc = time.perf_counter()
         img_tranfer = np.append(img_tranfer, toc-tic)
         #----------------------------------------------------------------------#
 
-        #cv2.namedWindow('Align Example', cv2.WINDOW_NORMAL)
-        #cv2.imshow('Align Example', images)
+        cv2.namedWindow('Align Example', cv2.WINDOW_NORMAL)
+        cv2.imshow('Align Example', images)
         key = cv2.waitKey(1)
+        #toc1 = time.perf_counter()
+        #cycletime = np.append(cycletime, toc1-tic1)
+        #hey = toc1-tic1
+        #print(f"{hey:0.3f}")
         # Press esc or 'q' to close the image window
         if key & 0xFF == ord('q') or key == 27:
            break
+        
 finally:
     pipeline.stop()
     print(f"Downloaded {i:0.1f} files in average {np.average(img_tranfer):0.3f} s (min/max:{np.min(img_tranfer):0.3f} /{np.max(img_tranfer):0.3f}")
+    print(f"Cycletime: {np.average(cycletime):0.3f} [s] ({(1/np.average(cycletime)):0.3f} [Hz]), safetime:{np.average(img_safe):0.3f} [s] transfertime {np.average(img_tranfer):0.3f}")
