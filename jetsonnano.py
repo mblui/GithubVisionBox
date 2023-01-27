@@ -109,7 +109,7 @@ try:
         loc_specific_jetson = loc_def_jetson + "tempImg"+".jpg"
         loc_specific_raspberry = loc_def_raspberry + "img" + str(i) + ".jpg"
         tic = time.perf_counter()
-        imgg = cv2.resize(images, (100,100),interpolation= cv2.INTER_LINEAR)
+        imgg = images #cv2.resize(images, (100,100),interpolation= cv2.INTER_LINEAR)
 
         if not cv2.imwrite(loc_specific_jetson, imgg):
             break
