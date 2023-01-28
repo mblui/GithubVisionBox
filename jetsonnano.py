@@ -12,7 +12,7 @@ import pyrealsense2 as rs
 import numpy as np
 import cv2
 import subprocess, time 
-
+#Push Visual
 loc_def_raspberry  = "dgslr@192.168.23.251:/home/dgslr/ProgramFiles/SCP_images/"  
 loc_def_jetson = "/home/rddgs/Desktop/Link_to_examples/SCP_SharedData/"
 
