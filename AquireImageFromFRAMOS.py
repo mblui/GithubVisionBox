@@ -109,13 +109,13 @@ try:
         loc_specific_jetson = loc_def_jetson + "tempImg"+".jpg"
         loc_specific_raspberry = loc_def_raspberry + "img" + str(i) + ".jpg"
         tic = time.perf_counter()
-        print("Jetson:", loc_specific_jetson)
+        #print("Jetson:", loc_specific_jetson)
         imgg = images #cv2.resize(images, (100,100),interpolation= cv2.INTER_LINEAR)
 
-        print(i)
+        #print(i)
         if not cv2.imwrite(loc_specific_jetson, imgg):
             break
-        print(i)
+        #print(i)
 
         tic = time.perf_counter()
         subprocess.run(["scp", loc_specific_jetson, loc_specific_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
@@ -125,11 +125,11 @@ try:
 
         #cv2.namedWindow('Align Example', cv2.WINDOW_NORMAL)
         #cv2.imshow('Align Example', images)
-        key = cv2.waitKey(1)
+        #key = cv2.waitKey(1)
         # Press esc or 'q' to close the image window
-        if key & 0xFF == ord('q') or key == 27:
-           break
+        #if key & 0xFF == ord('q') or key == 27:
+        #   break
 finally:
     pipeline.stop()
     print("Pipeline has been closed correctly")
-    #print(f"Downloaded {i:0.1f} files in average {np.average(img_tranfer):0.3f} s ({(1/np.average(img_tranfer)):0.3f}[Hz]) (min/max:{np.min(img_tranfer):0.3f} /{np.max(img_tranfer):0.3f}")
+    print(f"Downloaded {i:0.1f} files in average {np.average(img_tranfer):0.3f} s ({(1/np.average(img_tranfer)):0.3f}[Hz]) (min/max:{np.min(img_tranfer):0.3f} /{np.max(img_tranfer):0.3f}")
