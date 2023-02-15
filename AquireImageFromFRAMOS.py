@@ -130,4 +130,5 @@ try:
            break
 finally:
     pipeline.stop()
+    print("Pipeline has been closed correctly")
     #print(f"Downloaded {i:0.1f} files in average {np.average(img_tranfer):0.3f} s ({(1/np.average(img_tranfer)):0.3f}[Hz]) (min/max:{np.min(img_tranfer):0.3f} /{np.max(img_tranfer):0.3f}")
