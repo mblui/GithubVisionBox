@@ -14,7 +14,7 @@ import cv2
 import subprocess, time 
 #Push Visual
 loc_def_raspberry  = "dgslr@192.168.23.251:/home/dgslr/ProgramFiles/SCP_images/"  
-loc_def_jetson = "/home/rddgs/Desktop/Link_to_examples/SCP_SharedData/"
+loc_def_jetson = "/home/jetson/Documents/SCP_SharedData"
 
 
 #create variable to store image transfer speeds 
@@ -109,6 +109,7 @@ try:
         loc_specific_jetson = loc_def_jetson + "tempImg"+".jpg"
         loc_specific_raspberry = loc_def_raspberry + "img" + str(i) + ".jpg"
         tic = time.perf_counter()
+        print("Jetson:", loc_specific_jetson)
         imgg = images #cv2.resize(images, (100,100),interpolation= cv2.INTER_LINEAR)
 
         print(i)
