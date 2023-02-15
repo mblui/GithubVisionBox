@@ -14,7 +14,8 @@ import cv2
 import subprocess, time 
 #Push Visual
 loc_def_raspberry  = "dgslr@192.168.23.251:/home/dgslr/ProgramFiles/SCP_images/"  
-loc_def_jetson = "/home/rddgs/Desktop/Link_to_examples/SCP_SharedData/"
+loc_def_jetson = "/home/jetson/Documents/SCP_SharedData/"
+
 
 
 #create variable to store image transfer speeds 
@@ -114,7 +115,7 @@ try:
         if not cv2.imwrite(loc_specific_jetson, imgg):
             break
         tic = time.perf_counter()
-        subprocess.run(["scp", loc_specific_jetson, loc_specific_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
+        #subprocess.run(["scp", loc_specific_jetson, loc_specific_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
         toc = time.perf_counter()
         img_tranfer = np.append(img_tranfer, toc-tic)
         #----------------------------------------------------------------------#
