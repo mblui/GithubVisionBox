@@ -123,8 +123,8 @@ try:
         img_tranfer = np.append(img_tranfer, toc-tic)
         #----------------------------------------------------------------------#
 
-        #cv2.namedWindow('Align Example', cv2.WINDOW_NORMAL)
-        #cv2.imshow('Align Example', images)
+        cv2.namedWindow('Align Example', cv2.WINDOW_NORMAL)
+        cv2.imshow('Align Example', images)
         key = cv2.waitKey(1)
         # Press esc or 'q' to close the image window
         if key & 0xFF == ord('q') or key == 27:
