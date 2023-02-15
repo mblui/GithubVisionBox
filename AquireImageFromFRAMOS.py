@@ -111,9 +111,11 @@ try:
         tic = time.perf_counter()
         imgg = images #cv2.resize(images, (100,100),interpolation= cv2.INTER_LINEAR)
 
+        print(i)
         if not cv2.imwrite(loc_specific_jetson, imgg):
             break
         print(i)
+
         tic = time.perf_counter()
         subprocess.run(["scp", loc_specific_jetson, loc_specific_raspberry])     # [{type}, {from directory/file}, {from directory/file}]
         toc = time.perf_counter()
@@ -128,4 +130,4 @@ try:
            break
 finally:
     pipeline.stop()
-    print(f"Downloaded {i:0.1f} files in average {np.average(img_tranfer):0.3f} s ({(1/np.average(img_tranfer)):0.3f}[Hz]) (min/max:{np.min(img_tranfer):0.3f} /{np.max(img_tranfer):0.3f}")
+    #print(f"Downloaded {i:0.1f} files in average {np.average(img_tranfer):0.3f} s ({(1/np.average(img_tranfer)):0.3f}[Hz]) (min/max:{np.min(img_tranfer):0.3f} /{np.max(img_tranfer):0.3f}")
