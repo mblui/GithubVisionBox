@@ -14,7 +14,7 @@ import cv2
 import subprocess, time 
 #Push Visual
 loc_def_raspberry  = "dgslr@192.168.23.251:/home/dgslr/ProgramFiles/SCP_images/"  
-loc_def_jetson = "/home/jetson/Documents/SCP_SharedData"
+loc_def_jetson = "/home/jetson/Documents/SCP_SharedData/"
 
 
 #create variable to store image transfer speeds 
