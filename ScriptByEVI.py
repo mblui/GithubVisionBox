@@ -17,7 +17,7 @@ is_cuda_gpu_min_3 = tf.test.is_gpu_available(True, (3,0))
 print("is_cuda_gpu_available: ", is_cuda_gpu_available)
 print("is_cuda_gpu_min_3: ", is_cuda_gpu_min_3)
 
-# Doe hiermee wat je wilt!
+# Doe hiermee wat je wilt! Succes! 
 
 # Avoid OOM errors by setting GPU Memory Consumption Growth
 gpus = tf.config.experimental.list_physical_devices('GPU')
