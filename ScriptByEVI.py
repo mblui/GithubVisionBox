@@ -1,5 +1,6 @@
 import pyrealsense2 as rs
 import numpy as np
+import subprocess
 import os
 import glob
 import xml.etree.ElementTree as ET
@@ -48,7 +49,7 @@ print(" ## 5) Mount drive and link your folder")
 ########################################################
 print(" ## 6) Clone the tensorflow models git repository & Install TensorFlow Object Detection API")
 # clone the tensorflow models on the colab cloud vm
-#git clone --q https://github.com/tensorflow/models.git
+subprocess.run(["git clone --q https://github.com/tensorflow/models.git"])
 
 #navigate to /models/research folder to compile protos
 #%cd models/research
