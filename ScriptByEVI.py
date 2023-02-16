@@ -19,27 +19,10 @@ print("is_cuda_gpu_min_3: ", is_cuda_gpu_min_3)
 
 # Doe hiermee wat je wilt! Succes! 
 
-# Avoid OOM errors by setting GPU Memory Consumption Growth
-gpus = tf.config.experimental.list_physical_devices('GPU')
-for gpu in gpus: 
-    tf.config.experimental.set_memory_growth(gpu, True)
-
-model = Sequential()
-model.add(Conv2D(16, (3,3), 1, activation='relu', input_shape=(256,256,3)))
-model.add(MaxPooling2D())
-
-model.add(Conv2D(32, (3,3), 1, activation='relu'))
-model.add(MaxPooling2D())
-
-model.add(Conv2D(16, (3,3), 1, activation='relu'))
-model.add(MaxPooling2D())
-
-model.add(Flatten())
-model.add(Dense(256, activation='relu'))
-model.add(Dense(3, activation='relu'))
-
-#tf.optimizers.
-model.compile('adam', loss=tf.losses.BinaryCrossentropy(), metrics=['accuracy'])
-model.summary()
-
-model.summary()
+## Import Libraries
+import os
+import glob
+import xml.etree.ElementTree as ET
+import pandas as pd
+import tensorflow as tf
+print(tf.__version__)
