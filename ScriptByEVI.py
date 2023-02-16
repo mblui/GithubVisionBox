@@ -64,7 +64,9 @@ print(" ## 6) Clone the tensorflow models git repository & Install TensorFlow Ob
 ########################################################
 #adjusted from: https://github.com/datitran/raccoon_dataset
 
-
+dst_path = "/home/jetson/Documents/GithHub/GithubVisionBox/customTF2/data/"
+os.chdir(dst_path)
+print("Direc=", os.getcwd())
 def xml_to_csv(path):
   classes_names = []
   xml_list = []
@@ -107,6 +109,7 @@ pbtxt_content = pbtxt_content.strip()
 with open(label_map_path, "w") as f:
     f.write(pbtxt_content)
     print('Successfully created label_map.pbtxt ')   
+
 print("## END OF FILE")
 print("########################################################")
 
