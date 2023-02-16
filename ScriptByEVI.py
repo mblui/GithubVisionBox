@@ -6,7 +6,6 @@ import glob
 import xml.etree.ElementTree as ET
 import pandas as pd
 import tensorflow as tf
-import git
 
 ## Defined library locations of images
 loc_def_raspberry  = "dgslr@192.168.23.251:/home/dgslr/ProgramFiles/SCP_images/"  
