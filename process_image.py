@@ -61,20 +61,30 @@ def get_output_image(path):
   
     img = cv2.imread(path,2)
     img_org =  cv2.imread(path)
-    cv2.namedWindow("Resized_Window2", cv2.WINDOW_NORMAL)
+    cv2.namedWindow("W1", cv2.WINDOW_NORMAL)
     size = [500,500]
-    cv2.resizeWindow("Resized_Window2", size[0], size[1])
-    cv2.imshow('Resized_Window2',img_org)
-    cv2.waitKey(5000)
+    cv2.imshow('W1',img_org)
+    cv2.waitKey(2000)
+
+
     ret,thresh = cv2.threshold(img,127,255,0)
     th3 = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
 
     contours,hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
-    cv2.imshow('Resized_Window2',th3)
-    cv2.waitKey(1000)
-    print("start")
-    cv2.imshow('Resized_Window1',thresh)
-    cv2.waitKey(1000)
+
+    cv2.namedWindow("W2", cv2.WINDOW_NORMAL)
+    size = [500,500]
+    cv2.resizeWindow("W2", size[0], size[1])
+    cv2.imshow('W2',thresh)
+    cv2.waitKey(5000)
+
+    cv2.namedWindow("W1", cv2.WINDOW_NORMAL)
+    size = [500,500]
+    cv2.resizeWindow("W1", size[0], size[1])
+    cv2.imshow('W1',th3)
+    cv2.waitKey(5000)
+
+
     for j,cnt in enumerate(contours):
         epsilon = 0.01*cv2.arcLength(cnt,True)
         approx = cv2.approxPolyDP(cnt,epsilon,True)
