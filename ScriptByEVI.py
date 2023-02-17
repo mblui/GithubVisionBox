@@ -44,10 +44,10 @@ print("## 4) Upload the generate_tfrecord.py file to the customTF2 folder on you
 # You can find the generate_tfrecord.py file here
 
 ########################################################
-print(" ## 5) Mount drive and link your folder")
+print("## 5) Mount drive and link your folder")
 
 ########################################################
-print(" ## 6) Clone the tensorflow models git repository & Install TensorFlow Object Detection API")
+print("## 6) Clone the tensorflow models git repository & Install TensorFlow Object Detection API")
 ## This is executed once via terminal and now commented. 
 # clone the tensorflow models on the colab cloud vm
 #!git clone --q https://github.com/tensorflow/models.git")

@@ -9,7 +9,6 @@ import sys
 
 ## Define paths
 src_path = r"/home/jetson/Documents/GithHub/GithubVisionBox/"
-dst_path = r"/home/jetson/Desktop/librealsense2/wrappers/python/examples/"
 
 ## Add github path to system path
 sys.path.append(src_path)
@@ -26,7 +25,8 @@ print("##############################")
 print("## Start Python Script")
 print("##", file_path, "was last modified at" , m_ti)
 print("## Loading: ", file_path, "--> 0%")  
-shutil.copy(src_path+file_path, dst_path)
+for file in file_path:
+    shutil.copy(src_path+file, dst_path)
 print("## Loading: ", file_path, "--> 100%")  
 print("## Executing: ", file_path)
 print("##############################")

@@ -1,5 +1,9 @@
 ## INPUTS
-file_nr = 1
+file_nr = 1,2
 Available_files =   [   "AquireImageFromFRAMOS.py"          ,       #   0
-                        "ScriptByEVI.py"                    ,       #   1
+                        "app.py"                    ,       #   1
+                        "process_image.py"
                     ]
+
+#dst_path = r"/home/jetson/Desktop/librealsense2/wrappers/python/examples/"
+dst_path = r"/home/jetson/Desktop/RealTime-DigitRecognition/"
