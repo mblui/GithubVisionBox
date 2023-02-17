@@ -75,6 +75,7 @@ def get_output_image(path):
     areas = [cv2.contourArea(c) for c in contours]
     max_index = np.argmax(areas)
     cnt=contours[max_index]
+    print("hierarchy", hierarchy)
     hierarchy = hierarchy[max_index]
     contours = cnt
     print("Length fo contours2", len(contours))
