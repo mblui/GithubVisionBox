@@ -134,7 +134,7 @@ def get_output_image(path):
 
     n = 5
     print("All values", all_value)
-    idx = (all_value).argsort()[:n]
+    idx = (-1*all_value).argsort()[:n]
     print('index highest', idx)
     #print("pred, val, idx", pred, value, idx)
     for j,cnt in enumerate(contours):
