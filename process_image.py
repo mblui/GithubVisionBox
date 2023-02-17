@@ -55,8 +55,6 @@ def image_refiner(gray):
     return gray
 
 
-#121
-
 def get_output_image(path):
   
     img = cv2.imread(path,2)
@@ -67,8 +65,8 @@ def get_output_image(path):
     cv2.waitKey(2000)
 
 
-    ret,thresh = cv2.threshold(img,127,255,0)
-    #thresh = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+    #ret,thresh = cv2.threshold(img,127,255,0)
+    thresh = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
     
     contours,hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
     #print("Length fo contours1", len(cnt))
