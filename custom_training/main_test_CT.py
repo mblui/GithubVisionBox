@@ -11,8 +11,8 @@ print("Current directory", os.getcwd())
 for f in os.listdir(path_GIT+allfolders[1]):
     print(f[:-4])
     for ff in os.listdir(path_GIT+allfolders[0]):
-        ff[:-5]
-        if f[:-4] == f[:-5]:
+        ff[:-4]
+        if f[:-4] == ff[:-4]:
             print("yes baby")
             i = i + 1
 print("Total matches =", i)
