@@ -21,9 +21,9 @@ print("##############################")
 print("## Start Python Script")
 ## Load Configuration file
 fileRange = file_nr.size 
-print("range is", fileRange)
+#print("range is", fileRange)
 for fileIndex in range(fileRange):
-    print("fileIndex", fileIndex, 'file nr', file_nr, "available_files", Available_files)
+    #print("fileIndex", fileIndex, 'file nr', file_nr, "available_files", Available_files)
     file_path.append(Available_files[file_nr[fileIndex]])
     ## Last modified state
     ti_m.append(os.path.getmtime(src_path+file_path[fileIndex]))
@@ -33,12 +33,11 @@ for fileIndex in range(fileRange):
     shutil.copy(src_path+file_path[fileIndex], dst_path)
     print("## Loading: ", file_path[fileIndex], "--> 100%")  
 
-print("Filepath", file_path)
+#print("Filepath", file_path)
 print("## Executing: ", file_path[0])
 print("##############################")
 
 
 os.chdir(dst_path)
-print(os.getcwd())
 
 call(["python3", file_path[0]])

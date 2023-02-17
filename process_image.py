@@ -137,7 +137,7 @@ def get_output_image(path):
     print("pred, val, idx", pred, value, idx)
     for j,cnt in enumerate(contours):
         if j in idx:
-            #cv2.rectangle(img_org,(all_x[j],all_y[j]),(all_x[j]+all_w[j],all_y[j]+all_h[j]),(0,255,0),1)
+            cv2.rectangle(img_org,(int(all_x[j]),int(all_y[j])),(int(all_x[j]+all_w[j]),int(all_y[j]+all_h[j])),(0,255,0),1)
             print(all_x[j], all_y[j], all_w[j], all_h[j])
             #if value < 0.6:
             #    continue
