@@ -1,5 +1,5 @@
 import os
-
+import shutil
 path_GIT = "/home/jetson/Documents/GithHub/GithubVisionBox/custom_training/"
 
 allfolders = ["JPEGImages", "test_labels", "test_img", "train_labels", "train_labels"]
@@ -13,7 +13,7 @@ for f in os.listdir(path_GIT+allfolders[1]):
     for ff in os.listdir(path_GIT+allfolders[0]):
         ff[:-4]
         if f[:-4] == ff[:-4]:
-            print("yes baby")
+            shutil.copy(path_GIT+allfolders[0]+ff[:-4], path_GIT + "data_in\test_img")
             i = i + 1
 print("Total matches =", i)
     #ext = os.path.splitext(f)[1]
