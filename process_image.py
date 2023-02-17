@@ -78,6 +78,7 @@ def get_output_image(path):
     max_index = np.argmax(areas)
     n = 10
     idx = (-1*areas).argsort()[:n]
+    print("idx", idx)
     contours=contours[idx]
     #hierarchy = hier[:,max_index]
 
