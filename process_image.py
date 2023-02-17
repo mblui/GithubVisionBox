@@ -79,7 +79,7 @@ def get_output_image(path):
     n = 10
     idx = (-1*areas).argsort()[:n]
     print("idx", idx)
-    print("contours", contours.shape)
+    print("contours", contours.size)
     contours=contours[idx]
     #hierarchy = hier[:,max_index]
 
