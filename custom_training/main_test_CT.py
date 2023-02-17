@@ -1,5 +1,4 @@
 import os
-import cv2
 import shutil
 
 
@@ -43,7 +42,7 @@ import matplotlib.pyplot as plt
 # from keras.utils import to_categorical
 import tensorflow.keras as keras
 from tensorflow.keras.models import load_model
-
+import cv2
 import pandas as pd
 import os, sys 
 #import scipy.misc
