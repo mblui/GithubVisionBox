@@ -70,16 +70,15 @@ def get_output_image(path):
     ret,thresh = cv2.threshold(img,127,255,0)
     thresh = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
     
-    contours,hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
-    print("Length fo contours1", len(contours))
-    areas = [cv2.contourArea(c) for c in contours]
+    cnt,hier = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+    print("Length fo contours1", len(cnt))
+    areas = [cv2.contourArea(c) for c in cnt]
     max_index = np.argmax(areas)
-    cnt=contours[max_index]
-    hier = hierarchy[:,max_index]
-    print("hierarchy", hier)
-    #hierarchy = hierarchy[max_index]
-    contours = cnt
-    print("Length fo contours2", len(contours))
+    contours=contours[max_index]
+    hierarchy = hier[:,max_index]
+
+    print("contour", contours, "hierarchy", hierarchy)
+    
     cv2.namedWindow("W2", cv2.WINDOW_NORMAL)
     size = [400,400]
     cv2.resizeWindow("W2", size[0], size[1])
