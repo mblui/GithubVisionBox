@@ -1,5 +1,5 @@
 ## INPUTS
-file_nr = 0,2
+file_nr = 0
 Available_files =   [   "AquireImageFromFRAMOS.py"          ,       #   0
                         "app.py"                    ,       #   1
                         "process_image.py"
