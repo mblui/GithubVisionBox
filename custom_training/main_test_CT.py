@@ -1,6 +1,6 @@
 import os
 
-path_GIT = "/home/jetson/Documents/GithHub/GithubVisionBox/GithubVisionBox/custom_training/"
+path_GIT = "/home/jetson/Documents/GithHub/GithubVisionBox/custom_training/"
 
 allfolders = ["test_labels"] #, "train_labels"]
 
