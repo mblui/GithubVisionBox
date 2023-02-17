@@ -91,42 +91,45 @@ def get_output_image(path):
     # cv2.waitKey(2000)
     all_pred = []
     all_value = []
-    for j,cnt in enumerate(contours):
-        #print("j", j, "cnt", cnt)
-        epsilon = 0.01*cv2.arcLength(cnt,True)
-        approx = cv2.approxPolyDP(cnt,epsilon,True)
-        
-        hull = cv2.convexHull(cnt)
-        k = cv2.isContourConvex(cnt)
-        x,y,w,h = cv2.boundingRect(cnt)
-
-        if hierarchy[0][j][3]!=-1 and w>15 and h>15:
-            #putting boundary on each digit
-            cv2.rectangle(img_org,(x,y),(x+w,y+h),(0,255,0),1)
+    pred, value = predict_digit(img)
             
-            #cropping each image and process
-            roi = img[y:y+h, x:x+w]
-            roi = cv2.bitwise_not(roi)
-            roi = image_refiner(roi)
-            th,fnl = cv2.threshold(roi,127,255,cv2.THRESH_BINARY)
-            #cv2.namedWindow("W3", cv2.WINDOW_NORMAL)
-            #size = [400,400]
-            #cv2.resizeWindow("W3", size[0], size[1])
-            #cv2.imshow('W3',roi)
-            #cv2.waitKey(3000)
-            # getting prediction of cropped image
-            pred, value = predict_digit(roi)
-            all_pred.append(pred)
-            all_value.append(value)
-    print("all_pred, all_value", all_pred, all_value)
     # for j,cnt in enumerate(contours):
-    #     n = 5
-    #     idx = (-pred).argsort()[:n]
-    #     print("pred, val, idx", pred, value, idx)
-    #     if value < 0.6:
-    #         continue
-    #     # placing label on each digit
-    #         (x,y),radius = cv2.minEnclosingCircle(cnt)
-    #         img_org = put_label(img_org,pred,x,y)
+    #     #print("j", j, "cnt", cnt)
+    #     epsilon = 0.01*cv2.arcLength(cnt,True)
+    #     approx = cv2.approxPolyDP(cnt,epsilon,True)
+        
+    #     hull = cv2.convexHull(cnt)
+    #     k = cv2.isContourConvex(cnt)
+    #     x,y,w,h = cv2.boundingRect(cnt)
+
+    #     if hierarchy[0][j][3]!=-1 and w>15 and h>15:
+    #         #putting boundary on each digit
+    #         cv2.rectangle(img_org,(x,y),(x+w,y+h),(0,255,0),1)
+            
+    #         #cropping each image and process
+    #         roi = img[y:y+h, x:x+w]
+    #         roi = cv2.bitwise_not(roi)
+    #         roi = image_refiner(roi)
+    #         th,fnl = cv2.threshold(roi,127,255,cv2.THRESH_BINARY)
+    #         #cv2.namedWindow("W3", cv2.WINDOW_NORMAL)
+    #         #size = [400,400]
+    #         #cv2.resizeWindow("W3", size[0], size[1])
+    #         #cv2.imshow('W3',roi)
+    #         #cv2.waitKey(3000)
+    #         # getting prediction of cropped image
+    #         pred, value = predict_digit(roi)
+
+    #         all_pred.append(pred)
+    #         all_value.append(value)
+    # print("all_pred, all_value", all_pred, all_value)
+    # # for j,cnt in enumerate(contours):
+    # #     n = 5
+    # #     idx = (-pred).argsort()[:n]
+    # #     print("pred, val, idx", pred, value, idx)
+    # #     if value < 0.6:
+    # #         continue
+    # #     # placing label on each digit
+    # #         (x,y),radius = cv2.minEnclosingCircle(cnt)
+    # #         img_org = put_label(img_org,pred,x,y)
 
     return img_org
