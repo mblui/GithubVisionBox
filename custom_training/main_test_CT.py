@@ -14,13 +14,13 @@ for f in os.listdir(path_GIT+allfolders[1]):
     for ff in os.listdir(path_GIT+allfolders[0]):
         print("image", ff)
         if f[:-4] == ff[:-4]:
-            destimation = path_GIT + "data_in/test_img/" + ff
-            origin = path_GIT+allfolders[0]+ff
+            destimation = "data_in/test_img/" + ff
+            origin = allfolders[0]+ff
             cv2.imshow('hoi', cv2.imread(origin,2))
             cv2.waitKey(0)
             print("destimation", destimation)
             print("origin", origin)
-            shutil.copy(origin, destimation)
+            shutil.move(origin, destimation)
             i = i + 1
 print("Total matches =", i)
     #ext = os.path.splitext(f)[1]
