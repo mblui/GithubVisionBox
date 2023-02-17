@@ -109,16 +109,15 @@ def get_output_image(path):
             roi = cv2.bitwise_not(roi)
             roi = image_refiner(roi)
             th,fnl = cv2.threshold(roi,127,255,cv2.THRESH_BINARY)
-            cv2.namedWindow("W3", cv2.WINDOW_NORMAL)
-            size = [400,400]
-            cv2.resizeWindow("W3", size[0], size[1])
-            cv2.imshow('W3',roi)
-            cv2.waitKey(3000)
+            #cv2.namedWindow("W3", cv2.WINDOW_NORMAL)
+            #size = [400,400]
+            #cv2.resizeWindow("W3", size[0], size[1])
+            #cv2.imshow('W3',roi)
+            #cv2.waitKey(3000)
             # getting prediction of cropped image
             #pred = predict_digit(roi)
-            pred = 0.9
-            print(pred)
-            
+            pred = "X"
+
             # placing label on each digit
             (x,y),radius = cv2.minEnclosingCircle(cnt)
             img_org = put_label(img_org,pred,x,y)
