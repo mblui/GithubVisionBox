@@ -17,12 +17,29 @@ for f in os.listdir(path_GIT+allfolders[1]):
             destimation = path_GIT + allfolders[2] + ff
             origin = path_GIT +  allfolders[0]+ff
             cv2.imshow('hoi', cv2.imread(origin,2))
-            cv2.waitKey(50)
+            cv2.waitKey(300)
             print("destimation", destimation)
             print("origin", origin)
             shutil.copyfile(origin, destimation)
             i = i + 1
 print("Total matches =", i)
+
+i = 0
+for f in os.listdir(path_GIT+allfolders[3]):
+    print("XML FILE", f)
+    for ff in os.listdir(path_GIT+allfolders[0]):
+        print("image", ff)
+        if f[:-4] == ff[:-4]:
+            destimation = path_GIT + allfolders[5] + ff
+            origin = path_GIT +  allfolders[0]+ff
+            cv2.imshow('hoi', cv2.imread(origin,2))
+            cv2.waitKey(300)
+            print("destimation", destimation)
+            print("origin", origin)
+            shutil.copyfile(origin, destimation)
+            i = i + 1
+print("Total matches =", i)
+
     #ext = os.path.splitext(f)[1]
     #if ext.lower() not in valid_images:
     #    continue
