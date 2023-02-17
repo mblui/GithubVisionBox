@@ -115,8 +115,9 @@ def get_output_image(path):
             #cv2.waitKey(3000)
             # getting prediction of cropped image
             pred, value = predict_digit(roi)
-
-            print("pred, val", pred, value)
+            n = 5
+            idx = (-pred).argsort()[:n]
+            print("pred, val, idx", pred, value, idx)
             if value < 0.6:
                 continue
             # placing label on each digit
