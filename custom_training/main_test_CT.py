@@ -14,7 +14,7 @@ for f in os.listdir(path_GIT+allfolders[1]):
     for ff in os.listdir(path_GIT+allfolders[0]):
         print("image", ff)
         if f[:-4] == ff[:-4]:
-            destimation = "data_in/test_img/" + ff
+            destimation = "data_in/test_img/"
             origin = allfolders[0]+ff
             cv2.imshow('hoi', cv2.imread(origin,2))
             cv2.waitKey(0)
