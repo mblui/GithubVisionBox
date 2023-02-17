@@ -64,12 +64,13 @@ def get_output_image(path):
     cv2.namedWindow("Resized_Window2", cv2.WINDOW_NORMAL)
     size = [500,500]
     cv2.resizeWindow("Resized_Window2", size[0], size[1])
-    cv2.imshow('Resized_Window2',img)
-    cv2.waitKey(1000)
+    cv2.imshow('Resized_Window2',img_org)
+    cv2.waitKey(5000)
     ret,thresh = cv2.threshold(img,127,255,0)
     contours,hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
-    cv2.imshow('Resized_Window2',contours)
-    cv2.waitKey(1000)
+    cv2.imshow('Resized_Window2',img)
+    cv2.waitKey(5000)
+    print("start")
     for j,cnt in enumerate(contours):
         epsilon = 0.01*cv2.arcLength(cnt,True)
         approx = cv2.approxPolyDP(cnt,epsilon,True)
