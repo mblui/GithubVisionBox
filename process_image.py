@@ -1,7 +1,23 @@
+print( "#########################################")
+print("GPU EXPANDED BY MART") 
+print( "#########################################")
+
 import cv2
+print( "#########################################")
+print("GPU EXPANDED BY MART") 
+print( "#########################################")
 import numpy as np        
+print( "#########################################")
+print("GPU EXPANDED BY MART") 
+print( "#########################################")
 import matplotlib.pyplot as plt
+print( "#########################################")
+print("GPU EXPANDED BY MART") 
+print( "#########################################")
 from scipy import ndimage
+print( "#########################################")
+print("GPU EXPANDED BY MART") 
+print( "#########################################")
 import math
 #import tensorflow.keras as keras
 #from tensorflow.keras.models import load_model
@@ -11,16 +27,14 @@ import math
 #for gpu in gpus:
 	#tf.config.experimental.set_memory_growth(gpu, True)
 	#tf.config.experimental.reset_memory_stats('GPU:0')
-print( "#########################################")
-print("GPU EXPANDED BY MART") 
-print( "#########################################")
+
 
 # loading pre trained model
 #model = load_model('cnn_model/digit_classifier.h5')
 
-def predict_digit(img):
-    test_image = img.reshape(-1,28,28,1)
-    return np.argmax(model.predict(test_image))
+#def predict_digit(img):
+    #test_image = img.reshape(-1,28,28,1)
+    #return np.argmax(model.predict(test_image))
 
 
 #pitting label
