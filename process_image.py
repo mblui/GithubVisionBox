@@ -73,7 +73,7 @@ def get_output_image(path):
     
     contours,hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
     #print("Length fo contours1", len(cnt))
-    areas = [cv2.contourArea(c) for c in cnt]
+    areas = [cv2.contourArea(c) for c in contours]
     max_index = np.argmax(areas)
     n = 10
     idx = (-1*areas).argsort()[:n]
