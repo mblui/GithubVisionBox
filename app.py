@@ -24,15 +24,19 @@ for f in os.listdir(path_2_image):
         continue
     path = path_2_image + f
     # print("path =", path)
-    # img = cv2.imread(path)
+    img = cv2.imread(path)
 
     # #cv2.imshow('image',img)
     # #cv2.waitKey(0)
+    cv2.namedWindow("Resized_Window", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("Resized_Window", size[0], size[1])
+    cv2.imshow('Resized_Window',img)
+    cv2.waitKey(0)
     output = get_output_image(path)
     cv2.namedWindow("Resized_Window", cv2.WINDOW_NORMAL)
     cv2.resizeWindow("Resized_Window", size[0], size[1])
     cv2.imshow('Resized_Window',output)
-    cv2.waitKey(2000)
+    cv2.waitKey(0)
 
 
 ## TODO 
