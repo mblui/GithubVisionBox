@@ -113,7 +113,7 @@ def get_output_image(path):
         
         if hierarchy[0][j][3]!=-1 and w>15 and h>15:
             #putting boundary on each digit
-            cv2.rectangle(img_org,(x,y),(x+w,y+h),(0,255,0),1)
+            #cv2.rectangle(img_org,(x,y),(x+w,y+h),(0,255,0),1)
             
             #cropping each image and process
             roi = img[y:y+h, x:x+w]
