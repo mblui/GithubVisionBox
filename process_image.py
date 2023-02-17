@@ -1,13 +1,13 @@
 import cv2
 import numpy as np        
 import matplotlib.pyplot as plt
-from scipy import ndimage
+#from scipy import ndimage
 import math
 #import tensorflow.keras as keras
 #from tensorflow.keras.models import load_model
 
 import tensorflow as tf
-gpus = tf.config.experimental.list_physical_devices('GPU') 
+#gpus = tf.config.experimental.list_physical_devices('GPU') 
 #for gpu in gpus:
 	#tf.config.experimental.set_memory_growth(gpu, True)
 	#tf.config.experimental.reset_memory_stats('GPU:0')
@@ -16,7 +16,7 @@ print("GPU EXPANDED BY MART")
 print( "#########################################")
 
 # loading pre trained model
-model = load_model('cnn_model/digit_classifier.h5')
+#model = load_model('cnn_model/digit_classifier.h5')
 
 def predict_digit(img):
     test_image = img.reshape(-1,28,28,1)
