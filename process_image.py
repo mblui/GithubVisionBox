@@ -132,6 +132,6 @@ def get_output_image(path):
             #    continue
             # placing label on each digit
             (x,y),radius = cv2.minEnclosingCircle(cnt)
-            img_org = put_label(img_org,pred,x,y)
+            img_org = put_label(img_org,all_pred[j],x,y)
 
     return img_org
