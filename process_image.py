@@ -92,6 +92,7 @@ def get_output_image(path):
     # cv2.waitKey(2000)
 
     for j,cnt in enumerate(contours):
+        print("j", j, "cnt", cnt)
         epsilon = 0.01*cv2.arcLength(cnt,True)
         approx = cv2.approxPolyDP(cnt,epsilon,True)
         
@@ -99,7 +100,7 @@ def get_output_image(path):
         k = cv2.isContourConvex(cnt)
         x,y,w,h = cv2.boundingRect(cnt)
         
-        if(hierarchy[0][j][3]!=-1 and w>20 and h>20):
+        if(hierarchy[j][3]!=-1 and w>20 and h>20):
             #putting boundary on each digit
             cv2.rectangle(img_org,(x,y),(x+w,y+h),(0,255,0),1)
             
