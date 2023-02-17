@@ -14,9 +14,9 @@ image_itself= "result_foto14026.jpg_97.jpg"
 
 valid_images = [".jpg",".gif",".png",".tga"]
 
-cv2.namedWindow("Resized_Window", cv2.WINDOW_NORMAL)
-size = [500,500]
-cv2.resizeWindow("Resized_Window", size[0], size[1])
+cv2.namedWindow("W3", cv2.WINDOW_NORMAL)
+size = [400,400]
+cv2.resizeWindow("W3", size[0], size[1])
 
 for f in os.listdir(path_2_image):
     ext = os.path.splitext(f)[1]
@@ -33,7 +33,7 @@ for f in os.listdir(path_2_image):
     #cv2.imshow('Resized_Window',img)
     #cv2.waitKey(500)
     output = get_output_image(path)
-    cv2.imshow('W1',output)
+    cv2.imshow('W3',output)
     cv2.waitKey(2000)
     #cv2.namedWindow("Resized_Window", cv2.WINDOW_NORMAL)
     #cv2.resizeWindow("Resized_Window", size[0], size[1])
