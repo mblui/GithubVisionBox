@@ -5,13 +5,17 @@ path_GIT = "/home/jetson/Documents/GithHub/GithubVisionBox/custom_training/"
 allfolders = ["JPEGImages", "test_labels", "test_img", "train_labels", "train_labels"]
 
 valid_images = [".jpg",".gif",".png",".tga"]
-
+i = 0
 os.chdir(path_GIT)
 print("Current directory", os.getcwd())
 for f in os.listdir(path_GIT+allfolders[1]):
     print(f[:-4])
-for f in os.listdir(path_GIT+allfolders[0]):
-    print(f)
+    for ff in os.listdir(path_GIT+allfolders[0]):
+        f[:-5]
+        if f[:-4] == f[:-5]:
+            print("yes baby")
+            i = i + 1
+print("Total matches =", i)
     #ext = os.path.splitext(f)[1]
     #if ext.lower() not in valid_images:
     #    continue
