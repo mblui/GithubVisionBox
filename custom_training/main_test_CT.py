@@ -40,9 +40,16 @@ import matplotlib.pyplot as plt
 # from keras import optimizers
 # from keras.datasets import mnist
 # from keras.utils import to_categorical
+
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+os.environ["SM_FRAMEWORK"] = "tf.keras"
+
 import tensorflow.keras as keras
 from tensorflow.keras.models import load_model
 import tensorflow as tf
+
+
 import cv2
 import pandas as pd
 import os, sys 
