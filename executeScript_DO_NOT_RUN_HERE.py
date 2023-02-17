@@ -21,7 +21,7 @@ print("##############################")
 print("## Start Python Script")
 ## Load Configuration file
 
-fileRange = np.array([file_nr]).size
+fileRange = np.array([file_nr]).size - 1
 print("range is", range(fileRange))
 for fileIndex in range(fileRange):
     print("fileIndex", fileIndex)
