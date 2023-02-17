@@ -9,7 +9,7 @@ valid_images = [".jpg",".gif",".png",".tga"]
 i = 0
 os.chdir(path_GIT)
 print("Current directory", os.getcwd())
-for f in os.listdir(path_GIT+allfolders[1]):
+for f in os.listdir(path_GIT+allfolders[3]):
     #print("XML FILE", f)
     for ff in os.listdir(path_GIT+allfolders[0]):
         #print("image", ff)
