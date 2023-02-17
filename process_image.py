@@ -76,7 +76,7 @@ def get_output_image(path):
     areas = [cv2.contourArea(c) for c in contours]
     areas = np.array(areas)
     max_index = np.argmax(areas)
-    n = 10
+    n = 5
     idx = (-1*areas).argsort()[:n]
     #hierarchy = hier[:,max_index]
 
@@ -134,7 +134,6 @@ def get_output_image(path):
                 all_pred = np.append(all_pred, pred)
                 all_value = np.append(all_value, value)
                 #print(all_pred)
-
     n = 5
     print("All values", all_value)
     idx = (-1*all_value).argsort()[:n]
