@@ -93,6 +93,11 @@ def get_output_image(path):
     # cv2.waitKey(2000)
     all_pred = np.array([])
     all_value = np.array([])
+    all_x = np.array([])
+    all_y = np.array([])
+    all_w = np.array([])
+    all_h = np.array([])
+
     for j,cnt in enumerate(contours):
         #print("j", j, "cnt", cnt)
         epsilon = 0.01*cv2.arcLength(cnt,True)
@@ -101,7 +106,11 @@ def get_output_image(path):
         hull = cv2.convexHull(cnt)
         k = cv2.isContourConvex(cnt)
         x,y,w,h = cv2.boundingRect(cnt)
-
+        all_x = np.append(all_x, x)
+        all_y = np.append(all_y, y)
+        all_w = np.append(all_w, w)
+        all_h = np.append(all_h, h)
+        
         if hierarchy[0][j][3]!=-1 and w>15 and h>15:
             #putting boundary on each digit
             cv2.rectangle(img_org,(x,y),(x+w,y+h),(0,255,0),1)
@@ -128,6 +137,8 @@ def get_output_image(path):
     print("pred, val, idx", pred, value, idx)
     for j,cnt in enumerate(contours):
         if j in idx:
+            cv2.rectangle(img_org,(all_x[j],all_y[j]),(all_x[j]+all_w[j],all_y[j]+all_h[j]),(0,255,0),1)
+            
             #if value < 0.6:
             #    continue
             # placing label on each digit
