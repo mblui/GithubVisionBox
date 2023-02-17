@@ -9,7 +9,7 @@ valid_images = [".jpg",".gif",".png",".tga"]
 os.chdir(path_GIT)
 print("Current directory", os.getcwd())
 for f in os.listdir(path_GIT+allfolders[0]):
-        print("f", f)
+        print("f", f[:-3])
     #ext = os.path.splitext(f)[1]
     #if ext.lower() not in valid_images:
     #    continue
