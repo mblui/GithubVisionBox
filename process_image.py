@@ -18,6 +18,7 @@ model = load_model('cnn_model/digit_classifier.h5')
 
 def predict_digit(img):
     test_image = img.reshape(-1,28,28,1)
+    print("predictions", model.predict(test_image))
     return np.argmax(model.predict(test_image))
 
 
@@ -62,7 +63,7 @@ def get_output_image(path):
     cv2.namedWindow("W1", cv2.WINDOW_NORMAL)
     size = [400,400]
     cv2.imshow('W1',img_org)
-    cv2.waitKey(2000)
+    cv2.waitKey(500)
 
 
     #ret,thresh = cv2.threshold(img,127,255,0)
@@ -81,7 +82,7 @@ def get_output_image(path):
     size = [400,400]
     cv2.resizeWindow("W2", size[0], size[1])
     cv2.imshow('W2',thresh)
-    cv2.waitKey(2000)
+    cv2.waitKey(500)
 
     # cv2.namedWindow("W1", cv2.WINDOW_NORMAL)
     # size = [500,500]
