@@ -1,4 +1,5 @@
 import os
+import cv2
 import shutil
 path_GIT = "/home/jetson/Documents/GithHub/GithubVisionBox/custom_training/"
 
@@ -15,6 +16,7 @@ for f in os.listdir(path_GIT+allfolders[1]):
         if f[:-4] == ff[:-4]:
             destimation = path_GIT + "data_in/test_img/" + ff
             origin = path_GIT+allfolders[0]+ff
+            cv2.imshow('hoi', cv2.imread(origin,2))
             print("destimation", destimation)
             print("origin", origin)
             shutil.copy(origin, destimation)
