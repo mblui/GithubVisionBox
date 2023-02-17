@@ -89,8 +89,8 @@ def get_output_image(path):
     # cv2.resizeWindow("W1", size[0], size[1])
     # cv2.imshow('W1',th3)
     # cv2.waitKey(2000)
-    all_pred = []
-    all_value = []
+    all_pred = np.array([])
+    all_value = np.array([])
     for j,cnt in enumerate(contours):
         #print("j", j, "cnt", cnt)
         epsilon = 0.01*cv2.arcLength(cnt,True)
@@ -120,7 +120,7 @@ def get_output_image(path):
             all_value.append(value)
     print("all_pred, all_value", all_pred, all_value)
     n = 5
-    idx = (all_pred).argsort()[:n]
+    idx = (all_value).argsort()[:n]
     print("pred, val, idx", pred, value, idx)
     for j,cnt in enumerate(contours):
         if j in idx:
