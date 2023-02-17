@@ -133,7 +133,7 @@ def get_output_image(path):
             #print(all_pred)
 
     n = 5
-    print("All values", all_values)
+    print("All values", all_value)
     idx = (all_value).argsort()[:n]
     print('index highest', idx)
     #print("pred, val, idx", pred, value, idx)
