@@ -120,9 +120,8 @@ def get_output_image(path):
             all_value.append(value)
     print("all_pred, all_value", all_pred, all_value)
     n = 5
-    idx = (-pred).argsort()[:n]
+    idx = (-all_pred).argsort()[:n]
     print("pred, val, idx", pred, value, idx)
-    cv2.waitkey(0)
     for j,cnt in enumerate(contours):
         if j in idx:
             #if value < 0.6:
