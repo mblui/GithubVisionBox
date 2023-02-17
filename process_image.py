@@ -64,7 +64,7 @@ def get_output_image(path):
     size = [400,400]
     cv2.imshow('W1',img_org)
     cv2.waitKey(500)
-
+    #hoi
 
     #ret,thresh = cv2.threshold(img,127,255,0)
     thresh = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
