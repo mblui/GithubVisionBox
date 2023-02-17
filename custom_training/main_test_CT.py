@@ -31,7 +31,7 @@ if 0:
 
 ###############################################################
 import numpy as np
-import cv2
+
 import matplotlib.pyplot as plt
 # import tensorflow as tf
 # from keras.models import Sequential
@@ -45,8 +45,8 @@ import tensorflow.keras as keras
 from tensorflow.keras.models import load_model
 import tensorflow as tf
 from tensorflow.keras.applications import VGG16
-
-
+import cv2
+print("here")
 # import cv2
 # import pandas as pd
 # import os, sys 
@@ -57,5 +57,7 @@ from tensorflow.keras.applications import VGG16
 # #import skimage
 
 modelvgg16 = VGG16(include_top=True,weights='imagenet')
+
+print("here2")
 modelvgg16.summary()
 
