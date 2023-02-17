@@ -21,20 +21,22 @@ print("##############################")
 print("## Start Python Script")
 ## Load Configuration file
 
-fileRange = np.array([file_nr]).size -1
-for fileIndex in range(len(file_nr)):
-    file_path.append(Available_files[file_nr[fileIndex]])
-    ## Last modified state
-    ti_m.append(os.path.getmtime(src_path+file_path[fileIndex]))
-    m_ti.append(time.ctime(ti_m[fileIndex]))
-    print("##", file_path[fileIndex], "was last modified at" , m_ti[fileIndex])
-    print("## Loading: ", file_path[fileIndex], "--> 0%")  
-    #shutil.copy(src_path+file_path[fileIndex], dst_path)
-    print("## Loading: ", file_path[fileIndex], "--> 100%")  
+fileRange = np.array([file_nr]).size
+print("range is", range(fileRange))
+for fileIndex in range(fileRange):
+    print("fileIndex", fileIndex)
+#     file_path.append(Available_files[file_nr[fileIndex]])
+#     ## Last modified state
+#     ti_m.append(os.path.getmtime(src_path+file_path[fileIndex]))
+#     m_ti.append(time.ctime(ti_m[fileIndex]))
+#     print("##", file_path[fileIndex], "was last modified at" , m_ti[fileIndex])
+#     print("## Loading: ", file_path[fileIndex], "--> 0%")  
+#     #shutil.copy(src_path+file_path[fileIndex], dst_path)
+#     print("## Loading: ", file_path[fileIndex], "--> 100%")  
 
-print("Filepath", file_path)
-print("## Executing: ", file_path[0])
-print("##############################")
+# print("Filepath", file_path)
+# print("## Executing: ", file_path[0])
+# print("##############################")
 
 
 #os.chdir(dst_path)
