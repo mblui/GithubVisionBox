@@ -62,7 +62,7 @@ def get_output_image(path):
     img = cv2.imread(path,2)
     img_org =  cv2.imread(path)
     cv2.namedWindow("W1", cv2.WINDOW_NORMAL)
-    size = [500,500]
+    size = [400,400]
     cv2.imshow('W1',img_org)
     cv2.waitKey(2000)
 
@@ -70,8 +70,8 @@ def get_output_image(path):
     ret,thresh = cv2.threshold(img,127,255,0)
     thresh = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
     
-    print("Length fo contours1", len(contours))
     contours,hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
+    print("Length fo contours1", len(contours))
     areas = [cv2.contourArea(c) for c in contours]
     max_index = np.argmax(areas)
     cnt=contours[max_index]
@@ -79,7 +79,7 @@ def get_output_image(path):
     contours = cnt
     print("Length fo contours2", len(contours))
     cv2.namedWindow("W2", cv2.WINDOW_NORMAL)
-    size = [500,500]
+    size = [400,400]
     cv2.resizeWindow("W2", size[0], size[1])
     cv2.imshow('W2',thresh)
     cv2.waitKey(2000)
@@ -109,7 +109,7 @@ def get_output_image(path):
             roi = image_refiner(roi)
             th,fnl = cv2.threshold(roi,127,255,cv2.THRESH_BINARY)
             cv2.namedWindow("W3", cv2.WINDOW_NORMAL)
-            size = [500,500]
+            size = [400,400]
             cv2.resizeWindow("W3", size[0], size[1])
             cv2.imshow('W3',roi)
             cv2.waitKey(3000)
