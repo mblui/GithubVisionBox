@@ -11,7 +11,7 @@ print("Current directory", os.getcwd())
 for f in os.listdir(path_GIT+allfolders[1]):
     print(f[:-4])
     for ff in os.listdir(path_GIT+allfolders[0]):
-        f[:-5]
+        ff[:-5]
         if f[:-4] == f[:-5]:
             print("yes baby")
             i = i + 1
