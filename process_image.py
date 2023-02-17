@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import ndimage
 import math
-import tensorflow.keras as keras
-from tensorflow.keras.models import load_model
+#import tensorflow.keras as keras
+#from tensorflow.keras.models import load_model
 
 import tensorflow as tf
 gpus = tf.config.experimental.list_physical_devices('GPU') 
@@ -84,9 +84,11 @@ def get_output_image(path):
             roi = cv2.bitwise_not(roi)
             roi = image_refiner(roi)
             th,fnl = cv2.threshold(roi,127,255,cv2.THRESH_BINARY)
-
+            cv2.imshow(roi)
+            cv2.waitkey(0)
             # getting prediction of cropped image
-            pred = predict_digit(roi)
+            #pred = predict_digit(roi)
+            pred = 0.9
             print(pred)
             
             # placing label on each digit

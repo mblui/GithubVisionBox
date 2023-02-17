@@ -20,7 +20,6 @@ m_ti =[]
 print("##############################")
 print("## Start Python Script")
 ## Load Configuration file
-file_nr = np.array(file_nr)
 fileRange = file_nr.size 
 print("range is", fileRange)
 for fileIndex in range(fileRange):
@@ -39,5 +38,5 @@ print("## Executing: ", file_path[0])
 print("##############################")
 
 
-#os.chdir(dst_path)
-#call(["python3", file_path])
+os.chdir(dst_path)
+call(["python3", file_path[0]])
