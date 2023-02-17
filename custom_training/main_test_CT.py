@@ -30,11 +30,13 @@ if 0:
     print("Total matches =", i)
 
 ###############################################################
+
+import numpy as np
+import tensorflow as tf
 gpus = tf.config.experimental.list_physical_devices('GPU') 
 for gpu in gpus:
 	tf.config.experimental.set_memory_growth(gpu, True)
-import numpy as np
-
+        
 import matplotlib.pyplot as plt
 # import tensorflow as tf
 # from keras.models import Sequential
