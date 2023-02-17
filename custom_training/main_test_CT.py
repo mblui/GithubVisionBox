@@ -2,14 +2,16 @@ import os
 
 path_GIT = "/home/jetson/Documents/GithHub/GithubVisionBox/custom_training/"
 
-allfolders = ["test_labels"] #, "train_labels"]
+allfolders = ["JPEGImages", "test_labels", "test_img", "train_labels", "train_labels"]
 
 valid_images = [".jpg",".gif",".png",".tga"]
 
 os.chdir(path_GIT)
 print("Current directory", os.getcwd())
-for f in os.listdir(path_GIT+allfolders[0]):
-        print("f", f[:-3])
+for f in os.listdir(path_GIT+allfolders[1]):
+    print(f[:-4])
+for f in os.listdir(path_GIT+allfolders[0])
+    print(f)
     #ext = os.path.splitext(f)[1]
     #if ext.lower() not in valid_images:
     #    continue
