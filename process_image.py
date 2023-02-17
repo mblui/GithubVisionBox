@@ -143,12 +143,12 @@ def get_output_image(path):
     for j,cnt in enumerate(contours):
         if j in idx:
             print("in",idx, 'loop', j)
-            cv2.rectangle(img_org,(int(all_x[j]),int(all_y[j])),(int(all_x[j]+all_w[j]),int(all_y[j]+all_h[j])),(0,255,0),1)
+            #cv2.rectangle(img_org,(int(all_x[j]),int(all_y[j])),(int(all_x[j]+all_w[j]),int(all_y[j]+all_h[j])),(0,255,0),1)
             #print(all_x[j], all_y[j], all_w[j], all_h[j])
             #if value < 0.6:
             #    continue
             # placing label on each digit
             (x,y),radius = cv2.minEnclosingCircle(cnt)
-            img_org = put_label(img_org,int(all_pred[j]),x,y)
+            img_org = put_label(img_org,int(all_pred[j]),all_x[j],all_y[j])
 
     return img_org
