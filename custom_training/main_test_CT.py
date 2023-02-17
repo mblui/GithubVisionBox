@@ -1,6 +1,6 @@
 import os
 import shutil
-
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 ## Import once labels and files
 if 0:
