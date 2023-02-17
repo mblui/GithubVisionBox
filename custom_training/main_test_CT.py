@@ -3,7 +3,7 @@ import shutil
 path_GIT = "/home/jetson/Documents/GithHub/GithubVisionBox/custom_training/"
 
 allfolders = ["JPEGImages", "test_labels", "test_img", "train_labels", "train_labels"]
-
+# hoi
 valid_images = [".jpg",".gif",".png",".tga"]
 i = 0
 os.chdir(path_GIT)
