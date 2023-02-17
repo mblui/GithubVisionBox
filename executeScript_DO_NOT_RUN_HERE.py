@@ -21,8 +21,7 @@ print("##############################")
 print("## Start Python Script")
 ## Load Configuration file
 
-fileRange = file_nr.size
-print(fileRange)
+fileRange = np.array([file_nr]).size -1
 for fileIndex in range(len(file_nr)):
     file_path.append(Available_files[file_nr[fileIndex]])
     ## Last modified state
@@ -38,5 +37,5 @@ print("## Executing: ", file_path[0])
 print("##############################")
 
 
-os.chdir(dst_path)
-call(["python3", file_path])
+#os.chdir(dst_path)
+#call(["python3", file_path])
