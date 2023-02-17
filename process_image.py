@@ -3,10 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy import ndimage
 import math
-#import tensorflow.keras as keras
-#from tensorflow.keras.models import load_model
+import tensorflow.keras as keras
+from tensorflow.keras.models import load_model
 
-#import tensorflow as tf
+import tensorflow as tf
 #gpus = tf.config.experimental.list_physical_devices('GPU') 
 #for gpu in gpus:
 	#tf.config.experimental.set_memory_growth(gpu, True)
@@ -113,8 +113,8 @@ def get_output_image(path):
             #cv2.imshow('W3',roi)
             #cv2.waitKey(3000)
             # getting prediction of cropped image
-            #pred = predict_digit(roi)
-            pred = "X"
+            pred = predict_digit(roi)
+
 
             # placing label on each digit
             (x,y),radius = cv2.minEnclosingCircle(cnt)
