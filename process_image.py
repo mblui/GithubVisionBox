@@ -78,9 +78,6 @@ def get_output_image(path):
     max_index = np.argmax(areas)
     n = 10
     idx = (-1*areas).argsort()[:n]
-    print("idx", idx)
-    print("contours", contours)
-    contours=contours[idx]
     #hierarchy = hier[:,max_index]
 
     #print("contour", contours, "hierarchy", hierarchy)
@@ -104,38 +101,39 @@ def get_output_image(path):
     all_h = np.array([])
 
     for j,cnt in enumerate(contours):
-        #print("j", j, "cnt", cnt)
-        epsilon = 0.01*cv2.arcLength(cnt,True)
-        approx = cv2.approxPolyDP(cnt,epsilon,True)
-        
-        hull = cv2.convexHull(cnt)
-        k = cv2.isContourConvex(cnt)
-        x,y,w,h = cv2.boundingRect(cnt)
-        all_x = np.append(all_x, x)
-        all_y = np.append(all_y, y)
-        all_w = np.append(all_w, w)
-        all_h = np.append(all_h, h)
-        
-        if hierarchy[0][j][3]!=-1 and w>15 and h>15:
-            #putting boundary on each digit
-            #cv2.rectangle(img_org,(x,y),(x+w,y+h),(0,255,0),1)
+        if j in idx:
+            #print("j", j, "cnt", cnt)
+            epsilon = 0.01*cv2.arcLength(cnt,True)
+            approx = cv2.approxPolyDP(cnt,epsilon,True)
             
-            #cropping each image and process
-            roi = img[y:y+h, x:x+w]
-            roi = cv2.bitwise_not(roi)
-            roi = image_refiner(roi)
-            th,fnl = cv2.threshold(roi,127,255,cv2.THRESH_BINARY)
-            #cv2.namedWindow("W3", cv2.WINDOW_NORMAL)
-            #size = [400,400]
-            #cv2.resizeWindow("W3", size[0], size[1])
-            #cv2.imshow('W3',roi)
-            #cv2.waitKey(3000)
-            # getting prediction of cropped image
-            pred, value = predict_digit(roi)
-            #print("loop", pred, value)
-            all_pred = np.append(all_pred, pred)
-            all_value = np.append(all_value, value)
-            #print(all_pred)
+            hull = cv2.convexHull(cnt)
+            k = cv2.isContourConvex(cnt)
+            x,y,w,h = cv2.boundingRect(cnt)
+            all_x = np.append(all_x, x)
+            all_y = np.append(all_y, y)
+            all_w = np.append(all_w, w)
+            all_h = np.append(all_h, h)
+            
+            if hierarchy[0][j][3]!=-1 and w>15 and h>15:
+                #putting boundary on each digit
+                cv2.rectangle(img_org,(x,y),(x+w,y+h),(0,255,0),1)
+                
+                #cropping each image and process
+                roi = img[y:y+h, x:x+w]
+                roi = cv2.bitwise_not(roi)
+                roi = image_refiner(roi)
+                th,fnl = cv2.threshold(roi,127,255,cv2.THRESH_BINARY)
+                #cv2.namedWindow("W3", cv2.WINDOW_NORMAL)
+                #size = [400,400]
+                #cv2.resizeWindow("W3", size[0], size[1])
+                #cv2.imshow('W3',roi)
+                #cv2.waitKey(3000)
+                # getting prediction of cropped image
+                pred, value = predict_digit(roi)
+                #print("loop", pred, value)
+                all_pred = np.append(all_pred, pred)
+                all_value = np.append(all_value, value)
+                #print(all_pred)
 
     n = 5
     print("All values", all_value)
