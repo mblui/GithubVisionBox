@@ -30,7 +30,7 @@ for fileIndex in range(fileRange):
     m_ti.append(time.ctime(ti_m[fileIndex]))
     print("##", file_path[fileIndex], "was last modified at" , m_ti[fileIndex])
     print("## Loading: ", file_path[fileIndex], "--> 0%")  
-    #shutil.copy(src_path+file_path[fileIndex], dst_path)
+    shutil.copy(src_path+file_path[fileIndex], dst_path)
     print("## Loading: ", file_path[fileIndex], "--> 100%")  
 
 print("Filepath", file_path)
@@ -39,4 +39,6 @@ print("##############################")
 
 
 os.chdir(dst_path)
+print(os.getcwd())
+
 call(["python3", file_path[0]])

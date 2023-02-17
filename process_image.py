@@ -1,23 +1,7 @@
-print( "#########################################")
-print("GPU EXPANDED BY MART") 
-print( "#########################################")
-
 import cv2
-print( "#########################################")
-print("GPU EXPANDED BY MART") 
-print( "#########################################")
 import numpy as np        
-print( "#########################################")
-print("GPU EXPANDED BY MART") 
-print( "#########################################")
 import matplotlib.pyplot as plt
-print( "#########################################")
-print("GPU EXPANDED BY MART") 
-print( "#########################################")
 from scipy import ndimage
-print( "#########################################")
-print("GPU EXPANDED BY MART") 
-print( "#########################################")
 import math
 #import tensorflow.keras as keras
 #from tensorflow.keras.models import load_model
@@ -98,8 +82,11 @@ def get_output_image(path):
             roi = cv2.bitwise_not(roi)
             roi = image_refiner(roi)
             th,fnl = cv2.threshold(roi,127,255,cv2.THRESH_BINARY)
-            cv2.imshow(roi)
-            cv2.waitkey(0)
+            cv2.namedWindow("Resized_Window1", cv2.WINDOW_NORMAL)
+            size = [500,500]
+            cv2.resizeWindow("Resized_Window1", size[0], size[1])
+            cv2.imshow('Resized_Window1',roi)
+            cv2.waitKey(3000)
             # getting prediction of cropped image
             #pred = predict_digit(roi)
             pred = 0.9
