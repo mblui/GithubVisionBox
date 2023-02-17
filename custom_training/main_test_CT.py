@@ -50,16 +50,16 @@ from tensorflow.keras.models import load_model
 import tensorflow as tf
 
 
-import cv2
-import pandas as pd
-import os, sys 
-#import scipy.misc
-import matplotlib.pyplot as plt
-#import random
-import imageio
-#import skimage
+# import cv2
+# import pandas as pd
+# import os, sys 
+# #import scipy.misc
+# import matplotlib.pyplot as plt
+# #import random
+# import imageio
+# #import skimage
 
-from keras.applications import VGG16
+# from keras.applications import VGG16
 modelvgg16 = VGG16(include_top=True,weights='imagenet')
 modelvgg16.summary()
 
