@@ -33,6 +33,8 @@ for f in os.listdir(path_2_image):
     #cv2.imshow('Resized_Window',img)
     #cv2.waitKey(500)
     output = get_output_image(path)
+    cv2.imshow('W1',output)
+    cv2.waitKey(2000)
     #cv2.namedWindow("Resized_Window", cv2.WINDOW_NORMAL)
     #cv2.resizeWindow("Resized_Window", size[0], size[1])
     #cv2.imshow('Resized_Window',output)
