@@ -133,21 +133,8 @@ def get_output_image(path):
                 #print("loop", pred, value)
                 all_pred = np.append(all_pred, pred)
                 all_value = np.append(all_value, value)
-                #print(all_pred)
-    n = 5
-    print("All values", all_value)
-    idx = (-1*all_value).argsort()[:n]
-    print('index highest', idx)
-    #print("pred, val, idx", pred, value, idx)
-    for j,cnt in enumerate(contours):
-        if j in idx:
-            print("in",idx, 'loop', j)
-            #cv2.rectangle(img_org,(int(all_x[j]),int(all_y[j])),(int(all_x[j]+all_w[j]),int(all_y[j]+all_h[j])),(0,255,0),1)
-            #print(all_x[j], all_y[j], all_w[j], all_h[j])
-            #if value < 0.6:
-            #    continue
-            # placing label on each digit
-            (x,y),radius = cv2.minEnclosingCircle(cnt)
-            img_org = put_label(img_org,int(all_pred[j]),all_x[j],all_y[j])
+                (x,y),radius = cv2.minEnclosingCircle(cnt)
+                img_org = put_label(img_org,int(all_pred[j]),all_x[j],all_y[j])
 
+                #print(all_pred)
     return img_org
