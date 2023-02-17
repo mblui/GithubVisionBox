@@ -6,7 +6,7 @@ import shutil
 import os
 import time
 import sys
-
+import numpy as np
 ## Define paths
 src_path = r"/home/jetson/Documents/GithHub/GithubVisionBox/"
 
@@ -20,6 +20,9 @@ m_ti =[]
 print("##############################")
 print("## Start Python Script")
 ## Load Configuration file
+
+fileRange = file_nr.size
+print(fileRange)
 for fileIndex in range(len(file_nr)):
     file_path.append(Available_files[file_nr[fileIndex]])
     ## Last modified state
