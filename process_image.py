@@ -74,11 +74,11 @@ def get_output_image(path):
     print("Length fo contours1", len(cnt))
     areas = [cv2.contourArea(c) for c in cnt]
     max_index = np.argmax(areas)
-    contours=contours[max_index]
+    contours=cnt[max_index]
     hierarchy = hier[:,max_index]
 
     print("contour", contours, "hierarchy", hierarchy)
-    
+
     cv2.namedWindow("W2", cv2.WINDOW_NORMAL)
     size = [400,400]
     cv2.resizeWindow("W2", size[0], size[1])
