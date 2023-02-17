@@ -120,7 +120,7 @@ def get_output_image(path):
             all_value.append(value)
     print("all_pred, all_value", all_pred, all_value)
     n = 5
-    idx = (-all_pred).argsort()[:n]
+    idx = (all_pred).argsort()[:n]
     print("pred, val, idx", pred, value, idx)
     for j,cnt in enumerate(contours):
         if j in idx:
