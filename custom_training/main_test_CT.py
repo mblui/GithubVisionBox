@@ -30,7 +30,7 @@ for f in os.listdir(path_GIT+allfolders[3]):
     for ff in os.listdir(path_GIT+allfolders[0]):
         print("image", ff)
         if f[:-4] == ff[:-4]:
-            destimation = path_GIT + allfolders[5] + ff
+            destimation = path_GIT + allfolders[4] + ff
             origin = path_GIT +  allfolders[0]+ff
             cv2.imshow('hoi', cv2.imread(origin,2))
             cv2.waitKey(300)
