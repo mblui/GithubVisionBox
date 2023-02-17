@@ -89,7 +89,8 @@ def get_output_image(path):
     # cv2.resizeWindow("W1", size[0], size[1])
     # cv2.imshow('W1',th3)
     # cv2.waitKey(2000)
-
+    all_pred = []
+    all_value = []
     for j,cnt in enumerate(contours):
         #print("j", j, "cnt", cnt)
         epsilon = 0.01*cv2.arcLength(cnt,True)
@@ -115,13 +116,17 @@ def get_output_image(path):
             #cv2.waitKey(3000)
             # getting prediction of cropped image
             pred, value = predict_digit(roi)
-            n = 5
-            idx = (-pred).argsort()[:n]
-            print("pred, val, idx", pred, value, idx)
-            if value < 0.6:
-                continue
-            # placing label on each digit
-            (x,y),radius = cv2.minEnclosingCircle(cnt)
-            img_org = put_label(img_org,pred,x,y)
+            all_pred.append(pred)
+            all_value.append(value)
+    print("all_pred, all_value", all_pred, all_value)
+    # for j,cnt in enumerate(contours):
+    #     n = 5
+    #     idx = (-pred).argsort()[:n]
+    #     print("pred, val, idx", pred, value, idx)
+    #     if value < 0.6:
+    #         continue
+    #     # placing label on each digit
+    #         (x,y),radius = cv2.minEnclosingCircle(cnt)
+    #         img_org = put_label(img_org,pred,x,y)
 
     return img_org
