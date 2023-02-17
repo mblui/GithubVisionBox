@@ -67,7 +67,7 @@ def get_output_image(path):
     cv2.imshow('Resized_Window2',img_org)
     cv2.waitKey(5000)
     ret,thresh = cv2.threshold(img,127,255,0)
-    th3 = cv2.adaptiveThreshold(img_org,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+    th3 = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
 
     contours,hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
     cv2.imshow('Resized_Window2',th3)
