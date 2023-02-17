@@ -1,3 +1,5 @@
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 import cv2
 import numpy as np        
 import matplotlib.pyplot as plt
@@ -116,8 +118,8 @@ def get_output_image(path):
             #cv2.waitKey(3000)
             # getting prediction of cropped image
             pred, value = predict_digit(roi)
-            all_pred.append(pred)
-            all_value.append(value)
+            np.append(all_pred, pred)
+            np.append(all_value, value)
     print("all_pred, all_value", all_pred, all_value)
     n = 5
     idx = (all_value).argsort()[:n]
