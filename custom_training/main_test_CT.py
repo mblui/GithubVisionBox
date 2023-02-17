@@ -9,9 +9,9 @@ i = 0
 os.chdir(path_GIT)
 print("Current directory", os.getcwd())
 for f in os.listdir(path_GIT+allfolders[1]):
-    print(f[:-4])
+    print("XML FILE", f)
     for ff in os.listdir(path_GIT+allfolders[0]):
-        ff[:-4]
+        print("image", ff)
         if f[:-4] == ff[:-4]:
             shutil.copy(path_GIT+allfolders[0]+ff, path_GIT + "data_in\test_img")
             i = i + 1
