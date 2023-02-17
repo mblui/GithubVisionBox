@@ -118,8 +118,10 @@ def get_output_image(path):
             #cv2.waitKey(3000)
             # getting prediction of cropped image
             pred, value = predict_digit(roi)
+            print("loop", pred, value)
             np.append(all_pred, pred)
             np.append(all_value, value)
+            print(all_pred)
     print("all_pred, all_value", all_pred, all_value)
     n = 5
     idx = (all_value).argsort()[:n]
