@@ -17,7 +17,7 @@ for f in os.listdir(path_GIT+allfolders[1]):
             destimation = path_GIT + allfolders[2] + ff
             origin = path_GIT +  allfolders[0]+ff
             cv2.imshow('hoi', cv2.imread(origin,2))
-            cv2.waitKey(0)
+            cv2.waitKey(50)
             print("destimation", destimation)
             print("origin", origin)
             shutil.copyfile(origin, destimation)
