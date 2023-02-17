@@ -10,7 +10,7 @@ os.chdir(path_GIT)
 print("Current directory", os.getcwd())
 for f in os.listdir(path_GIT+allfolders[1]):
     print(f[:-4])
-for f in os.listdir(path_GIT+allfolders[0])
+for f in os.listdir(path_GIT+allfolders[0]):
     print(f)
     #ext = os.path.splitext(f)[1]
     #if ext.lower() not in valid_images:
