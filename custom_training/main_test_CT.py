@@ -3,7 +3,7 @@ import cv2
 import shutil
 path_GIT = "/home/jetson/Documents/GithHub/GithubVisionBox/custom_training/"
 
-allfolders = ["JPEGImages/", "data_in/test_labels", "data_in/test_img\", "data_in/train_labels", "data_in/train_img\"]
+allfolders = ["JPEGImages/", "data_in/test_labels", "data_in/test_img/", "data_in/train_labels", "data_in/train_img/"]
 # hoi
 valid_images = [".jpg",".gif",".png",".tga"]
 i = 0
