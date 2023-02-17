@@ -73,7 +73,7 @@ def get_output_image(path):
     cv2.imshow('Resized_Window2',th3)
     cv2.waitKey(0)
     print("start")
-    cv2.imshow('Resized_Window2',thresh)
+    cv2.imshow('Resized_Window1',thresh)
     cv2.waitKey(0)
     for j,cnt in enumerate(contours):
         epsilon = 0.01*cv2.arcLength(cnt,True)
