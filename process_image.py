@@ -18,8 +18,8 @@ model = load_model('cnn_model/digit_classifier.h5')
 
 def predict_digit(img):
     test_image = img.reshape(-1,28,28,1)
-    print("predictions", np.max(model.predict(test_image)))
-    return np.argmax(model.predict(test_image))
+    #print("predictions", np.max(model.predict(test_image)))
+    return np.argmax(model.predict(test_image)),  np.max(model.predict(test_image))
 
 
 #pitting label
@@ -114,9 +114,11 @@ def get_output_image(path):
             #cv2.imshow('W3',roi)
             #cv2.waitKey(3000)
             # getting prediction of cropped image
-            pred = predict_digit(roi)
+            pred, value = predict_digit(roi)
 
-
+            print("pred, val", pred, value)
+            if value < 0.6:
+                continue
             # placing label on each digit
             (x,y),radius = cv2.minEnclosingCircle(cnt)
             img_org = put_label(img_org,pred,x,y)
