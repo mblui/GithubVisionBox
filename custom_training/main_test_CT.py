@@ -13,7 +13,7 @@ for f in os.listdir(path_GIT+allfolders[1]):
     for ff in os.listdir(path_GIT+allfolders[0]):
         ff[:-4]
         if f[:-4] == ff[:-4]:
-            shutil.copy(path_GIT+allfolders[0]+f, path_GIT + "data_in\test_img")
+            shutil.copy(path_GIT+allfolders[0]+ff, path_GIT + "data_in\test_img")
             i = i + 1
 print("Total matches =", i)
     #ext = os.path.splitext(f)[1]
