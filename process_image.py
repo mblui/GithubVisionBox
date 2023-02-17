@@ -134,7 +134,7 @@ def get_output_image(path):
                 all_pred = np.append(all_pred, pred)
                 all_value = np.append(all_value, value)
                 (x,y),radius = cv2.minEnclosingCircle(cnt)
-                img_org = put_label(img_org,int(all_pred[j]),all_x[j],all_y[j])
+                img_org = put_label(img_org,int(pred),x,y)
 
                 #print(all_pred)
     return img_org
