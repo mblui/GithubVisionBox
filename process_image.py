@@ -68,7 +68,7 @@ def get_output_image(path):
 
 
     ret,thresh = cv2.threshold(img,127,255,0)
-    thresh = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+    #thresh = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
     
     contours,hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
     #print("Length fo contours1", len(cnt))
@@ -100,7 +100,7 @@ def get_output_image(path):
         k = cv2.isContourConvex(cnt)
         x,y,w,h = cv2.boundingRect(cnt)
 
-        if hierarchy[0][j][3]!=-1 and w>20 and h>20:
+        if hierarchy[0][j][3]!=-1 and w>15 and h>15:
             #putting boundary on each digit
             cv2.rectangle(img_org,(x,y),(x+w,y+h),(0,255,0),1)
             
