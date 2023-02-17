@@ -84,7 +84,7 @@ def get_output_image(path):
     # cv2.imshow('W1',th3)
     # cv2.waitKey(2000)
 
-
+    print("contours", contours)
     for j,cnt in enumerate(contours):
         epsilon = 0.01*cv2.arcLength(cnt,True)
         approx = cv2.approxPolyDP(cnt,epsilon,True)
