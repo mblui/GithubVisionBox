@@ -68,7 +68,7 @@ def get_output_image(path):
 
 
     ret,thresh = cv2.threshold(img,127,255,0)
-    th3 = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
+    thresh = cv2.adaptiveThreshold(img,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,cv2.THRESH_BINARY,11,2)
 
     contours,hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -76,13 +76,13 @@ def get_output_image(path):
     size = [500,500]
     cv2.resizeWindow("W2", size[0], size[1])
     cv2.imshow('W2',thresh)
-    cv2.waitKey(5000)
+    cv2.waitKey(2000)
 
-    cv2.namedWindow("W1", cv2.WINDOW_NORMAL)
-    size = [500,500]
-    cv2.resizeWindow("W1", size[0], size[1])
-    cv2.imshow('W1',th3)
-    cv2.waitKey(5000)
+    # cv2.namedWindow("W1", cv2.WINDOW_NORMAL)
+    # size = [500,500]
+    # cv2.resizeWindow("W1", size[0], size[1])
+    # cv2.imshow('W1',th3)
+    # cv2.waitKey(2000)
 
 
     for j,cnt in enumerate(contours):
@@ -102,10 +102,10 @@ def get_output_image(path):
             roi = cv2.bitwise_not(roi)
             roi = image_refiner(roi)
             th,fnl = cv2.threshold(roi,127,255,cv2.THRESH_BINARY)
-            cv2.namedWindow("Resized_Window1", cv2.WINDOW_NORMAL)
+            cv2.namedWindow("W3", cv2.WINDOW_NORMAL)
             size = [500,500]
-            cv2.resizeWindow("Resized_Window1", size[0], size[1])
-            cv2.imshow('Resized_Window1',roi)
+            cv2.resizeWindow("W3", size[0], size[1])
+            cv2.imshow('W3',roi)
             cv2.waitKey(3000)
             # getting prediction of cropped image
             #pred = predict_digit(roi)
