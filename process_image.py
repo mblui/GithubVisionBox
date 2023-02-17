@@ -71,10 +71,10 @@ def get_output_image(path):
 
     contours,hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
     cv2.imshow('Resized_Window2',th3)
-    cv2.waitKey(0)
+    cv2.waitKey(1000)
     print("start")
     cv2.imshow('Resized_Window1',thresh)
-    cv2.waitKey(0)
+    cv2.waitKey(1000)
     for j,cnt in enumerate(contours):
         epsilon = 0.01*cv2.arcLength(cnt,True)
         approx = cv2.approxPolyDP(cnt,epsilon,True)
