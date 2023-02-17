@@ -30,4 +30,27 @@ if 0:
                 i = i + 1
     print("Total matches =", i)
 
-##
+###############################################################
+import numpy as np
+import cv2
+import matplotlib.pyplot as plt
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers.core import Dense, Dropout, Activation, Flatten
+from tensorflow.keras.layers import Conv2D, MaxPool2D
+from tensorflow.keras import optimizers
+from tensorflow.keras.datasets import mnist
+from keras.utils import to_categorical
+import keras
+
+import pandas as pd
+import os, sys 
+#import scipy.misc
+import matplotlib.pyplot as plt
+#import random
+import imageio
+#import skimage
+
+from keras.applications import VGG16
+modelvgg16 = VGG16(include_top=True,weights='imagenet')
+modelvgg16.summary()
+
