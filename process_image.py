@@ -68,7 +68,7 @@ def get_output_image(path):
     cv2.waitKey(5000)
     ret,thresh = cv2.threshold(img,127,255,0)
     contours,hierarchy = cv2.findContours(thresh, cv2.RETR_CCOMP, cv2.CHAIN_APPROX_SIMPLE)
-    cv2.imshow('Resized_Window2',img)
+    cv2.imshow('Resized_Window2',ret)
     cv2.waitKey(5000)
     print("start")
     for j,cnt in enumerate(contours):
