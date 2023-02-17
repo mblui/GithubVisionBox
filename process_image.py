@@ -14,11 +14,11 @@ import tensorflow as tf
 
 
 # loading pre trained model
-#model = load_model('cnn_model/digit_classifier.h5')
+model = load_model('cnn_model/digit_classifier.h5')
 
-#def predict_digit(img):
-    #test_image = img.reshape(-1,28,28,1)
-    #return np.argmax(model.predict(test_image))
+def predict_digit(img):
+    test_image = img.reshape(-1,28,28,1)
+    return np.argmax(model.predict(test_image))
 
 
 #pitting label
