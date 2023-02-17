@@ -20,11 +20,11 @@ m_ti =[]
 print("##############################")
 print("## Start Python Script")
 ## Load Configuration file
-
-fileRange = np.array([file_nr]).size - 1
-print("range is", range(fileRange))
+file_nr = np.array(file_nr)
+fileRange = file_nr.size 
+print("range is", fileRange)
 for fileIndex in range(fileRange):
-    print("fileIndex", fileIndex)
+    print("fileIndex", fileIndex, 'file nr', file_nr, "available_files", Available_files)
     file_path.append(Available_files[file_nr[fileIndex]])
     ## Last modified state
     ti_m.append(os.path.getmtime(src_path+file_path[fileIndex]))
