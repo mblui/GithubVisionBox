@@ -18,7 +18,7 @@ model = load_model('cnn_model/digit_classifier.h5')
 
 def predict_digit(img):
     test_image = img.reshape(-1,28,28,1)
-    print("predictions", model.predict(test_image))
+    print("predictions", np.max(model.predict(test_image)))
     return np.argmax(model.predict(test_image))
 
 
