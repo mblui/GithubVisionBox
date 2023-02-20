@@ -61,7 +61,8 @@ def extract_single_xml_file(tree):
         if elems.tag == "size":
             for elem in elems:
                 print("Elemememe", elem)
-                row[elem.tag] = int(elem.text)
+                val = elem.text if elem.text else 1
+                row[elem.tag] = int(val)
         if elems.tag == "object":
             for elem in elems:
                 if elem.tag == "name":
