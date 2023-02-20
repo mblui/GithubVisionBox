@@ -251,6 +251,17 @@ dir_result = "result"
 print("directory", os.getcwd())
 
 # #####################################
+def warp(img, newsize):
+    '''
+    warp image 
+    
+    
+    img     : np.array of (height, width, Nchannel)
+    newsize : (height, width)
+    '''
+    img_resize = skimage.transform.resize(img,newsize)
+    return(img_resize)
+
 import time 
 start = time.time()   
 # the "rough" ratio between the region candidate with and without objects.
