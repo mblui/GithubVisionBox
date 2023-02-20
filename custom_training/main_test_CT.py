@@ -1,11 +1,13 @@
 import os
 import shutil
+
+## Disable GPU
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+
 
 ## Import once labels and files
 if 0:
     path_GIT = "/home/jetson/Documents/GithHub/GithubVisionBox/custom_training/"
-
     allfolders = ["JPEGImages/", "data_in/test_labels", "data_in/", "data_in/train_labels", "data_in/"]
     # hoi
     valid_images = [".jpg",".gif",".png",".tga"]
@@ -51,7 +53,7 @@ from tensorflow.keras.models import load_model
 import tensorflow as tf
 from tensorflow.keras.applications import VGG16
 import cv2
-print("here")
+
 # import cv2
 # import pandas as pd
 # import os, sys 
@@ -62,7 +64,8 @@ print("here")
 # #import skimage
 
 modelvgg16 = VGG16(include_top=True,weights='imagenet')
-
-print("here2")
 modelvgg16.summary()
 
+import selective_search as ss
+img_dir   = "VOCdevkit/VOC2012/JPEGImages"
+imgnm     = "2012_002870.jpg"
