@@ -211,4 +211,4 @@ if True:
         resized = cv2.resize(img, resizedim, interpolation = cv2.INTER_AREA)
         cv2.imshow("Resized image", resized)
         cv2.waitKey(100)
-        cv2.imwrite(img_name, test2)
+        cv2.imwrite(test2, resized)
