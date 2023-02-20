@@ -55,10 +55,7 @@ dir_anno = customFolder + "Annotations"
 img_dir  = customFolder + "JPEGImages"
 
 path_2_csv = customFolder + "df_anno.csv"
-if os.path.exists(path_2_csv):
-    print("File is already been created earlier")
-else:
-    def extract_single_xml_file(tree):
+def extract_single_xml_file(tree):
     Nobj = 0
     row  = OrderedDict()
     for elems in tree.iter():
@@ -78,26 +75,31 @@ else:
     row["Nobj"] = Nobj
     return(row)
 
+if os.path.exists(path_2_csv):
+    print("File is already been created earlier")
+else:
     df_anno = []
     for fnm in os.listdir(dir_anno):  
-    if not fnm.startswith('.'): ## do not include hidden folders/files
-        #print("FNM", fnm)
-        tree = ET.parse(os.path.join(dir_anno,fnm))
-        #print("Tree", tree)
-        row = extract_single_xml_file(tree)
-        row["fileID"] = fnm.split(".")[0]
-        df_anno.append(row)
+        if not fnm.startswith('.'): ## do not include hidden folders/files
+            #print("FNM", fnm)
+            tree = ET.parse(os.path.join(dir_anno,fnm))
+            #print("Tree", tree)
+            row = extract_single_xml_file(tree)
+            row["fileID"] = fnm.split(".")[0]
+            df_anno.append(row)
     df_anno = pd.DataFrame(df_anno)
 
     maxNobj = np.max(df_anno["Nobj"])
 
     print("columns in df_anno\n-----------------")
     for icol, colnm in enumerate(df_anno.columns):
-    print("{:3.0f}: {}".format(icol,colnm))
+        print("{:3.0f}: {}".format(icol,colnm))
     print("-"*30)
     print("df_anno.shape={}=(N frames, N columns)".format(df_anno.shape))
     df_anno.head()
 
     dir_preprocessed = customFolder
     df_anno.to_csv(os.path.join(dir_preprocessed,"df_anno.csv"),index=False)
+
+
 #############################################
