@@ -58,7 +58,7 @@ def extract_single_xml_file(tree):
     Nobj = 0
     row  = OrderedDict()
     for elems in tree.iter():
-
+        print ("tree iter", tree.iter())
         if elems.tag == "size":
             for elem in elems:
                 row[elem.tag] = int(elem.text)
