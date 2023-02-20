@@ -104,3 +104,25 @@ else:
 plt.hist(df_anno["Nobj"].values,bins=100)
 plt.title("max N of objects per image={}".format(maxNobj))
 plt.show()
+
+####################################################
+from collections import Counter
+class_obj = []
+for ibbx in range(maxNobj):
+    class_obj.extend(df_anno["bbx_{}_name".format(ibbx)].values)
+class_obj = np.array(class_obj)
+
+count             = Counter(class_obj[class_obj != 'nan'])
+print(count)
+class_nm          = list(count.keys())
+class_count       = list(count.values())
+asort_class_count = np.argsort(class_count)
+
+class_nm          = np.array(class_nm)[asort_class_count]
+class_count       = np.array(class_count)[asort_class_count]
+
+xs = range(len(class_count))
+plt.barh(xs,class_count)
+plt.yticks(xs,class_nm)
+plt.title("The number of objects per class: {} objects in total".format(len(count)))
+plt.show()
