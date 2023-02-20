@@ -237,18 +237,18 @@ df_anno_person = df_anno.loc[pick,:]
 
 # ##############################
 # ######################################################################
-# #   image0  --> containt 6 75%
-# #   image1  --> contains 6 < 40 %
-# #   info0 infor corresponding to object in image0
-# #   info1 infor corresponding to object in image1
+#   image0  --> containt 6 75%
+#   image1  --> contains 6 < 40 %
+#   info0 infor corresponding to object in image0
+#   info1 infor corresponding to object in image1
 
-# import pickle
-# IoU_cutoff_object     = 0.7
-# IoU_cutoff_not_object = 0.4
-# objnms = ["image0","info0","image1","info1"]  
-# os.chdir("custom_training/")
-# dir_result = "result"
-# print("directory", os.getcwd())
+import pickle
+IoU_cutoff_object     = 0.7
+IoU_cutoff_not_object = 0.4
+objnms = ["image0","info0","image1","info1"]  
+os.chdir("custom_training/")
+dir_result = "result"
+print("directory", os.getcwd())
 
 # #####################################
 # import time 
