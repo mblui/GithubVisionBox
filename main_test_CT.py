@@ -41,9 +41,8 @@ import imageio
 import random
 import imageio
 import skimage
-#from tensorflow.keras import models
-#from tensorflow.keras.applications import VGG16
 
+## DON'T USE GPU
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 import tensorflow as tf
@@ -198,9 +197,10 @@ modelvgg.summary()
 
 ## Input layer is 224,224,3
 img_dir_image_resized = customFolder + "JPEGImages_resize"
-
+resizedim = (224,224,3)
 for img_name in os.listdir(img_dir): 
     print("fnm", img_name)
-    #img = cv2.imread(fnm)
-    #resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
-    #cv2.imwrite(img_dir_image_resized)
+    img = cv2.imread(fnm)
+    
+    resized = cv2.resize(img, resizedim, interpolation = cv2.INTER_AREA)
+    cv2.imwrite(img_dir_image_resized+img_name)
