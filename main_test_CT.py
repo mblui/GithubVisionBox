@@ -233,7 +233,7 @@ import pickle
 IoU_cutoff_object     = 0.7
 IoU_cutoff_not_object = 0.4
 objnms = ["image0","info0","image1","info1"]  
-os.chdir(customFolder)
+os.chdir("custom_training/")
 dir_result = "result"
 print("directory", os.getcwd())
 #####################################
