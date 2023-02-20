@@ -187,10 +187,10 @@ for irow in ind_random:
 ########################################################################################################################
 
 print(sys.version)
-modelvgg16 = VGG16(include_top=True,weights='imagenet')
+modelvgg16 = tensorflow.keras.applications.VGG16(include_top=True,weights='imagenet')
 modelvgg16.summary()
 
-modelvgg = models.Model(inputs  =  modelvgg16.inputs, 
+modelvgg = tensorflow.keras.models.Model(inputs  =  modelvgg16.inputs, 
                         outputs = modelvgg16.layers[-3].output)
 ## show the deep learning model
 modelvgg.summary()
