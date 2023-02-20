@@ -1,5 +1,3 @@
-import os
-import shutil
 
 ## Disable GPU
 #os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
@@ -32,22 +30,27 @@ import shutil
 #     print("Total matches =", i)
 
 ###############################################################
-
+import os
+import shutil
 import numpy as np
+import matplotlib.pyplot as plt
+import xml.etree.ElementTree as ET
+from collections import OrderedDict
+import pandas as pd 
+import imageio
+from tensorflow.keras.applications import VGG16
+import os, sys 
+import scipy.misc
+import random
+import imageio
+import skimage
+from tensorflow.keras import models
 #import tensorflow as tf
 #gpus = tf.config.experimental.list_physical_devices('GPU') 
 #for gpu in gpus:
 #	tf.config.experimental.set_memory_growth(gpu, True)
         
-import matplotlib.pyplot as plt
-#import tensorflow.keras as keras
-#from tensorflow.keras.models import load_model
-#from tensorflow.keras.applications import VGG16
-#import os 
-import xml.etree.ElementTree as ET
-from collections import OrderedDict
-#import matplotlib.pyplot as plt
-import pandas as pd 
+
 
 
 customFolder = "custom_training/result/"
@@ -135,7 +138,7 @@ if False:
     plt.show()
 ####################################################
 ## SHOW arbitrary image with label
-import imageio
+
 def plt_rectangle(plt,label,x1,y1,x2,y2):
     '''
     == Input ==
@@ -181,19 +184,11 @@ for irow in ind_random:
                         y2=row["bbx_{}_ymax".format(iplot)])
         plt.show() ## show the plot
 ########################################################################################################################
-from tensorflow.keras.applications import VGG16
-import pandas as pd
-import os, sys 
-import scipy.misc
-import matplotlib.pyplot as plt
-import random
-import imageio
-import skimage
+
 print(sys.version)
 modelvgg16 = VGG16(include_top=True,weights='imagenet')
 modelvgg16.summary()
 
-from keras import models
 modelvgg = models.Model(inputs  =  modelvgg16.inputs, 
                         outputs = modelvgg16.layers[-3].output)
 ## show the deep learning model
