@@ -50,7 +50,7 @@ from collections import OrderedDict
 import pandas as pd 
 
 
-customFolder = "GithubVisionBox/custom_training/result/"
+customFolder = "custom_training/result/"
 dir_anno = customFolder + "Annotations"
 img_dir  = customFolder + "JPEGImages"
 
