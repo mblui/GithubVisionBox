@@ -75,7 +75,7 @@ def extract_single_xml_file(tree):
     row["Nobj"] = Nobj
     return(row)
 
-if os.path.exists(path_2_csv):
+if False: #os.path.exists(path_2_csv):
     print("File is already been created earlier")
 else:
     df_anno = []
