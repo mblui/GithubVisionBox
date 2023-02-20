@@ -86,7 +86,7 @@ else:
             #print("Tree", tree)
             row = extract_single_xml_file(tree)
             #for i in range(len(fnm.split))
-            print("ROWID", fnm.split("."))
+            print("ROWID", fnm#fnm.split("."))
             row["fileID"] = fnm.split(".")[0]
             df_anno.append(row)
     df_anno = pd.DataFrame(df_anno)
