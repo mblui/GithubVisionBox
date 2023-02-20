@@ -155,6 +155,7 @@ def plt_rectangle(plt,label,x1,y1,x2,y2):
 # randomly select 20 frames    
 size = 20    
 ind_random = np.random.randint(0,df_anno.shape[0],size=size)
+print("sizes:", df_anno.shape[0])
 for irow in ind_random:
     row  = df_anno.iloc[irow,:]
     row["fileID"]
