@@ -39,7 +39,7 @@ import numpy as np
 #for gpu in gpus:
 #	tf.config.experimental.set_memory_growth(gpu, True)
         
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 #import tensorflow.keras as keras
 #from tensorflow.keras.models import load_model
 #from tensorflow.keras.applications import VGG16
@@ -100,6 +100,7 @@ else:
 
     dir_preprocessed = customFolder
     df_anno.to_csv(os.path.join(dir_preprocessed,"df_anno.csv"),index=False)
-
-
 #############################################
+plt.hist(df_anno["Nobj"].values,bins=100)
+plt.title("max N of objects per image={}".format(maxNobj))
+plt.show()
