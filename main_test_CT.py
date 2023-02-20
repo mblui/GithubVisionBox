@@ -78,6 +78,7 @@ for fnm in os.listdir(dir_anno):
     if not fnm.startswith('.'): ## do not include hidden folders/files
         print("FNM", fnm)
         tree = ET.parse(os.path.join(dir_anno,fnm))
+        print("Tree", tree)
         row = extract_single_xml_file(tree)
         row["fileID"] = fnm.split(".")[0]
         df_anno.append(row)
