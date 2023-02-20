@@ -160,7 +160,7 @@ def plt_rectangle(plt,label,x1,y1,x2,y2):
     plt.plot([x1,x2],[y2,y2], linewidth=linewidth,color=color)
     
 # randomly select 20 frames    
-size = 2    
+size = 1   
 ind_random = np.random.randint(0,df_anno.shape[0],size=size)
 print("sizes:", df_anno.shape[0])
 for irow in ind_random:
@@ -204,9 +204,9 @@ if True:
     for img_name in os.listdir(img_dir): 
         print("fnm", img_name)
         img = cv2.imread(fnm)
-        cv2.imshow(img, 'hoi')
+        cv2.imshow("Resized image", img)
         cv2.waitkey(0)
         resized = cv2.resize(img, resizedim, interpolation = cv2.INTER_AREA)
-        cv2.imshow(resized)
+        cv2.imshow("Resized image", resized)
         cv2.waitkey(0)
         cv2.imwrite(img_dir_image_resized+img_name)
