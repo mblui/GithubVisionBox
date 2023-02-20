@@ -85,6 +85,7 @@ else:
             tree = ET.parse(os.path.join(dir_anno,fnm))
             #print("Tree", tree)
             row = extract_single_xml_file(tree)
+            print("ROWID", row)
             row["fileID"] = fnm.split(".")[0]
             df_anno.append(row)
     df_anno = pd.DataFrame(df_anno)
@@ -158,7 +159,6 @@ ind_random = np.random.randint(0,df_anno.shape[0],size=size)
 print("sizes:", df_anno.shape[0])
 for irow in ind_random:
     row  = df_anno.iloc[irow,:]
-    row["fileID"]
     path = os.path.join(img_dir, row["fileID"] + ".jpg")
     if  not os.path.exists(path):
         print("File with bullshit name:",path)
