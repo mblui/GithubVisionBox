@@ -35,14 +35,14 @@ import shutil
 import numpy as np
 import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
-import scipy.misc
+import scipy
 from collections import OrderedDict
 import pandas as pd 
 import imageio
 import random
 import imageio
 import skimage
-
+import selective_search as ss
 ## DON'T USE GPU
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
@@ -274,7 +274,7 @@ for irow in range(df_anno_person.shape[0]):
     row  = df_anno_person.iloc[irow,:]
     ## read in the corresponding frame
     path = os.path.join(img_dir,row["fileID"] + ".jpg")
-    img  = imageio.imread(path)
+    img  = imageio.v2.imread(path)
     orig_h, orig_w, _ = img.shape
     ## to reduce the computation speed,
     ## I will do a small hack here. I will resize all the images into newsize = (200,250)    
