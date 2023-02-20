@@ -47,6 +47,7 @@ import skimage
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 import tensorflow as tf
+import cv2
 gpus = tf.config.experimental.list_physical_devices('GPU') 
 for gpus in gpus:
 	tf.config.experimental.set_memory_growth("GPU", True)
@@ -170,7 +171,7 @@ for irow in ind_random:
         print("File with bullshit name:",path)
     else:
         # read in image
-        img  = imageio.imread(path)
+        img  = imageio.v2.imread(path)
 
         plt.figure(figsize=(12,12))
         plt.imshow(img) # plot image
@@ -194,3 +195,12 @@ modelvgg = tf.keras.models.Model(inputs  =  modelvgg16.inputs,
                         outputs = modelvgg16.layers[-3].output)
 ## show the deep learning model
 modelvgg.summary()
+
+## Input layer is 224,224,3
+img_dir_image_resized = customFolder + "JPEGImages_resize"
+
+for img_name in os.listdir(img_dir): 
+    print("fnm", img_name)
+    #img = cv2.imread(fnm)
+    #resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
+    #cv2.imwrite(img_dir_image_resized)
