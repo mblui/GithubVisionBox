@@ -228,7 +228,7 @@ for colnm in df_anno.columns:
         cols_bbx.append(colnm)
     else:
         print("00")
-print('hoi', df_anno[cols_bbx].values)
+#print('hoi', df_anno[cols_bbx].values)
 bbx_has_personTF = df_anno[cols_bbx].values == "6"
 pick = np.any(bbx_has_personTF,axis=1)
 df_anno_person = df_anno.loc[pick,:]
