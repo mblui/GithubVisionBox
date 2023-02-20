@@ -71,7 +71,7 @@ def extract_single_xml_file(tree):
         if elems.tag == "object":
             for elem in elems:
                 if elem.tag == "name":
-                    print("i'm here")
+                    #print("i'm here")
                     row["bbx_{}_{}".format(Nobj,elem.tag)] = str(elem.text)              
                 if elem.tag == "bndbox":
                     for k in elem:
@@ -93,7 +93,7 @@ else:
             ######################################################################### WORKAROUND HERE! 
             row["fileID"] = fnm.split(".")[0]
             row["fileID"] = fnm[:-4]            
-            print("rowid", row["fileID"])
+            #print("rowid", row["fileID"])
             df_anno.append(row)
     df_anno = pd.DataFrame(df_anno)
 
