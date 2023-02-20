@@ -85,9 +85,10 @@ else:
             tree = ET.parse(os.path.join(dir_anno,fnm))
             #print("Tree", tree)
             row = extract_single_xml_file(tree)
-            #for i in range(len(fnm.split))
-            print("ROWID", fnm)#fnm.split("."))
+            ######################################################################### WORKAROUND HERE! 
             row["fileID"] = fnm.split(".")[0]
+            row["fileID"] = fnm[:-4]            
+            print("rowid", row["fileID"])
             df_anno.append(row)
     df_anno = pd.DataFrame(df_anno)
 
