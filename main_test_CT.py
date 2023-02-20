@@ -196,14 +196,15 @@ print(sys.version)
 #modelvgg.summary()
 
 ## Input layer is 224,224,3 --> Resize image to input size
-img_dir_image_resized = customFolder + "/JPEGImages_resize"
+img_dir_image_resized = customFolder + "JPEGImages_resize"
 resizedim = (224,224)
 
 ## Move images with correct size to another folder
 if True:
-    for img_name in os.listdir(img_dir): 
-        print("fnm", img_name)
-        img = cv2.imread(img_dir+img_name)
+    for img_name in os.listdir(img_dir):
+        test =  img_dir+ "/"+ img_name
+        print("fnm", test)
+        img = cv2.imread(test)
         cv2.imshow("Resized image", img)
         cv2.waitkey(0)
         resized = cv2.resize(img, resizedim, interpolation = cv2.INTER_AREA)
