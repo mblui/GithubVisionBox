@@ -156,7 +156,7 @@ def plt_rectangle(plt,label,x1,y1,x2,y2):
     plt.plot([x1,x2],[y2,y2], linewidth=linewidth,color=color)
     
 # randomly select 20 frames    
-size = 20    
+size = 2    
 ind_random = np.random.randint(0,df_anno.shape[0],size=size)
 print("sizes:", df_anno.shape[0])
 for irow in ind_random:
