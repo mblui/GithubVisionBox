@@ -204,7 +204,7 @@ if True:
     for img_name in os.listdir(img_dir): 
         print("fnm", img_name)
         img = cv2.imread(fnm)
-        cv2.imshow(img)
+        cv2.imshow(img, 'hoi')
         cv2.waitkey(0)
         resized = cv2.resize(img, resizedim, interpolation = cv2.INTER_AREA)
         cv2.imshow(resized)
