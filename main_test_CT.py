@@ -187,20 +187,21 @@ for irow in ind_random:
 ########################################################################################################################
 
 print(sys.version)
-modelvgg16 = tf.keras.applications.VGG16(include_top=True,weights='imagenet')
-modelvgg16.summary()
+#modelvgg16 = tf.keras.applications.VGG16(include_top=True,weights='imagenet')
+#modelvgg16.summary()
 
-modelvgg = tf.keras.models.Model(inputs  =  modelvgg16.inputs, 
-                        outputs = modelvgg16.layers[-3].output)
+#modelvgg = tf.keras.models.Model(inputs  =  modelvgg16.inputs, 
+#                        outputs = modelvgg16.layers[-3].output)
 ## show the deep learning model
-modelvgg.summary()
+#modelvgg.summary()
 
 ## Input layer is 224,224,3
 img_dir_image_resized = customFolder + "JPEGImages_resize"
-resizedim = (224,224,3)
-for img_name in os.listdir(img_dir): 
-    print("fnm", img_name)
-    img = cv2.imread(fnm)
-    
-    resized = cv2.resize(img, resizedim, interpolation = cv2.INTER_AREA)
-    cv2.imwrite(img_dir_image_resized+img_name)
+resizedim = (224,224)
+if True:
+    for img_name in os.listdir(img_dir): 
+        print("fnm", img_name)
+        img = cv2.imread(fnm)
+        
+        resized = cv2.resize(img, resizedim, interpolation = cv2.INTER_AREA)
+        cv2.imwrite(img_dir_image_resized+img_name)
