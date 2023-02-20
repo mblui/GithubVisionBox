@@ -87,7 +87,6 @@ df_anno = pd.DataFrame(df_anno)
 
 maxNobj = np.max(df_anno["Nobj"])
 
-
 print("columns in df_anno\n-----------------")
 for icol, colnm in enumerate(df_anno.columns):
     print("{:3.0f}: {}".format(icol,colnm))
@@ -95,5 +94,5 @@ print("-"*30)
 print("df_anno.shape={}=(N frames, N columns)".format(df_anno.shape))
 df_anno.head()
 
-dir_preprocessed = customFolder+ "VOC2012"
+dir_preprocessed = customFolder
 df_anno.to_csv(os.path.join(dir_preprocessed,"df_anno.csv"),index=False)
