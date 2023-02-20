@@ -229,7 +229,7 @@ for colnm in df_anno.columns:
     #    print("00")
 #print("cols_bbx", df_anno[cols_bbx].values)
 #print('hoi', df_anno[cols_bbx].values)
-print("bbx_has_personTF", df_anno[cols_bbx].values)
+print("bbx_has_personTF", str(df_anno[cols_bbx].values))
 bbx_has_personTF = df_anno[cols_bbx].values == "6"
 
 pick = np.any(bbx_has_personTF,axis=1)
