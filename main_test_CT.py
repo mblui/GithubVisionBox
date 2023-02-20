@@ -35,6 +35,7 @@ import shutil
 import numpy as np
 import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
+import scipy.misc
 from collections import OrderedDict
 import pandas as pd 
 import imageio
