@@ -180,3 +180,21 @@ for irow in ind_random:
                         x2=row["bbx_{}_xmax".format(iplot)],
                         y2=row["bbx_{}_ymax".format(iplot)])
         plt.show() ## show the plot
+########################################################################################################################
+from tensorflow.keras.applications import VGG16
+import pandas as pd
+import os, sys 
+import scipy.misc
+import matplotlib.pyplot as plt
+import random
+import imageio
+import skimage
+print(sys.version)
+modelvgg16 = VGG16(include_top=True,weights='imagenet')
+modelvgg16.summary()
+
+from keras import models
+modelvgg = models.Model(inputs  =  modelvgg16.inputs, 
+                        outputs = modelvgg16.layers[-3].output)
+## show the deep learning model
+modelvgg.summary()
