@@ -195,13 +195,18 @@ print(sys.version)
 ## show the deep learning model
 #modelvgg.summary()
 
-## Input layer is 224,224,3
+## Input layer is 224,224,3 --> Resize image to input size
 img_dir_image_resized = customFolder + "JPEGImages_resize"
 resizedim = (224,224)
+
+## Move images with correct size to another folder
 if True:
     for img_name in os.listdir(img_dir): 
         print("fnm", img_name)
         img = cv2.imread(fnm)
-        
+        cv2.imshow(img)
+        cv2.waitkey(0)
         resized = cv2.resize(img, resizedim, interpolation = cv2.INTER_AREA)
+        cv2.imshow(resized)
+        cv2.waitkey(0)
         cv2.imwrite(img_dir_image_resized+img_name)
