@@ -2,7 +2,7 @@ import os
 import shutil
 
 ## Disable GPU
-os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+#os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 
 # ## Import once labels and files
