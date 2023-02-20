@@ -196,7 +196,7 @@ print(sys.version)
 #modelvgg.summary()
 
 ## Input layer is 224,224,3 --> Resize image to input size
-img_dir_image_resized = customFolder + "JPEGImages_resize"
+img_dir_image_resized = customFolder + "JPEGImages_resize/"
 resizedim = (224,224)
 
 ## Move images with correct size to another folder
