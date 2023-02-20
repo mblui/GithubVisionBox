@@ -48,8 +48,8 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 import tensorflow as tf
 gpus = tf.config.experimental.list_physical_devices('GPU') 
-for gpus in cpus:
-	tf.config.experimental.set_memory_growth(GPU, True)
+for gpus in gpus:
+	tf.config.experimental.set_memory_growth("GPU", True)
         
 
 
