@@ -220,6 +220,7 @@ df_anno = pd.read_csv(os.path.join(dir_preprocessed,"df_anno.csv"))
 # #####################
 cols_bbx = []
 for colnm in df_anno.columns:
+    print("column", colnm)
     if "name" in colnm:
         cols_bbx.append(colnm)
 bbx_has_personTF = df_anno[cols_bbx].values == "6"
