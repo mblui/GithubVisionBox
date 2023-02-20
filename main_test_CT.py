@@ -40,7 +40,6 @@ import pandas as pd
 import imageio
 from tensorflow.keras.applications import VGG16
 import os, sys 
-import scipy.misc
 import random
 import imageio
 import skimage
