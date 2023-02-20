@@ -222,12 +222,12 @@ df_anno = pd.read_csv(os.path.join(dir_preprocessed,"df_anno.csv"))
 cols_bbx = []
 for colnm in df_anno.columns:
     print("Available columns", colnm)
-
     if "name" in colnm:
-        print("bierjte")
+        #print("bierjte")
         cols_bbx.append(colnm)
-    else:
-        print("00")
+    #else:
+    #    print("00")
+print("cols_bbx", cols_bbx)
 #print('hoi', df_anno[cols_bbx].values)
 bbx_has_personTF = df_anno[cols_bbx].values == "6"
 pick = np.any(bbx_has_personTF,axis=1)
