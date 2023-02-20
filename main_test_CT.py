@@ -200,7 +200,7 @@ img_dir_image_resized = customFolder + "JPEGImages_resize/"
 resizedim = (224,224)
 
 ## Move images with correct size to another folder
-if True:
+if False:
     for img_name in os.listdir(img_dir):
         test =  img_dir+ "/"+ img_name
         test2 = img_dir_image_resized+img_name
@@ -212,3 +212,15 @@ if True:
         cv2.imshow("Resized image", resized)
         cv2.waitKey(100)
         cv2.imwrite(test2, resized)
+
+
+#####################
+cols_bbx = []
+for colnm in df_anno.columns:
+    if "name" in colnm:
+        cols_bbx.append(colnm)
+bbx_has_personTF = df_anno[cols_bbx].values == "6"
+pick = np.any(bbx_has_personTF,axis=1)
+df_anno_person = df_anno.loc[pick,:]
+
+
