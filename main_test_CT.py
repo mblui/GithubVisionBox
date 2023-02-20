@@ -42,7 +42,7 @@ import imageio
 import random
 from scipy.fftpack import fft
 import imageio
-import skimage
+#import skimage
 import selective_search as ss
 ## DON'T USE GPU
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
