@@ -71,6 +71,7 @@ def extract_single_xml_file(tree):
         if elems.tag == "object":
             for elem in elems:
                 if elem.tag == "name":
+                    print("i'm here")
                     row["bbx_{}_{}".format(Nobj,elem.tag)] = str(elem.text)              
                 if elem.tag == "bndbox":
                     for k in elem:
