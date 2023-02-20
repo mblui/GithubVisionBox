@@ -155,21 +155,24 @@ def plt_rectangle(plt,label,x1,y1,x2,y2):
 size = 20    
 ind_random = np.random.randint(0,df_anno.shape[0],size=size)
 for irow in ind_random:
-    print("irow", irow)
     row  = df_anno.iloc[irow,:]
+    row["fileID"]
     path = os.path.join(img_dir, row["fileID"] + ".jpg")
-    # read in image
-    img  = imageio.imread(path)
+    if  not os.path.exists(path):
+        print("File with bullshit name")
+    else:
+        # read in image
+        img  = imageio.imread(path)
 
-    plt.figure(figsize=(12,12))
-    plt.imshow(img) # plot image
-    plt.title("Nobj={}, height={}, width={}".format(row["Nobj"],row["height"],row["width"]))
-    # for each object in the image, plot the bounding box
-    for iplot in range(row["Nobj"]):
-        plt_rectangle(plt,
-                      label = row["bbx_{}_name".format(iplot)],
-                      x1=row["bbx_{}_xmin".format(iplot)],
-                      y1=row["bbx_{}_ymin".format(iplot)],
-                      x2=row["bbx_{}_xmax".format(iplot)],
-                      y2=row["bbx_{}_ymax".format(iplot)])
-    plt.show() ## show the plot
+        plt.figure(figsize=(12,12))
+        plt.imshow(img) # plot image
+        plt.title("Nobj={}, height={}, width={}".format(row["Nobj"],row["height"],row["width"]))
+        # for each object in the image, plot the bounding box
+        for iplot in range(row["Nobj"]):
+            plt_rectangle(plt,
+                        label = row["bbx_{}_name".format(iplot)],
+                        x1=row["bbx_{}_xmin".format(iplot)],
+                        y1=row["bbx_{}_ymin".format(iplot)],
+                        x2=row["bbx_{}_xmax".format(iplot)],
+                        y2=row["bbx_{}_ymax".format(iplot)])
+        plt.show() ## show the plot
