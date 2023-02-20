@@ -60,8 +60,8 @@ def extract_single_xml_file(tree):
     for elems in tree.iter():
         if elems.tag == "size":
             for elem in elems:
-                print("Elemememe", elem)
-                val = elem.text if elem.text else 1
+                ######################################################################### WORKAROUND HERE! 
+                val = elem.text if elem.text else 1     ## depth in the VOC is empty. int() will complain about it!
                 row[elem.tag] = int(val)
         if elems.tag == "object":
             for elem in elems:
@@ -94,3 +94,6 @@ for icol, colnm in enumerate(df_anno.columns):
 print("-"*30)
 print("df_anno.shape={}=(N frames, N columns)".format(df_anno.shape))
 df_anno.head()
+
+dir_preprocessed = customFolder+ "VOC2012"
+df_anno.to_csv(os.path.join(dir_preprocessed,"df_anno.csv"),index=False)
