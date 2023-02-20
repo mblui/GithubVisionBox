@@ -203,11 +203,12 @@ resizedim = (224,224)
 if True:
     for img_name in os.listdir(img_dir):
         test =  img_dir+ "/"+ img_name
-        print("fnm", test)
+        test2 = img_dir_image_resized+img_name
+        print("fnm", test, test2)
         img = cv2.imread(test)
         cv2.imshow("Resized image", img)
-        cv2.waitkey(0)
+        cv2.waitKey(0)
         resized = cv2.resize(img, resizedim, interpolation = cv2.INTER_AREA)
         cv2.imshow("Resized image", resized)
-        cv2.waitkey(0)
-        cv2.imwrite(img_dir_image_resized+img_name)
+        cv2.waitKey(0)
+        cv2.imwrite(test2)
