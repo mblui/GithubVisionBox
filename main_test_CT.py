@@ -235,4 +235,88 @@ IoU_cutoff_not_object = 0.4
 objnms = ["image0","info0","image1","info1"]  
 os.chdir(customFolder)
 dir_result = "result"
-print("direct", os.getcwd())
+print("directory", os.getcwd())
+#####################################
+import time 
+start = time.time()   
+# the "rough" ratio between the region candidate with and without objects.
+N_img_without_obj = 2 
+newsize = (300,400) ## hack
+image0, image1, info0,info1 = [], [], [], [] 
+for irow in range(df_anno_person.shape[0]):
+    ## extract a single frame that contains at least one person object
+    row  = df_anno_person.iloc[irow,:]
+    ## read in the corresponding frame
+    path = os.path.join(img_dir,row["fileID"] + ".jpg")
+    img  = imageio.imread(path)
+    orig_h, orig_w, _ = img.shape
+    ## to reduce the computation speed,
+    ## I will do a small hack here. I will resize all the images into newsize = (200,250)    
+    img  = warp(img, newsize)
+    orig_nh, orig_nw, _ = img.shape
+    ## region candidates for this frame
+    regions = ss.get_region_proposal(img,min_size=50)[::-1]
+    
+    ## for each object that exists in the data,
+    ## find if the candidate regions contain the person
+    for ibb in range(row["Nobj"]): 
+
+        name = row["bbx_{}_name".format(ibb)]
+        if name != "person": ## if this object is not person, move on to the next object
+            continue 
+        if irow % 50 == 0:
+            print("frameID = {:04.0f}/{}, BBXID = {:02.0f},  N region proposals = {}, N regions with an object gathered till now = {}".format(
+                    irow, df_anno_person.shape[0], ibb, len(regions), len(image1)))
+        
+        ## extract the bounding box of the person object  
+        multx, multy  = orig_nw/orig_w, orig_nh/orig_h 
+        true_xmin     = row["bbx_{}_xmin".format(ibb)]*multx
+        true_ymin     = row["bbx_{}_ymin".format(ibb)]*multy
+        true_xmax     = row["bbx_{}_xmax".format(ibb)]*multx
+        true_ymax     = row["bbx_{}_ymax".format(ibb)]*multy
+        
+        
+        person_found_TF = 0
+        _image1 = None
+        _image0, _info0  = [],[]
+        ## for each candidate region, find if this person object is included
+        for r in regions:
+            
+            prpl_xmin, prpl_ymin, prpl_width, prpl_height = r["rect"]
+            ## calculate IoU between the candidate region and the object
+            IoU = ss.get_IOU(prpl_xmin, prpl_ymin, prpl_xmin + prpl_width, prpl_ymin + prpl_height,
+                             true_xmin, true_ymin, true_xmax, true_ymax)
+            ## candidate region numpy array
+            img_bb = np.array(img[prpl_ymin:prpl_ymin + prpl_height,
+                                  prpl_xmin:prpl_xmin + prpl_width])
+            
+            info = [irow, prpl_xmin, prpl_ymin, prpl_width, prpl_height]
+            if IoU > IoU_cutoff_object:
+                _image1 = img_bb
+                _info1  = info
+                break
+            elif IoU < IoU_cutoff_not_object:
+                _image0.append(img_bb) 
+                _info0.append(info) 
+        if _image1 is not None:
+            # record all the regions with the objects
+            image1.append(_image1)
+            info1.append(_info1)
+            if len(_info0) >= N_img_without_obj: ## record only 2 regions without objects
+                # downsample the candidate regions without object 
+                # so that the training does not have too much class imbalance. 
+                # randomly select N_img_without_obj many frames out of all the sampled images without objects.
+                pick = np.random.choice(np.arange(len(_info0)),N_img_without_obj)
+                image0.extend([_image0[i] for i in pick ])    
+                info0.extend( [_info0[i]  for i in pick ])  
+
+        
+end = time.time()  
+print("TIME TOOK : {}MIN".format((end-start)/60))
+
+### Save image0, info0, image1, info1 
+objs   = [image0,info0,image1,info1]        
+for obj, nm in zip(objs,objnms):
+    with open(os.path.join(dir_result ,'{}.pickle'.format(nm)), 'wb') as handle:
+        pickle.dump(obj, 
+                    handle, protocol=pickle.HIGHEST_PROTOCOL)
