@@ -44,11 +44,12 @@ import skimage
 #from tensorflow.keras import models
 #from tensorflow.keras.applications import VGG16
 
+os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+
 import tensorflow as tf
 gpus = tf.config.experimental.list_physical_devices('GPU') 
-cpus = tf.config.experimental.list_physical_devices('CPU') 
-for cpu in cpus:
-	tf.config.experimental.set_memory_growth(cpu, True)
+for gpus in cpus:
+	tf.config.experimental.set_memory_growth(GPU, True)
         
 
 
