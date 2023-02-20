@@ -231,9 +231,10 @@ for colnm in df_anno.columns:
 #print('hoi', df_anno[cols_bbx].values)
 print("bbx_has_personTF", df_anno[cols_bbx].values)
 bbx_has_personTF = df_anno[cols_bbx].values == int(6)
-
+print("bbx_has_personTF", bbx_has_personTF)
 pick = np.any(bbx_has_personTF,axis=1)
 df_anno_person = df_anno.loc[pick,:]
+
 # ##############################
 # ######################################################################
 # #   image0  --> containt 6 75%
