@@ -218,13 +218,13 @@ if False:
 df_anno = pd.read_csv(os.path.join(dir_preprocessed,"df_anno.csv"))
 
 # #####################
-# cols_bbx = []
-# for colnm in df_anno.columns:
-#     if "name" in colnm:
-#         cols_bbx.append(colnm)
-# bbx_has_personTF = df_anno[cols_bbx].values == "6"
-# pick = np.any(bbx_has_personTF,axis=1)
-# df_anno_person = df_anno.loc[pick,:]
+cols_bbx = []
+for colnm in df_anno.columns:
+    if "name" in colnm:
+        cols_bbx.append(colnm)
+bbx_has_personTF = df_anno[cols_bbx].values == "6"
+pick = np.any(bbx_has_personTF,axis=1)
+df_anno_person = df_anno.loc[pick,:]
 # ##############################
 # ######################################################################
 # #   image0  --> containt 6 75%
