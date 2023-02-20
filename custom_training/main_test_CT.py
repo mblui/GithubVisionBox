@@ -40,32 +40,56 @@ for gpu in gpus:
 	tf.config.experimental.set_memory_growth(gpu, True)
         
 import matplotlib.pyplot as plt
-# import tensorflow as tf
-# from keras.models import Sequential
-# from keras.layers.core import Dense, Dropout, Activation, Flatten
-# from keras.layers import Conv2D, MaxPool2D
-# from keras import optimizers
-# from keras.datasets import mnist
-# from keras.utils import to_categorical
-
 import tensorflow.keras as keras
 from tensorflow.keras.models import load_model
 import tensorflow as tf
 from tensorflow.keras.applications import VGG16
-import cv2
+import os 
+import numpy as np
+import xml.etree.ElementTree as ET
+from collections import OrderedDict
+import matplotlib.pyplot as plt
+import pandas as pd 
 
-# import cv2
-# import pandas as pd
-# import os, sys 
-# #import scipy.misc
-# import matplotlib.pyplot as plt
-# #import random
-# import imageio
-# #import skimage
 
-modelvgg16 = VGG16(include_top=True,weights='imagenet')
-modelvgg16.summary()
+customFolder = "GithubVisionBox/custom_training/result/"
+dir_anno = customFolder + "Annotations"
+img_dir  = customFolder + "JPEGImages"
 
-import selective_search as ss
-img_dir   = "VOCdevkit/VOC2012/JPEGImages"
-imgnm     = "2012_002870.jpg"
+def extract_single_xml_file(tree):
+    Nobj = 0
+    row  = OrderedDict()
+    for elems in tree.iter():
+
+        if elems.tag == "size":
+            for elem in elems:
+                row[elem.tag] = int(elem.text)
+        if elems.tag == "object":
+            for elem in elems:
+                if elem.tag == "name":
+                    row["bbx_{}_{}".format(Nobj,elem.tag)] = str(elem.text)              
+                if elem.tag == "bndbox":
+                    for k in elem:
+                        row["bbx_{}_{}".format(Nobj,k.tag)] = float(k.text)
+                    Nobj += 1
+    row["Nobj"] = Nobj
+    return(row)
+
+df_anno = []
+for fnm in os.listdir(dir_anno):  
+    if not fnm.startswith('.'): ## do not include hidden folders/files
+        tree = ET.parse(os.path.join(dir_anno,fnm))
+        row = extract_single_xml_file(tree)
+        row["fileID"] = fnm.split(".")[0]
+        df_anno.append(row)
+df_anno = pd.DataFrame(df_anno)
+
+maxNobj = np.max(df_anno["Nobj"])
+
+
+print("columns in df_anno\n-----------------")
+for icol, colnm in enumerate(df_anno.columns):
+    print("{:3.0f}: {}".format(icol,colnm))
+print("-"*30)
+print("df_anno.shape={}=(N frames, N columns)".format(df_anno.shape))
+df_anno.head()
