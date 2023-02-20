@@ -155,6 +155,7 @@ def plt_rectangle(plt,label,x1,y1,x2,y2):
 size = 20    
 ind_random = np.random.randint(0,df_anno.shape[0],size=size)
 for irow in ind_random:
+    print("irow", irow)
     row  = df_anno.iloc[irow,:]
     path = os.path.join(img_dir, row["fileID"] + ".jpg")
     # read in image
