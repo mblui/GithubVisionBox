@@ -54,6 +54,8 @@ customFolder = "custom_training/result/"
 dir_anno = customFolder + "Annotations"
 img_dir  = customFolder + "JPEGImages"
 
+path_2_csv = customFolder + "df_anno.csv"
+print("hoi", os.path.exists(path_2_csv))
 def extract_single_xml_file(tree):
     Nobj = 0
     row  = OrderedDict()
@@ -96,3 +98,6 @@ df_anno.head()
 
 dir_preprocessed = customFolder
 df_anno.to_csv(os.path.join(dir_preprocessed,"df_anno.csv"),index=False)
+
+
+#############################################
