@@ -74,9 +74,9 @@ def extract_single_xml_file(tree):
     return(row)
 
 df_anno = []
-print("hoi", os.listdir(dir_anno))
 for fnm in os.listdir(dir_anno):  
     if not fnm.startswith('.'): ## do not include hidden folders/files
+        print("FNM", fnm)
         tree = ET.parse(os.path.join(dir_anno,fnm))
         row = extract_single_xml_file(tree)
         row["fileID"] = fnm.split(".")[0]
