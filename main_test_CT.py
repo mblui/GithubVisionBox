@@ -30,7 +30,7 @@
 #     print("Total matches =", i)
 
 ###############################################################
-import os
+import os, sys 
 import shutil
 import numpy as np
 import matplotlib.pyplot as plt
@@ -38,12 +38,12 @@ import xml.etree.ElementTree as ET
 from collections import OrderedDict
 import pandas as pd 
 import imageio
-from tensorflow.keras.applications import VGG16
-import os, sys 
 import random
 import imageio
 import skimage
 from tensorflow.keras import models
+from tensorflow.keras.applications import VGG16
+
 #import tensorflow as tf
 #gpus = tf.config.experimental.list_physical_devices('GPU') 
 #for gpu in gpus:
