@@ -160,30 +160,30 @@ def plt_rectangle(plt,label,x1,y1,x2,y2):
     plt.plot([x1,x2],[y2,y2], linewidth=linewidth,color=color)
     
 # randomly select 20 frames    
-size = 1   
-ind_random = np.random.randint(0,df_anno.shape[0],size=size)
-print("sizes:", df_anno.shape[0])
-for irow in ind_random:
-    row  = df_anno.iloc[irow,:]
-    path = os.path.join(img_dir, row["fileID"] + ".jpg")
-    if  not os.path.exists(path):
-        print("File with bullshit name:",path)
-    else:
-        # read in image
-        img  = imageio.v2.imread(path)
+# size = 1   
+# ind_random = np.random.randint(0,df_anno.shape[0],size=size)
+# print("sizes:", df_anno.shape[0])
+# for irow in ind_random:
+#     row  = df_anno.iloc[irow,:]
+#     path = os.path.join(img_dir, row["fileID"] + ".jpg")
+#     if  not os.path.exists(path):
+#         print("File with bullshit name:",path)
+#     else:
+#         # read in image
+#         img  = imageio.v2.imread(path)
 
-        plt.figure(figsize=(12,12))
-        plt.imshow(img) # plot image
-        plt.title("Nobj={}, height={}, width={}".format(row["Nobj"],row["height"],row["width"]))
-        # for each object in the image, plot the bounding box
-        for iplot in range(row["Nobj"]):
-            plt_rectangle(plt,
-                        label = row["bbx_{}_name".format(iplot)],
-                        x1=row["bbx_{}_xmin".format(iplot)],
-                        y1=row["bbx_{}_ymin".format(iplot)],
-                        x2=row["bbx_{}_xmax".format(iplot)],
-                        y2=row["bbx_{}_ymax".format(iplot)])
-        plt.show() ## show the plot
+#         plt.figure(figsize=(12,12))
+#         plt.imshow(img) # plot image
+#         plt.title("Nobj={}, height={}, width={}".format(row["Nobj"],row["height"],row["width"]))
+#         # for each object in the image, plot the bounding box
+#         for iplot in range(row["Nobj"]):
+#             plt_rectangle(plt,
+#                         label = row["bbx_{}_name".format(iplot)],
+#                         x1=row["bbx_{}_xmin".format(iplot)],
+#                         y1=row["bbx_{}_ymin".format(iplot)],
+#                         x2=row["bbx_{}_xmax".format(iplot)],
+#                         y2=row["bbx_{}_ymax".format(iplot)])
+#         plt.show() ## show the plot
 ########################################################################################################################
 
 print(sys.version)
@@ -233,6 +233,6 @@ import pickle
 IoU_cutoff_object     = 0.7
 IoU_cutoff_not_object = 0.4
 objnms = ["image0","info0","image1","info1"]  
-os.chdir("/custom_training/result")
+os.chdir(customFolder)
 dir_result = "result"
 print("direct", os.getcwd())
