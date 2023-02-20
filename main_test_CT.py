@@ -161,7 +161,7 @@ for irow in ind_random:
     row["fileID"]
     path = os.path.join(img_dir, row["fileID"] + ".jpg")
     if  not os.path.exists(path):
-        print("File with bullshit name")
+        print("File with bullshit name:",path)
     else:
         # read in image
         img  = imageio.imread(path)
