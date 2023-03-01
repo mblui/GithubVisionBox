@@ -7,7 +7,6 @@ import os
 import time
 import sys
 import numpy as np
-import git
 ## Define paths
 src_path = r"/home/jetson/Documents/GithHub/GithubVisionBox/"
 
@@ -25,11 +24,9 @@ os.chdir(src_path)
 print(print(os.getcwd()))
 print("## Get latest version of GITHUB FILES--> 0 %")#
 call(["git", "reset", "--hard"])
-print("DONE 1")
 call(["git", "pull", "origin", "main"])
 print("## Get latest version of GITHUB FILES --> 100%")
 
-os.chdir(dst_path)
 ## Load Configuration file
 fileRange = file_nr.size 
 #print("range is", fileRange)
