@@ -16,6 +16,7 @@ import subprocess, time
 loc_def_raspberry  = "dgslr@192.168.23.249:/home/dgslr/ProgramFiles/SCP_images/"  
 loc_def_jetson = "/home/jetson/Documents/SCP_SharedData/"
 
+print("HIEROOOO")
 
 #create variable to store image transfer speeds 
 img_tranfer = np.array([])

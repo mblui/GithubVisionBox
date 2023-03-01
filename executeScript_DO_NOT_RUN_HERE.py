@@ -7,6 +7,7 @@ import os
 import time
 import sys
 import numpy as np
+import git
 ## Define paths
 src_path = r"/home/jetson/Documents/GithHub/GithubVisionBox/"
 
@@ -21,7 +22,8 @@ print("##############################")
 print("## Start Python Script")
 
 print("## Get latest version of GITHUB FILES--> 0 %")
-call(["python3", "git pull origin main"])
+g = git.cmd.Git(gitsrc_path)
+g.pull()
 print("## Get latest version of GITHUB FILES --> 100%")
 
 ## Load Configuration file
