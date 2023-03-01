@@ -6,5 +6,5 @@ Available_files =   [   "AquireImageFromFRAMOS.py"          ,       #   0
                         "process_image.py"
                     ]
 
-#dst_path = r"/home/jetson/Desktop/librealsense2/wrappers/python/examples/"
-dst_path = r"/home/jetson/Desktop/RealTime-DigitRecognition/"
+dst_path = r"/home/jetson/Desktop/librealsense2/wrappers/python/examples/"
+#dst_path = r"/home/jetson/Desktop/RealTime-DigitRecognition/"
