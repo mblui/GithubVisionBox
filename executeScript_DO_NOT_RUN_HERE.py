@@ -19,6 +19,11 @@ m_ti =[]
 
 print("##############################")
 print("## Start Python Script")
+
+print("## Get latest version of GITHUB FILES--> 0 %")
+call(["python3", "git pull origin main"])
+print("## Get latest version of GITHUB FILES --> 100%")
+
 ## Load Configuration file
 fileRange = file_nr.size 
 #print("range is", fileRange)
