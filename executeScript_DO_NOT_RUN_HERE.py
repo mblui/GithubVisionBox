@@ -55,5 +55,6 @@ print("##############################")
 
 
 os.chdir(dst_path)
+print(os.getcwd())
 
 call(["python3", file_path[0]])
