@@ -7,7 +7,7 @@ import os
 import time
 import sys
 import numpy as np
-import git
+from git import repo
 ## Define paths
 src_path = r"/home/jetson/Documents/GithHub/GithubVisionBox/"
 
@@ -24,6 +24,15 @@ print("## Start Python Script")
 print("## Get latest version of GITHUB FILES--> 0 %")
 g = git.cmd.Git(src_path)
 g.pull()
+
+# discard any current changes
+repo.git.reset('--hard')
+
+# if you need to reset to a specific branch:    
+repo.git.reset('--hard','origin/master')
+
+# pull in the changes from from the remote
+repo.remotes.origin.pull()
 print("## Get latest version of GITHUB FILES --> 100%")
 
 ## Load Configuration file
