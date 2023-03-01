@@ -22,7 +22,7 @@ print("##############################")
 print("## Start Python Script")
 
 print("## Get latest version of GITHUB FILES--> 0 %")
-g = git.cmd.Git(gitsrc_path)
+g = git.cmd.Git(src_path)
 g.pull()
 print("## Get latest version of GITHUB FILES --> 100%")
 

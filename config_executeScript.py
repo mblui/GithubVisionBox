@@ -1,6 +1,6 @@
 import numpy as np
 ## INPUTS
-file_nr = np.array([1,2])
+file_nr = np.array([0])
 Available_files =   [   "AquireImageFromFRAMOS.py"          ,       #   0
                         "app.py"                    ,       #   1
                         "process_image.py"
