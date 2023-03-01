@@ -22,8 +22,8 @@ print("##############################")
 print("## Start Python Script")
 
 print("## Get latest version of GITHUB FILES--> 0 %")
-g = git.cmd.Git(src_path)
-g.pull()
+#g = git.cmd.Git(src_path)
+#g.pull()
 
 # discard any current changes
 repo.git.reset('--hard')
