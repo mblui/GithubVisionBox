@@ -250,6 +250,7 @@ def rescale_cebterwh(obj,config):
     center_h = (obj['ymax'] - obj['ymin']) / (float(config['IMAGE_H']) / config['GRID_H']) 
     return(center_w,center_h)
 # MART from tensorflow.keras.utils import Sequence
+from tensorflow.keras import Sequence   # NEW MART
 
 class SimpleBatchGenerator(Sequence):
     def __init__(self, images, config, norm=None, shuffle=True):
