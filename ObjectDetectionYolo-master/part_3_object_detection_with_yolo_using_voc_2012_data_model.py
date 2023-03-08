@@ -80,7 +80,10 @@ from tensorflow.keras.optimizers import SGD, Adam, RMSprop
 from tensorflow.keras.layers import concatenate
 import tensorflow.keras.backend as K
 import tensorflow as tf
-print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+print(" ###Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+gpus = tf.config.list_physical_devices('GPU')
+for gpu in gpus:
+    tf.config.experimental.set_memory_growth(gpu, True)
 
 # the function to implement the orgnization layer (thanks to github.com/allanzelener/YAD2K)
 def space_to_depth_x2(x):
