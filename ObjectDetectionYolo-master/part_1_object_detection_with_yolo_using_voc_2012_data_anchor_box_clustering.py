@@ -454,7 +454,7 @@ The width and heights range between 0 and 1.
 """
 
 Nanchor_box = 4
-results[Nanchor_box]["clusters"]
+print(results[Nanchor_box]["clusters"])
 
 """[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
  contains this ipython notebook and all the functions that I defined in this notebook. 
