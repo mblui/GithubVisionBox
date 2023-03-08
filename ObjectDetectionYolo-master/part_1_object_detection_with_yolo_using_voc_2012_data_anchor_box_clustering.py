@@ -192,7 +192,7 @@ print("N train = {}".format(len(train_image)))
 - Each element of the train_image is a dictionary containing the annoation infomation of an image.
 """
 
-train_image[:2]
+print(train_image[:2])
 
 """#### Visualize output : seen_train_labels
 
