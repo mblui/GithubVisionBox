@@ -229,11 +229,16 @@ The data contain width and height as its features.
 I will standardize the bounding box width and hight with its image width and height as the image width and height differ across images.
 """
 
+## COMMENT MART: The scaling between object width to image with and object length to image length 
+
 wh = []
 for anno in train_image:
     aw = float(anno['width'])  # width of the original image
     ah = float(anno['height']) # height of the original image
+    i = 0
     for obj in anno["object"]:
+        i = i + 1
+        print("Hoi", i)
         w = (obj["xmax"] - obj["xmin"])/aw # make the width range between [0,GRID_W)
         h = (obj["ymax"] - obj["ymin"])/ah # make the width range between [0,GRID_H)
         temp = [w,h]
@@ -353,7 +358,7 @@ To find answer to these hyperparameter values, I will run k-means clustering for
 The more clusters, the larger mean IoU becomes. This is expected as in ultimate case, when k = N cases, then the mean IoU must be 1. 
 """
 
-kmax = 11
+kmax = 20
 dist = np.mean
 results = {}
 for k in range(2,kmax):
