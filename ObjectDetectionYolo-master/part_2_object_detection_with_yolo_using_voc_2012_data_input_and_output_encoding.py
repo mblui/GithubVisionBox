@@ -694,7 +694,7 @@ def plot_image_with_grid_cell_partition(irow):
         IMAGE_      = generator_config["IMAGE_" + wh] ## 416
         if wh == "W":
             pltax   = plt.axvline
-            plttick = plt.xticks
+            plttick = plt.xticks(fontsize=10)
         else:
             pltax   = plt.axhline
             plttick = plt.yticks
