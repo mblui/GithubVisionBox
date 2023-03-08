@@ -81,6 +81,7 @@ def parse_annotation(ann_dir, img_dir, labels=[]):
 import numpy as np
 import cv2
 import copy
+import tensorflow as tf
 class ImageReader(object):
     def __init__(self,IMAGE_H,IMAGE_W, norm=None):
         '''
@@ -399,8 +400,8 @@ from tensorflow.keras.layers import LeakyReLU
 from tensorflow.keras.layers import concatenate
 from tensorflow.keras import backend as K
 #from tensorflow.keras.utils import * #import Sequence
-from tensorflow.keras import Sequence   # NEW MART
-import tensorflow as tf
+#from tensorflow.keras import Sequence   # NEW MART
+
 
 # the function to implement the orgnization layer (thanks to github.com/allanzelener/YAD2K)
 def space_to_depth_x2(x):
