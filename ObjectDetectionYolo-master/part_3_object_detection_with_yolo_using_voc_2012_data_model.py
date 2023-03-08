@@ -80,6 +80,7 @@ from tensorflow.keras.optimizers import SGD, Adam, RMSprop
 from tensorflow.keras.layers import concatenate
 import tensorflow.keras.backend as K
 #os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+os.environ['TF_XLA_FLAGS'] = '--tf_xla_enable_xla_devices'
 import tensorflow as tf
 
 print(" ### Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
