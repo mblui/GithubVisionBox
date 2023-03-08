@@ -238,7 +238,7 @@ for anno in train_image:
     i = 0
     for obj in anno["object"]:
         i = i + 1
-        print("Hoi", i)
+        #print("Hoi", i)
         w = (obj["xmax"] - obj["xmin"])/aw # make the width range between [0,GRID_W)
         h = (obj["ymax"] - obj["ymin"])/ah # make the width range between [0,GRID_H)
         temp = [w,h]
