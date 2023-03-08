@@ -695,7 +695,8 @@ def plot_image_with_grid_cell_partition(irow):
         if wh == "W":
             pltax   = plt.axvline
             plttick = plt.xticks
-            plt.xticks(fontsize=10)
+            plt.xticks(fontsize=1)
+            plttick(fontsize=1)
             
         else:
             pltax   = plt.axhline
