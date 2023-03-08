@@ -393,7 +393,8 @@ class SimpleBatchGenerator(Sequence):
 
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, BatchNormalization, Flatten, Dense, Lambda
-from tensorflow.keras.layers.advanced_activations import LeakyReLU
+# OLD from tensorflow.keras.layers.advanced_activations import LeakyReLU
+from tensorflow.keras.layers import LeakyReLU
 from tensorflow.keras.layers.merge import concatenate
 import tensorflow.keras.backend as K
 import tensorflow as tf
