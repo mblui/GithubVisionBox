@@ -696,11 +696,12 @@ def plot_image_with_grid_cell_partition(irow):
             pltax   = plt.axvline
             plttick = plt.xticks
             plt.xticks(fontsize=1)
-            plttick(fontsize=1)
+            plttick(fontsize=5)
             
         else:
             pltax   = plt.axhline
             plttick = plt.yticks
+            plttick(fontsize=5)
             
         for count in range(GRID_):
             l = IMAGE_*count/GRID_
@@ -746,7 +747,7 @@ plt.show()
 
 """### More examples"""
 
-for irow in range(5,6):
+for irow in range(5,5):
     print("-"*30)
     check_object_in_grid_anchor_pair(irow)
     plot_image_with_grid_cell_partition(irow)
