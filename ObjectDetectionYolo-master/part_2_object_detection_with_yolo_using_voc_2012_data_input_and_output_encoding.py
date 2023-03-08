@@ -727,7 +727,7 @@ def plot_grid(irow):
                     ymax = y + 0.5*h
                     # center
                     plt.text(x*multx,y*multy,
-                             "X",color=c,fontsize=23)
+                             "X",color=c,fontsize=13)
                     plt.plot(np.array([xmin,xmin])*multx,
                              np.array([ymin,ymax])*multy,color=c,linewidth=10)
                     plt.plot(np.array([xmin,xmax])*multx,
