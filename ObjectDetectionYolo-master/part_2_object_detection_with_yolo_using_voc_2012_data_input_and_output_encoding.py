@@ -733,13 +733,13 @@ def plot_grid(irow):
                     plt.text(x*multx,y*multy,
                              "X",color=c,fontsize=13)
                     plt.plot(np.array([xmin,xmin])*multx,
-                             np.array([ymin,ymax])*multy,color=c,linewidth=10)
+                             np.array([ymin,ymax])*multy,color=c,linewidth=5)
                     plt.plot(np.array([xmin,xmax])*multx,
-                             np.array([ymin,ymin])*multy,color=c,linewidth=10)
+                             np.array([ymin,ymin])*multy,color=c,linewidth=5)
                     plt.plot(np.array([xmax,xmax])*multx,
-                             np.array([ymax,ymin])*multy,color=c,linewidth=10)  
+                             np.array([ymax,ymin])*multy,color=c,linewidth=5)  
                     plt.plot(np.array([xmin,xmax])*multx,
-                             np.array([ymax,ymax])*multy,color=c,linewidth=10)
+                             np.array([ymax,ymax])*multy,color=c,linewidth=5)
 
 plot_image_with_grid_cell_partition(iframe)
 plot_grid(iframe)
