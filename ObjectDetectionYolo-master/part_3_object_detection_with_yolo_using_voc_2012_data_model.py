@@ -72,13 +72,13 @@ It repeatedly stacks Convolusion + Batch Normalization + Leaky Relu layers until
 Here is the model defenition, extracted from [experiencor/keras-yolo2](https://github.com/experiencor/keras-yolo2). 
 """
 
-from keras.models import Sequential, Model
-from keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, BatchNormalization, Flatten, Dense, Lambda
-from keras.layers.advanced_activations import LeakyReLU
-from keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
-from keras.optimizers import SGD, Adam, RMSprop
-from keras.layers.merge import concatenate
-import keras.backend as K
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, BatchNormalization, Flatten, Dense, Lambda
+from tensorflow.keras.layers import LeakyReLU
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
+from tensorflow.keras.optimizers import SGD, Adam, RMSprop
+from tensorflow.keras.layers import concatenate
+import tensorflow.keras.backend as K
 import tensorflow as tf
 
 # the function to implement the orgnization layer (thanks to github.com/allanzelener/YAD2K)
