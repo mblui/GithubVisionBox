@@ -104,8 +104,8 @@ LABELS = ['aeroplane',  'bicycle', 'bird',  'boat',      'bottle',
 
 """I downloaded data at:"""
 
-train_image_folder = "../ObjectDetectionRCNN/VOCdevkit/VOC2012/JPEGImages/"
-train_annot_folder = "../ObjectDetectionRCNN/VOCdevkit/VOC2012/Annotations/"
+train_image_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/JPEGImages/"
+train_annot_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/Annotations/"
 
 # Commented out IPython magic to ensure Python compatibility.
 import matplotlib.pyplot as plt
