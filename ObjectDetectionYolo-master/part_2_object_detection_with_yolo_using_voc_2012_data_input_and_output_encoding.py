@@ -184,6 +184,7 @@ plt.imshow(image)
 plt.title("image.shape={}".format(image.shape))
 plt.show()
 
+
 """## Output encoding 1:
 ### Assign each object to a ground truth anchor box
 
@@ -752,3 +753,5 @@ for irow in range(5,10):
 """[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
  contains this ipython notebook and all the functions that I defined in this notebook. 
 """
+
+print("END OF SCRIPT!")
