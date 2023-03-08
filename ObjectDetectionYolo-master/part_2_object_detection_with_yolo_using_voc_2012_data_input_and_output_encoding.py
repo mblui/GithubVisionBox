@@ -477,9 +477,10 @@ The calculation of the loss function will be discussed later in [Part 3 Object D
 
 """
 
-from keras.utils import Sequence
+#from tensorflow.keras.utils import Sequence
+import tensorflow as tf
 
-class SimpleBatchGenerator(Sequence):
+class SimpleBatchGenerator(tf.keras.utils.Sequence):
     def __init__(self, images, config, norm=None, shuffle=True):
         '''
         config : dictionary containing necessary hyper parameters for traning. e.g., 
