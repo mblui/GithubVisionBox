@@ -396,7 +396,7 @@ from tensorflow.keras.layers import Reshape, Activation, Conv2D, Input, MaxPooli
 # OLD from tensorflow.keras.layers.advanced_activations import LeakyReLU
 from tensorflow.keras.layers import LeakyReLU
 from tensorflow.keras.layers import concatenate
-import tensorflow.keras.backend as K
+from tensorflow.keras import backend as K
 import tensorflow as tf
 
 # the function to implement the orgnization layer (thanks to github.com/allanzelener/YAD2K)
