@@ -79,14 +79,14 @@ from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoa
 from tensorflow.keras.optimizers import SGD, Adam, RMSprop
 from tensorflow.keras.layers import concatenate
 import tensorflow.keras.backend as K
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+#os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import tensorflow as tf
 
 print(" ### Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 gpus = tf.config.list_physical_devices('GPU')
-#for gpu in gpus:
-#    tf.config.experimental.set_memory_growth(gpu, True)
-#   print("DONE", gpu)
+for gpu in gpus:
+    tf.config.experimental.set_memory_growth(gpu, True)
+    print("DONE", gpu)
 
 #gpu_options = tf.GPUOptions(allow_growth=True)
 #session = tf.InteractiveSession(config=tf.ConfigProto(gpu_options=gpu_options))
