@@ -150,21 +150,21 @@ def define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, train
     # Layer 9 - 13
     x = ConvBatchLReLu_loop(x,9,convstack9to13,trainable)
         
-    # skip_connection = x
-    # x = MaxPooling2D(pool_size=(2, 2),name="maxpool1_26to13")(x)
+    skip_connection = x
+    x = MaxPooling2D(pool_size=(2, 2),name="maxpool1_26to13")(x)
     
-    # # Layer 14 - 20
-    # x = ConvBatchLReLu_loop(x,14,convstack14to20,trainable)
+    # Layer 14 - 20
+    x = ConvBatchLReLu_loop(x,14,convstack14to20,trainable)
 
-    # # Layer 21
-    # skip_connection = ConvBatchLReLu(skip_connection,filters=64,
-    #                                  kernel_size=(1,1),index=21,trainable=trainable)
-    # skip_connection = Lambda(space_to_depth_x2)(skip_connection)
+    # Layer 21
+    skip_connection = ConvBatchLReLu(skip_connection,filters=64,
+                                     kernel_size=(1,1),index=21,trainable=trainable)
+    skip_connection = Lambda(space_to_depth_x2)(skip_connection)
 
-    # x = concatenate([skip_connection, x])
+    x = concatenate([skip_connection, x])
 
-    # # Layer 22
-    # x = ConvBatchLReLu(x,filters=1024,kernel_size=(3,3),index=22,trainable=trainable)
+    # Layer 22
+    x = ConvBatchLReLu(x,filters=1024,kernel_size=(3,3),index=22,trainable=trainable)
 
     # Layer 23
     x = Conv2D(BOX * (4 + 1 + CLASS), (1,1), strides=(1,1), padding='same', name='conv_23')(x)
