@@ -253,7 +253,7 @@ def rescale_cebterwh(obj,config):
 # MART from tensorflow.keras.utils import Sequence
 from tensorflow import keras # .keras import Sequence   # NEW MART
 
-class SimpleBatchGenerator(tensorflow.keras.utils.Sequence):
+class SimpleBatchGenerator(tf.keras.utils.Sequence):
     def __init__(self, images, config, norm=None, shuffle=True):
         '''
         config : dictionary containing necessary hyper parameters for traning. e.g., 
