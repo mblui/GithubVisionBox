@@ -106,6 +106,7 @@ LABELS = ['aeroplane',  'bicycle', 'bird',  'boat',      'bottle',
 
 train_image_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/JPEGImages/"
 train_annot_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/Annotations/"
+print("Succesfully loaded the folder!")
 
 # Commented out IPython magic to ensure Python compatibility.
 import matplotlib.pyplot as plt
@@ -458,3 +459,5 @@ results[Nanchor_box]["clusters"]
 """[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
  contains this ipython notebook and all the functions that I defined in this notebook. 
 """
+
+print("END OF CODE!")
