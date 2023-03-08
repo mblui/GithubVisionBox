@@ -397,7 +397,8 @@ from tensorflow.keras.layers import Reshape, Activation, Conv2D, Input, MaxPooli
 from tensorflow.keras.layers import LeakyReLU
 from tensorflow.keras.layers import concatenate
 from tensorflow.keras import backend as K
-from tensorflow.keras.utils import * #import Sequence
+#from tensorflow.keras.utils import * #import Sequence
+from tensorflow.keras import Sequence   # NEW MART
 import tensorflow as tf
 
 # the function to implement the orgnization layer (thanks to github.com/allanzelener/YAD2K)
