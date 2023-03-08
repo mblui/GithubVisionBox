@@ -121,16 +121,16 @@ def define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, train
                       {"filters":256, "kernel_size":(1,1)},  # 12
                       {"filters":512, "kernel_size":(3,3)}]  # 13
         
-    convstack14to20 = [{"filters":64, "kernel_size":(3,3)}, # 14 
-                       {"filters":64,  "kernel_size":(1,1)}, # 15
-                       {"filters":64, "kernel_size":(3,3)}, # 16
-                       {"filters":64,  "kernel_size":(1,1)}, # 17
-                       {"filters":64, "kernel_size":(3,3)}, # 18
-                       {"filters":64, "kernel_size":(3,3)}, # 19
+    convstack14to20 = [{"filters":1024, "kernel_size":(3,3)}, # 14 
+                       {"filters":512,  "kernel_size":(1,1)}, # 15
+                       {"filters":1024, "kernel_size":(3,3)}, # 16
+                       {"filters":512,  "kernel_size":(1,1)}, # 17
+                       {"filters":1024, "kernel_size":(3,3)}, # 18
+                       {"filters":1024, "kernel_size":(3,3)}, # 19
                        {"filters":1024, "kernel_size":(3,3)}] # 20
     
     input_image = Input(shape=(IMAGE_H, IMAGE_W, 3),name="input_image")
-    true_boxes  = Input(shape=(1, 1, 1, TRUE_BOX_BUFFER , 4),name="input_hack")    
+    true_boxes  = Input(shape=(1, 1, 1, TRUE_BOX_BUFFER , 4),name="input_hack")  
     # Layer 1
     x = ConvBatchLReLu(input_image,filters=3,kernel_size=(3,3),index=1,trainable=trainable)
     
