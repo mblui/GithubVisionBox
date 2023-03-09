@@ -582,7 +582,7 @@ def calc_loss_xywh(true_box_conf,
     # lambda_{coord} L_{i,j}^{obj} 
     # np.array of shape (Nbatch, Ngrid h, N grid w, N anchor, 1)
     coord_mask  = tf.expand_dims(true_box_conf, axis=-1) * COORD_SCALE 
-    nb_coord_box = tf.reduce_sum(tf.to_float(coord_mask > 0.0))
+    nb_coord_box = tf.reduce_sum(tf.cast(coord_mask > 0.0, dtype=tf.float32))
     loss_xy      = tf.reduce_sum(tf.square(true_box_xy-pred_box_xy) * coord_mask) / (nb_coord_box + 1e-6) / 2.
     loss_wh      = tf.reduce_sum(tf.square(true_box_wh-pred_box_wh) * coord_mask) / (nb_coord_box + 1e-6) / 2.
     return(loss_xy + loss_wh, coord_mask)
@@ -624,7 +624,7 @@ def calc_loss_class(true_box_conf,CLASS_SCALE, true_box_class,pred_box_class):
     '''   
     class_mask   = true_box_conf  * CLASS_SCALE ## L_{i,j}^obj * lambda_class
     
-    nb_class_box = tf.reduce_sum(tf.to_float(class_mask > 0.0))
+    nb_class_box = tf.reduce_sum(tf.cast(class_mask > 0.0, dtype=tf.float32))
     loss_class   = tf.nn.sparse_softmax_cross_entropy_with_logits(labels = true_box_class, 
                                                                   logits = pred_box_class)
     loss_class   = tf.reduce_sum(loss_class * class_mask) / (nb_class_box + 1e-6)   
@@ -898,7 +898,7 @@ def get_conf_mask(best_ious, true_box_conf, true_box_conf_IOU,LAMBDA_NO_OBJECT, 
               when there is an object in (grid cell, anchor) pair        
     '''
 
-    conf_mask = tf.to_float(best_ious < 0.6) * (1 - true_box_conf) * LAMBDA_NO_OBJECT
+    conf_mask = tf.cast(best_ious < 0.6, dtype=tf.float32) * (1 - true_box_conf) * LAMBDA_NO_OBJECT
     # penalize the confidence of the boxes, which are reponsible for corresponding ground truth box
     conf_mask = conf_mask + true_box_conf_IOU * LAMBDA_OBJECT
     return(conf_mask)
@@ -955,7 +955,7 @@ def calc_loss_conf(conf_mask,true_box_conf_IOU, pred_box_conf):
     # the number of (grid cell, anchor) pair that has an assigned object or
     # that has no assigned object but some objects may be in bounding box.
     # N conf
-    nb_conf_box  = tf.reduce_sum(tf.to_float(conf_mask  > 0.0))
+    nb_conf_box  = tf.reduce_sum(tf.cast(conf_mask  > 0.0, dtype=tf.float32))
     loss_conf    = tf.reduce_sum(tf.square(true_box_conf_IOU-pred_box_conf) * conf_mask)  / (nb_conf_box  + 1e-6) / 2.
     return(loss_conf)
 
