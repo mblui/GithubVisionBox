@@ -202,15 +202,15 @@ except:
     pass
 
 
-# BATCH_SIZE   = 32
-# generator_config['BATCH_SIZE'] = BATCH_SIZE
-# print("Ik ben hiero")
-# early_stop = EarlyStopping(monitor='loss', 
-#                            min_delta=0.001, 
-#                            patience=3, 
-#                            mode='min', 
-#                            verbose=1)
-# print("Ik ben hiero2")
+BATCH_SIZE   = 32
+generator_config['BATCH_SIZE'] = BATCH_SIZE
+print("Ik ben hiero")
+early_stop = EarlyStopping(monitor='loss', 
+                           min_delta=0.001, 
+                           patience=3, 
+                           mode='min', 
+                           verbose=1)
+print("Ik ben hiero2")
 
 # checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5', 
 #                              monitor='loss', 
