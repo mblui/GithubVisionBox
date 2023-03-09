@@ -354,7 +354,7 @@ def get_cell_grid(GRID_W,GRID_H,BATCH_SIZE,BOX):
     '''
     ## cell_x.shape = (1, 13, 13, 1, 1)
     ## cell_x[:,i,j,:] = [[[j]]]
-    cell_x = tf.to_float(tf.reshape(tf.tile(tf.range(GRID_W), [GRID_H]), (1, GRID_H, GRID_W, 1, 1)))
+    cell_x = tf.cast(tf.reshape(tf.tile(tf.range(GRID_W), [GRID_H]), (1, GRID_H, GRID_W, 1, 1)), dtype=tf.float32)
     ## cell_y.shape = (1, 13, 13, 1, 1)
     ## cell_y[:,i,j,:] = [[[i]]]
     cell_y = tf.transpose(cell_x, (0,2,1,3,4))
