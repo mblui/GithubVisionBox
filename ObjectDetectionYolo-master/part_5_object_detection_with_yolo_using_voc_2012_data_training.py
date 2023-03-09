@@ -219,7 +219,7 @@ checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5',
 optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 #optimizer = SGD(lr=1e-4, decay=0.0005, momentum=0.9)
 #optimizer = RMSprop(lr=1e-4, rho=0.9, epsilon=1e-08, decay=0.0)
-tf.disable_eager_execution()
+tf.compat.v1.disable_eager_execution()
 model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False)
 model.fit(train_batch_generator, 
             steps_per_epoch  = len(train_batch_generator), 
