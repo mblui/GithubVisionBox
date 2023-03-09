@@ -231,7 +231,8 @@ print("Ik ben hiero4")
 model.compile(loss=custom_loss, optimizer=optimizer)
 print("*"*30)
 print("Ik ben hiero5")
-model.fit(generator        = train_batch_generator, 
+model.fit()
+model.fit(train_batch_generator, 
             steps_per_epoch  = len(train_batch_generator), 
             epochs           = 5, 
             verbose          = 1,
