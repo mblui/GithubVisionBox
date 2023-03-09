@@ -396,14 +396,16 @@ class SimpleBatchGenerator(tf.keras.utils.Sequence):
 ## Part 3 Object Detection with Yolo using VOC 2014 data - model
 ## ==============================================================
 
+#from tensorflow.keras.utils import * #import Sequence
+#from tensorflow.keras import Sequence   # NEW MART
+
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, BatchNormalization, Flatten, Dense, Lambda
-# # OLD from tensorflow.keras.layers.advanced_activations import LeakyReLU
 from tensorflow.keras.layers import LeakyReLU
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
+from tensorflow.keras.optimizers import SGD, Adam, RMSprop
 from tensorflow.keras.layers import concatenate
-from tensorflow.keras import backend as K
-from tensorflow.keras.utils import * #import Sequence
-from tensorflow.keras import Sequence   # NEW MART
+import tensorflow.keras.backend as K
 
 # the function to implement the orgnization layer (thanks to github.com/allanzelener/YAD2K)
 def space_to_depth_x2(x):
