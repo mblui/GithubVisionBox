@@ -44,6 +44,12 @@ This repository contains all the ipython notebooks in this blog series and the f
 import matplotlib.pyplot as plt
 import numpy as np
 import os, sys
+from tensorflow.keras.callbacks import EarlyStopping 
+print("END OF SCRIPT")
+from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.optimizers import SGD 
+from tensorflow.keras.optimizers import Adam 
+from tensorflow.keras.optimizers import RMSprop
 import tensorflow as tf
 print(" ### Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 gpus = tf.config.list_physical_devices('GPU')
@@ -186,61 +192,61 @@ We only train the final 23rd layer and freeze the other weights.
 This is because I am unfortunately using CPU environment.
 """
 
-from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras.optimizers import SGD, Adam, RMSprop
-
-dir_log = "logs/"
-try:
-    os.makedirs(dir_log)
-except:
-    pass
 
 
-BATCH_SIZE   = 32
-generator_config['BATCH_SIZE'] = BATCH_SIZE
 
-early_stop = EarlyStopping(monitor='loss', 
-                           min_delta=0.001, 
-                           patience=3, 
-                           mode='min', 
-                           verbose=1)
-
-checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5', 
-                             monitor='loss', 
-                             verbose=1, 
-                             save_best_only=True, 
-                             mode='min', 
-                             period=1)
+# dir_log = "logs/"
+# try:
+#     os.makedirs(dir_log)
+# except:
+#     pass
 
 
-optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
-#optimizer = SGD(lr=1e-4, decay=0.0005, momentum=0.9)
-#optimizer = RMSprop(lr=1e-4, rho=0.9, epsilon=1e-08, decay=0.0)
+# BATCH_SIZE   = 32
+# generator_config['BATCH_SIZE'] = BATCH_SIZE
 
-model.compile(loss=custom_loss, optimizer=optimizer)
+# early_stop = EarlyStopping(monitor='loss', 
+#                            min_delta=0.001, 
+#                            patience=3, 
+#                            mode='min', 
+#                            verbose=1)
 
-model.fit_generator(generator        = train_batch_generator, 
-                    steps_per_epoch  = len(train_batch_generator), 
-                    epochs           = 50, 
-                    verbose          = 1,
-                    #validation_data  = valid_batch,
-                    #validation_steps = len(valid_batch),
-                    callbacks        = [early_stop, checkpoint], 
-                    max_queue_size   = 3)
+# checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5', 
+#                              monitor='loss', 
+#                              verbose=1, 
+#                              save_best_only=True, 
+#                              mode='min', 
+#                              period=1)
 
-"""[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
- contains this ipython notebook and all the functions that I defined in this notebook. 
 
-By accident, I stopped a notebook.
-Here, let's resume the training..
-"""
+# optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+# #optimizer = SGD(lr=1e-4, decay=0.0005, momentum=0.9)
+# #optimizer = RMSprop(lr=1e-4, rho=0.9, epsilon=1e-08, decay=0.0)
 
-model.load_weights('weights_yolo_on_voc2012.h5')
-model.fit_generator(generator        = train_batch_generator, 
-                    steps_per_epoch  = len(train_batch_generator), 
-                    epochs           = 50, 
-                    verbose          = 1,
-                    #validation_data  = valid_batch,
-                    #validation_steps = len(valid_batch),
-                    callbacks        = [early_stop, checkpoint], 
-                    max_queue_size   = 3)
+# model.compile(loss=custom_loss, optimizer=optimizer)
+
+# model.fit_generator(generator        = train_batch_generator, 
+#                     steps_per_epoch  = len(train_batch_generator), 
+#                     epochs           = 50, 
+#                     verbose          = 1,
+#                     #validation_data  = valid_batch,
+#                     #validation_steps = len(valid_batch),
+#                     callbacks        = [early_stop, checkpoint], 
+#                     max_queue_size   = 3)
+
+# """[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
+#  contains this ipython notebook and all the functions that I defined in this notebook. 
+
+# By accident, I stopped a notebook.
+# Here, let's resume the training..
+# """
+
+# model.load_weights('weights_yolo_on_voc2012.h5')
+# model.fit_generator(generator        = train_batch_generator, 
+#                     steps_per_epoch  = len(train_batch_generator), 
+#                     epochs           = 50, 
+#                     verbose          = 1,
+#                     #validation_data  = valid_batch,
+#                     #validation_steps = len(valid_batch),
+#                     callbacks        = [early_stop, checkpoint], 
+#                     max_queue_size   = 3)
