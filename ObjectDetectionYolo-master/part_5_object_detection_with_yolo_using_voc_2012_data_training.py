@@ -202,7 +202,7 @@ except:
     pass
 
 
-BATCH_SIZE   = 16
+BATCH_SIZE   = 4
 generator_config['BATCH_SIZE'] = BATCH_SIZE
 early_stop = EarlyStopping(monitor='loss', 
                            min_delta=0.001, 
@@ -247,3 +247,4 @@ model.fit(train_batch_generator,
 #                     #validation_steps = len(valid_batch),
 #                     callbacks        = [early_stop, checkpoint], 
 #                     max_queue_size   = 3)
+
