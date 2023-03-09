@@ -197,81 +197,81 @@ wget https://pjreddie.com/media/files/yolov2.weights
 The weights are saved at:
 """
 
-path_to_weight = "./yolov2.weights"
+# path_to_weight = "./yolov2.weights"
 
-"""The following codes are extracted from [keras-yolo2/Yolo Step-by-Step.ipynb](https://github.com/experiencor/keras-yolo2/blob/master/Yolo%20Step-by-Step.ipynb)"""
+# """The following codes are extracted from [keras-yolo2/Yolo Step-by-Step.ipynb](https://github.com/experiencor/keras-yolo2/blob/master/Yolo%20Step-by-Step.ipynb)"""
 
-class WeightReader:
-    # code from https://github.com/experiencor/keras-yolo2/blob/master/Yolo%20Step-by-Step.ipynb
-    def __init__(self, weight_file):
-        self.offset = 4
-        self.all_weights = np.fromfile(weight_file, dtype='float32')
+# class WeightReader:
+#     # code from https://github.com/experiencor/keras-yolo2/blob/master/Yolo%20Step-by-Step.ipynb
+#     def __init__(self, weight_file):
+#         self.offset = 4
+#         self.all_weights = np.fromfile(weight_file, dtype='float32')
         
-    def read_bytes(self, size):
-        self.offset = self.offset + size
-        return self.all_weights[self.offset-size:self.offset]
+#     def read_bytes(self, size):
+#         self.offset = self.offset + size
+#         return self.all_weights[self.offset-size:self.offset]
     
-    def reset(self):
-        self.offset = 4
+#     def reset(self):
+#         self.offset = 4
                 
-weight_reader = WeightReader(path_to_weight)
-print("all_weights.shape = {}".format(weight_reader.all_weights.shape))
+# weight_reader = WeightReader(path_to_weight)
+# print("all_weights.shape = {}".format(weight_reader.all_weights.shape))
 
-"""Assign pre-trained weights to the following layers: 
-<code> conv_i</code>, <code>norm_i</code>, <code> i = 1, 2,..., 22</code>. 
-These layers do not depend on the number of object classes or the number of anchor boxes.
-"""
+# """Assign pre-trained weights to the following layers: 
+# <code> conv_i</code>, <code>norm_i</code>, <code> i = 1, 2,..., 22</code>. 
+# These layers do not depend on the number of object classes or the number of anchor boxes.
+# """
 
-def set_pretrained_weight(model,nb_conv, path_to_weight):
-    weight_reader = WeightReader(path_to_weight)
-    weight_reader.reset()
-    for i in range(1, nb_conv+1):
-        conv_layer = model.get_layer('conv_' + str(i)) ## convolusional layer
+# def set_pretrained_weight(model,nb_conv, path_to_weight):
+#     weight_reader = WeightReader(path_to_weight)
+#     weight_reader.reset()
+#     for i in range(1, nb_conv+1):
+#         conv_layer = model.get_layer('conv_' + str(i)) ## convolusional layer
 
-        if i < nb_conv:
-            norm_layer = model.get_layer('norm_' + str(i)) ## batch normalization layer
+#         if i < nb_conv:
+#             norm_layer = model.get_layer('norm_' + str(i)) ## batch normalization layer
 
-            size = np.prod(norm_layer.get_weights()[0].shape)
+#             size = np.prod(norm_layer.get_weights()[0].shape)
 
-            beta  = weight_reader.read_bytes(size)
-            gamma = weight_reader.read_bytes(size)
-            mean  = weight_reader.read_bytes(size)
-            var   = weight_reader.read_bytes(size)
+#             beta  = weight_reader.read_bytes(size)
+#             gamma = weight_reader.read_bytes(size)
+#             mean  = weight_reader.read_bytes(size)
+#             var   = weight_reader.read_bytes(size)
 
-            weights = norm_layer.set_weights([gamma, beta, mean, var])       
+#             weights = norm_layer.set_weights([gamma, beta, mean, var])       
 
-        if len(conv_layer.get_weights()) > 1: ## with bias
-            bias   = weight_reader.read_bytes(np.prod(conv_layer.get_weights()[1].shape))
-            kernel = weight_reader.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
-            kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
-            kernel = kernel.transpose([2,3,1,0])
-            conv_layer.set_weights([kernel, bias])
-        else: ## without bias
-            kernel = weight_reader.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
-            kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
-            kernel = kernel.transpose([2,3,1,0])
-            conv_layer.set_weights([kernel])
-    return(model)
+#         if len(conv_layer.get_weights()) > 1: ## with bias
+#             bias   = weight_reader.read_bytes(np.prod(conv_layer.get_weights()[1].shape))
+#             kernel = weight_reader.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
+#             kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
+#             kernel = kernel.transpose([2,3,1,0])
+#             conv_layer.set_weights([kernel, bias])
+#         else: ## without bias
+#             kernel = weight_reader.read_bytes(np.prod(conv_layer.get_weights()[0].shape))
+#             kernel = kernel.reshape(list(reversed(conv_layer.get_weights()[0].shape)))
+#             kernel = kernel.transpose([2,3,1,0])
+#             conv_layer.set_weights([kernel])
+#     return(model)
 
 
-nb_conv = 22
-model = set_pretrained_weight(model,nb_conv, path_to_weight)
+# nb_conv = 22
+# model = set_pretrained_weight(model,nb_conv, path_to_weight)
 
-"""## Initialize the 23rd layer"""
+# """## Initialize the 23rd layer"""
 
-def initialize_weight(layer,sd):
-    weights = layer.get_weights()
-    new_kernel = np.random.normal(size=weights[0].shape, scale=sd)
-    new_bias   = np.random.normal(size=weights[1].shape, scale=sd)
-    layer.set_weights([new_kernel, new_bias])
+# def initialize_weight(layer,sd):
+#     weights = layer.get_weights()
+#     new_kernel = np.random.normal(size=weights[0].shape, scale=sd)
+#     new_bias   = np.random.normal(size=weights[1].shape, scale=sd)
+#     layer.set_weights([new_kernel, new_bias])
     
-layer   = model.layers[-4] # the last convolutional layer
-initialize_weight(layer,sd=GRID_H*GRID_W)
+# layer   = model.layers[-4] # the last convolutional layer
+# initialize_weight(layer,sd=GRID_H*GRID_W)
 
-"""So that's how we define the YOLOv2 model!
-The next blog will discuss the loss function of this model which will be used to train the parameters.
+# """So that's how we define the YOLOv2 model!
+# The next blog will discuss the loss function of this model which will be used to train the parameters.
 
-[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
- contains this ipython notebook and all the functions that I defined in this notebook. 
-"""
-print("END OF SCRIPT!")
+# [FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
+#  contains this ipython notebook and all the functions that I defined in this notebook. 
+# """
+# print("END OF SCRIPT!")
