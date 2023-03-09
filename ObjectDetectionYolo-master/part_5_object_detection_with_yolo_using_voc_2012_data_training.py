@@ -150,7 +150,7 @@ I modified the codes and the codes are available at [my Github](https://github.c
 """
 
 from backend import custom_loss_core 
-help(custom_loss_core)
+#help(custom_loss_core)
 
 """Notice that this custom function <code>custom_loss_core</code> depends not only on <code>y_true</code> and <code>y_pred</code> but also the various hayperparameters.
 Unfortunately, Keras's loss function API does not accept any parameters except <code>y_true</code> and <code>y_pred</code>. Therefore, these hyperparameters need to be defined globaly. 

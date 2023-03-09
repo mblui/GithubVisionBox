@@ -358,7 +358,7 @@ To find answer to these hyperparameter values, I will run k-means clustering for
 The more clusters, the larger mean IoU becomes. This is expected as in ultimate case, when k = N cases, then the mean IoU must be 1. 
 """
 
-kmax = 20
+kmax = 11
 dist = np.mean
 results = {}
 for k in range(2,kmax):
