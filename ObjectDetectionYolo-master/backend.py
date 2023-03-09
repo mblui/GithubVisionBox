@@ -827,46 +827,45 @@ def custom_loss_core(y_true,
                      LAMBDA_CLASS,
                      LAMBDA_NO_OBJECT, 
                      LAMBDA_OBJECT):
-    '''
-    y_true : (N batch, N grid h, N grid w, N anchor, 4 + 1 + N classes)
-    y_true[irow, i_gridh, i_gridw, i_anchor, :4] = center_x, center_y, w, h
+    # y_true : (N batch, N grid h, N grid w, N anchor, 4 + 1 + N classes)
+    # y_true[irow, i_gridh, i_gridw, i_anchor, :4] = center_x, center_y, w, h
     
-        center_x : The x coordinate center of the bounding box.
-                   Rescaled to range between 0 and N gird  w (e.g., ranging between [0,13)
-        center_y : The y coordinate center of the bounding box.
-                   Rescaled to range between 0 and N gird  h (e.g., ranging between [0,13)
-        w        : The width of the bounding box.
-                   Rescaled to range between 0 and N gird  w (e.g., ranging between [0,13)
-        h        : The height of the bounding box.
-                   Rescaled to range between 0 and N gird  h (e.g., ranging between [0,13)
+    #     center_x : The x coordinate center of the bounding box.
+    #                Rescaled to range between 0 and N gird  w (e.g., ranging between [0,13)
+    #     center_y : The y coordinate center of the bounding box.
+    #                Rescaled to range between 0 and N gird  h (e.g., ranging between [0,13)
+    #     w        : The width of the bounding box.
+    #                Rescaled to range between 0 and N gird  w (e.g., ranging between [0,13)
+    #     h        : The height of the bounding box.
+    #                Rescaled to range between 0 and N gird  h (e.g., ranging between [0,13)
                    
-    y_true[irow, i_gridh, i_gridw, i_anchor, 4] = ground truth confidence
+    # y_true[irow, i_gridh, i_gridw, i_anchor, 4] = ground truth confidence
         
-        ground truth confidence is 1 if object exists in this (anchor box, gird cell) pair
+    #     ground truth confidence is 1 if object exists in this (anchor box, gird cell) pair
     
-    y_true[irow, i_gridh, i_gridw, i_anchor, 5 + iclass] = 1 if the object is in category <iclass> else 0
+    # y_true[irow, i_gridh, i_gridw, i_anchor, 5 + iclass] = 1 if the object is in category <iclass> else 0
     
-    =====================================================
-    tensor that connect to the YOLO model's hack input 
-    =====================================================    
+    # =====================================================
+    # tensor that connect to the YOLO model's hack input 
+    # =====================================================    
     
-    true_boxes    
+    # true_boxes    
     
-    =========================================
-    training parameters specification example 
-    =========================================
-    GRID_W             = 13
-    GRID_H             = 13
-    BATCH_SIZE         = 34
-    ANCHORS = np.array([1.07709888,  1.78171903,  # anchor box 1, width , height
-                        2.71054693,  5.12469308,  # anchor box 2, width,  height
-                       10.47181473, 10.09646365,  # anchor box 3, width,  height
-                        5.48531347,  8.11011331]) # anchor box 4, width,  height
-    LAMBDA_NO_OBJECT = 1.0
-    LAMBDA_OBJECT    = 5.0
-    LAMBDA_COORD     = 1.0
-    LAMBDA_CLASS     = 1.0
-    ''' 
+    # =========================================
+    # training parameters specification example 
+    # =========================================
+    # GRID_W             = 13
+    # GRID_H             = 13
+    # BATCH_SIZE         = 34
+    # ANCHORS = np.array([1.07709888,  1.78171903,  # anchor box 1, width , height
+    #                     2.71054693,  5.12469308,  # anchor box 2, width,  height
+    #                    10.47181473, 10.09646365,  # anchor box 3, width,  height
+    #                     5.48531347,  8.11011331]) # anchor box 4, width,  height
+    # LAMBDA_NO_OBJECT = 1.0
+    # LAMBDA_OBJECT    = 5.0
+    # LAMBDA_COORD     = 1.0
+    # LAMBDA_CLASS     = 1.0
+    
     BOX = int(len(ANCHORS)/2)    
     # Step 1: Adjust prediction output
     cell_grid   = get_cell_grid(GRID_W,GRID_H,BATCH_SIZE,BOX)
