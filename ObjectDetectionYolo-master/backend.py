@@ -547,599 +547,600 @@ def initialize_weight(layer,sd):
     layer.set_weights([new_kernel, new_bias])
     
     
-## ==============================================================            
-## Part 4 Object Detection with Yolo using VOC 2014 data - loss
-## ==============================================================
+# ## ==============================================================            
+# ## Part 4 Object Detection with Yolo using VOC 2014 data - loss
+# ## ==============================================================
 
-def get_cell_grid(GRID_W,GRID_H,BATCH_SIZE,BOX): 
-    '''
-    Helper function to assure that the bounding box x and y are in the grid cell scale
-    == output == 
-    for any i=0,1..,batch size - 1
-    output[i,5,3,:,:] = array([[3., 5.],
-                               [3., 5.],
-                               [3., 5.]], dtype=float32)
-    '''
-    ## cell_x.shape = (1, 13, 13, 1, 1)
-    ## cell_x[:,i,j,:] = [[[j]]]
-    cell_x = tf.cast(tf.reshape(tf.tile(tf.range(GRID_W), [GRID_H]), (1, GRID_H, GRID_W, 1, 1)), dtype=tf.float32)
-    ## cell_y.shape = (1, 13, 13, 1, 1)
-    ## cell_y[:,i,j,:] = [[[i]]]
-    cell_y = tf.transpose(cell_x, (0,2,1,3,4))
-    ## cell_gird.shape = (16, 13, 13, 5, 2)
-    ## for any n, k, i, j
-    ##    cell_grid[n, i, j, anchor, k] = j when k = 0
-    ## for any n, k, i, j
-    ##    cell_grid[n, i, j, anchor, k] = i when k = 1    
-    cell_grid = tf.tile(tf.concat([cell_x,cell_y], -1), [BATCH_SIZE, 1, 1, BOX, 1])
-    return(cell_grid) 
-
-def adjust_scale_prediction(y_pred, cell_grid, ANCHORS):    
-    """
-        Adjust prediction
-        
-        == input ==
-        
-        y_pred : takes any real values
-                 tensor of shape = (N batch, NGrid h, NGrid w, NAnchor, 4 + 1 + N class)
-        
-        ANCHORS : list containing width and height specializaiton of anchor box
-        == output ==
-        
-        pred_box_xy : shape = (N batch, N grid x, N grid y, N anchor, 2), contianing [center_y, center_x] rangining [0,0]x[grid_H-1,grid_W-1]
-          pred_box_xy[irow,igrid_h,igrid_w,ianchor,0] =  center_x
-          pred_box_xy[irow,igrid_h,igrid_w,ianchor,1] =  center_1
-          
-          calculation process:
-          tf.sigmoid(y_pred[...,:2]) : takes values between 0 and 1
-          tf.sigmoid(y_pred[...,:2]) + cell_grid : takes values between 0 and grid_W - 1 for x coordinate 
-                                                   takes values between 0 and grid_H - 1 for y coordinate 
-                                                   
-        pred_Box_wh : shape = (N batch, N grid h, N grid w, N anchor, 2), 
-                        containing width and height, rangining [0,0]x[grid_H-1,grid_W-1]
-        
-        pred_box_conf : shape = (N batch, N grid h, N grid w, N anchor, 1), containing confidence to range between 0 and 1
-        
-        pred_box_class : shape = (N batch, N grid h, N grid w, N anchor, N class), containing 
-    """
-    BOX = int(len(ANCHORS)/2)
-    ## cell_grid is of the shape of 
-    
-    ### adjust x and y  
-    # the bounding box bx and by are rescaled to range between 0 and 1 for given gird.
-    # Since there are BOX x BOX grids, we rescale each bx and by to range between 0 to BOX + 1
-    pred_box_xy = tf.sigmoid(y_pred[..., :2]) + cell_grid # bx, by
-    
-    ### adjust w and h
-    # exp to make width and height positive
-    # rescale each grid to make some anchor "good" at representing certain shape of bounding box 
-    pred_box_wh = tf.exp(y_pred[..., 2:4]) * np.reshape(ANCHORS,[1,1,1,BOX,2]) # bw, bh
-
-    ### adjust confidence 
-    pred_box_conf = tf.sigmoid(y_pred[..., 4])# prob bb
-
-    ### adjust class probabilities 
-    pred_box_class = y_pred[..., 5:] # prC1, prC2, ..., prC20
-    
-    return(pred_box_xy,pred_box_wh,pred_box_conf,pred_box_class)
-
-def extract_ground_truth(y_true):    
-    true_box_xy    = y_true[..., 0:2] # bounding box x, y coordinate in grid cell scale 
-    true_box_wh    = y_true[..., 2:4] # number of cells accross, horizontally and vertically
-    true_box_conf  = y_true[...,4]    # confidence 
-    true_box_class = tf.argmax(y_true[..., 5:], -1)
-    return(true_box_xy, true_box_wh, true_box_conf, true_box_class)
-
-def calc_loss_xywh(true_box_conf,
-                   COORD_SCALE,
-                   true_box_xy, pred_box_xy,true_box_wh,pred_box_wh):  
-    '''
-    coord_mask:      np.array of shape (Nbatch, Ngrid h, N grid w, N anchor, 1)
-                     lambda_{coord} L_{i,j}^{obj}     
-                         
-    '''
-    
-    # lambda_{coord} L_{i,j}^{obj} 
-    # np.array of shape (Nbatch, Ngrid h, N grid w, N anchor, 1)
-    coord_mask  = tf.expand_dims(true_box_conf, axis=-1) * COORD_SCALE 
-    nb_coord_box = tf.reduce_sum(tf.cast(coord_mask > 0.0, dtype=tf.float32))
-    loss_xy      = tf.reduce_sum(tf.square(true_box_xy-pred_box_xy) * coord_mask) / (nb_coord_box + 1e-6) / 2.
-    loss_wh      = tf.reduce_sum(tf.square(true_box_wh-pred_box_wh) * coord_mask) / (nb_coord_box + 1e-6) / 2.
-    return(loss_xy + loss_wh, coord_mask)
-def calc_loss_class(true_box_conf,CLASS_SCALE, true_box_class,pred_box_class):
-    '''
-    == input ==    
-    true_box_conf  : tensor of shape (N batch, N grid h, N grid w, N anchor)
-    true_box_class : tensor of shape (N batch, N grid h, N grid w, N anchor), containing class index
-    pred_box_class : tensor of shape (N batch, N grid h, N grid w, N anchor, N class)
-    CLASS_SCALE    : 1.0
-    
-    == output ==  
-    class_mask
-    if object exists in this (grid_cell, anchor) pair and the class object receive nonzero weight
-        class_mask[iframe,igridy,igridx,ianchor] = 1 
-    else: 
-        0 
-    '''   
-    class_mask   = true_box_conf  * CLASS_SCALE ## L_{i,j}^obj * lambda_class
-    
-    nb_class_box = tf.reduce_sum(tf.cast(class_mask > 0.0, dtype=tf.float32))
-    loss_class   = tf.nn.sparse_softmax_cross_entropy_with_logits(labels = true_box_class, 
-                                                                  logits = pred_box_class)
-    loss_class   = tf.reduce_sum(loss_class * class_mask) / (nb_class_box + 1e-6)   
-    return(loss_class)
-
-
-
-def get_intersect_area(true_xy,true_wh,
-                       pred_xy,pred_wh):
-    '''
-    == INPUT ==
-    true_xy,pred_xy, true_wh and pred_wh must have the same shape length
-
-    p1 : pred_mins = (px1,py1)
-    p2 : pred_maxs = (px2,py2)
-    t1 : true_mins = (tx1,ty1) 
-    t2 : true_maxs = (tx2,ty2) 
-                 p1______________________ 
-                 |      t1___________   |
-                 |       |           |  |
-                 |_______|___________|__|p2 
-                         |           |rmax
-                         |___________|
-                                      t2
-    intersect_mins : rmin = t1  = (tx1,ty1)
-    intersect_maxs : rmax = (rmaxx,rmaxy)
-    intersect_wh   : (rmaxx - tx1, rmaxy - ty1)
-        
-    '''
-    true_wh_half = true_wh / 2.
-    true_mins    = true_xy - true_wh_half
-    true_maxes   = true_xy + true_wh_half
-    
-    pred_wh_half = pred_wh / 2.
-    pred_mins    = pred_xy - pred_wh_half
-    pred_maxes   = pred_xy + pred_wh_half    
-    
-    intersect_mins  = tf.maximum(pred_mins,  true_mins)
-    intersect_maxes = tf.minimum(pred_maxes, true_maxes)
-    intersect_wh    = tf.maximum(intersect_maxes - intersect_mins, 0.)
-    intersect_areas = intersect_wh[..., 0] * intersect_wh[..., 1]
-    
-    true_areas = true_wh[..., 0] * true_wh[..., 1]
-    pred_areas = pred_wh[..., 0] * pred_wh[..., 1]
-
-    union_areas = pred_areas + true_areas - intersect_areas
-    iou_scores  = tf.truediv(intersect_areas, union_areas)    
-    return(iou_scores)
-
-def calc_IOU_pred_true_assigned(true_box_conf,
-                                true_box_xy, true_box_wh,
-                                pred_box_xy,  pred_box_wh):
-    ''' 
-    == input ==
-    
-    true_box_conf : tensor of shape (N batch, N grid h, N grid w, N anchor )
-    true_box_xy   : tensor of shape (N batch, N grid h, N grid w, N anchor , 2)
-    true_box_wh   : tensor of shape (N batch, N grid h, N grid w, N anchor , 2)
-    pred_box_xy   : tensor of shape (N batch, N grid h, N grid w, N anchor , 2)
-    pred_box_wh   : tensor of shape (N batch, N grid h, N grid w, N anchor , 2)
-        
-    == output ==
-    
-    true_box_conf : tensor of shape (N batch, N grid h, N grid w, N anchor)
-    
-    true_box_conf value depends on the predicted values 
-    true_box_conf = IOU_{true,pred} if objecte exist in this anchor else 0
-    '''
-    iou_scores        =  get_intersect_area(true_box_xy,true_box_wh,
-                                            pred_box_xy,pred_box_wh)
-    true_box_conf_IOU = iou_scores * true_box_conf
-    return(true_box_conf_IOU)
-
-
-def calc_IOU_pred_true_best(pred_box_xy,pred_box_wh,true_boxes):   
-    '''
-    == input ==
-    pred_box_xy : tensor of shape (N batch, N grid h, N grid w, N anchor, 2)
-    pred_box_wh : tensor of shape (N batch, N grid h, N grid w, N anchor, 2)
-    true_boxes  : tensor of shape (N batch, N grid h, N grid w, N anchor, 2)
-    
-    == output == 
-    
-    best_ious
-    
-    for each iframe,
-        best_ious[iframe,igridy,igridx,ianchor] contains
-        
-        the IOU of the object that is most likely included (or best fitted) 
-        within the bounded box recorded in (grid_cell, anchor) pair
-        
-        NOTE: a same object may be contained in multiple (grid_cell, anchor) pair
-              from best_ious, you cannot tell how may actual objects are captured as the "best" object
-    '''
-    true_xy = true_boxes[..., 0:2]           # (N batch, 1, 1, 1, TRUE_BOX_BUFFER, 2)
-    true_wh = true_boxes[..., 2:4]           # (N batch, 1, 1, 1, TRUE_BOX_BUFFER, 2)
-    
-    pred_xy = tf.expand_dims(pred_box_xy, 4) # (N batch, N grid_h, N grid_w, N anchor, 1, 2)
-    pred_wh = tf.expand_dims(pred_box_wh, 4) # (N batch, N grid_h, N grid_w, N anchor, 1, 2)
-    
-    iou_scores  =  get_intersect_area(true_xy,
-                                      true_wh,
-                                      pred_xy,
-                                      pred_wh) # (N batch, N grid_h, N grid_w, N anchor, 50)   
-
-    best_ious = tf.reduce_max(iou_scores, axis=4) # (N batch, N grid_h, N grid_w, N anchor)
-    return(best_ious)
-def get_conf_mask(best_ious, true_box_conf, true_box_conf_IOU,LAMBDA_NO_OBJECT, LAMBDA_OBJECT):    
-    '''
-    == input == 
-    
-    best_ious           : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
-    true_box_conf       : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
-    true_box_conf_IOU   : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
-    LAMBDA_NO_OBJECT    : 1.0
-    LAMBDA_OBJECT       : 5.0
-    
-    == output ==
-    conf_mask : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
-    
-    conf_mask[iframe, igridy, igridx, ianchor] = 0
-               when there is no object assigned in (grid cell, anchor) pair and the region seems useless i.e. 
-               y_true[iframe,igridx,igridy,4] = 0 "and" the predicted region has no object that has IoU > 0.6
-               
-    conf_mask[iframe, igridy, igridx, ianchor] =  NO_OBJECT_SCALE
-               when there is no object assigned in (grid cell, anchor) pair but region seems to include some object
-               y_true[iframe,igridx,igridy,4] = 0 "and" the predicted region has some object that has IoU > 0.6
-               
-    conf_mask[iframe, igridy, igridx, ianchor] =  OBJECT_SCALE
-              when there is an object in (grid cell, anchor) pair        
-    '''
-
-    conf_mask = tf.cast(best_ious < 0.6,dtype=tf.float32) * (1 - true_box_conf) * LAMBDA_NO_OBJECT
-    # penalize the confidence of the boxes, which are reponsible for corresponding ground truth box
-    conf_mask = conf_mask + true_box_conf_IOU * LAMBDA_OBJECT
-    return(conf_mask)
-
-def calc_loss_conf(conf_mask,true_box_conf_IOU, pred_box_conf):  
-    '''
-    == input ==
-    
-    conf_mask         : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
-    true_box_conf_IOU : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
-    pred_box_conf     : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
-    '''
-    # the number of (grid cell, anchor) pair that has an assigned object or
-    # that has no assigned object but some objects may be in bounding box.
-    # N conf
-    nb_conf_box  = tf.reduce_sum(tf.cast(conf_mask  > 0.0, dtype=tf.float32))
-    loss_conf    = tf.reduce_sum(tf.square(true_box_conf_IOU-pred_box_conf) * conf_mask)  / (nb_conf_box  + 1e-6) / 2.
-    return(loss_conf)
-
-def custom_loss_core(y_true,
-                     y_pred,
-                     true_boxes,
-                     GRID_W,
-                     GRID_H,
-                     BATCH_SIZE,
-                     ANCHORS,
-                     LAMBDA_COORD,
-                     LAMBDA_CLASS,
-                     LAMBDA_NO_OBJECT, 
-                     LAMBDA_OBJECT):
-    # y_true : (N batch, N grid h, N grid w, N anchor, 4 + 1 + N classes)
-    # y_true[irow, i_gridh, i_gridw, i_anchor, :4] = center_x, center_y, w, h
-    
-    #     center_x : The x coordinate center of the bounding box.
-    #                Rescaled to range between 0 and N gird  w (e.g., ranging between [0,13)
-    #     center_y : The y coordinate center of the bounding box.
-    #                Rescaled to range between 0 and N gird  h (e.g., ranging between [0,13)
-    #     w        : The width of the bounding box.
-    #                Rescaled to range between 0 and N gird  w (e.g., ranging between [0,13)
-    #     h        : The height of the bounding box.
-    #                Rescaled to range between 0 and N gird  h (e.g., ranging between [0,13)
-                   
-    # y_true[irow, i_gridh, i_gridw, i_anchor, 4] = ground truth confidence
-        
-    #     ground truth confidence is 1 if object exists in this (anchor box, gird cell) pair
-    
-    # y_true[irow, i_gridh, i_gridw, i_anchor, 5 + iclass] = 1 if the object is in category <iclass> else 0
-    
-    # =====================================================
-    # tensor that connect to the YOLO model's hack input 
-    # =====================================================    
-    
-    # true_boxes    
-    
-    # =========================================
-    # training parameters specification example 
-    # =========================================
-    # GRID_W             = 13
-    # GRID_H             = 13
-    # BATCH_SIZE         = 34
-    # ANCHORS = np.array([1.07709888,  1.78171903,  # anchor box 1, width , height
-    #                     2.71054693,  5.12469308,  # anchor box 2, width,  height
-    #                    10.47181473, 10.09646365,  # anchor box 3, width,  height
-    #                     5.48531347,  8.11011331]) # anchor box 4, width,  height
-    # LAMBDA_NO_OBJECT = 1.0
-    # LAMBDA_OBJECT    = 5.0
-    # LAMBDA_COORD     = 1.0
-    # LAMBDA_CLASS     = 1.0
-    
-    BOX = int(len(ANCHORS)/2)    
-    # Step 1: Adjust prediction output
-    cell_grid   = get_cell_grid(GRID_W,GRID_H,BATCH_SIZE,BOX)
-    pred_box_xy, pred_box_wh, pred_box_conf, pred_box_class = adjust_scale_prediction(y_pred,cell_grid,ANCHORS)
-    # Step 2: Extract ground truth output
-    true_box_xy, true_box_wh, true_box_conf, true_box_class = extract_ground_truth(y_true)
-    # Step 3: Calculate loss for the bounding box parameters
-    loss_xywh, coord_mask = calc_loss_xywh(true_box_conf,LAMBDA_COORD,
-                                           true_box_xy, pred_box_xy,true_box_wh,pred_box_wh)
-    # Step 4: Calculate loss for the class probabilities
-    loss_class  = calc_loss_class(true_box_conf,LAMBDA_CLASS,
-                                   true_box_class,pred_box_class)
-    # Step 5: For each (grid cell, anchor) pair, 
-    #         calculate the IoU between predicted and ground truth bounding box
-    true_box_conf_IOU = calc_IOU_pred_true_assigned(true_box_conf,
-                                                    true_box_xy, true_box_wh,
-                                                    pred_box_xy, pred_box_wh)
-    # Step 6: For each predicted bounded box from (grid cell, anchor box), 
-    #         calculate the best IOU, regardless of the ground truth anchor box that each object gets assigned.
-    best_ious = calc_IOU_pred_true_best(pred_box_xy,pred_box_wh,true_boxes)
-    # Step 7: For each grid cell, calculate the L_{i,j}^{noobj}
-    conf_mask = get_conf_mask(best_ious, true_box_conf, true_box_conf_IOU,LAMBDA_NO_OBJECT, LAMBDA_OBJECT)
-    # Step 8: Calculate loss for the confidence
-    loss_conf = calc_loss_conf(conf_mask,true_box_conf_IOU, pred_box_conf)
-    
-    loss = loss_xywh + loss_conf + loss_class
-    return(loss)
-
-def custom_loss(y_true, y_pred):
-    loss = custom_loss_core(y_true,
-                     y_pred,
-                     true_boxes,
-                     GRID_W,
-                     GRID_H,
-                     BATCH_SIZE,
-                     ANCHORS,
-                     LAMBDA_COORD,
-                     LAMBDA_CLASS,
-                     LAMBDA_NO_OBJECT, 
-                     LAMBDA_OBJECT)
-
-    
-    return loss
-
-
-# # ========================================================================== ##
-# # Part 6 Object Detection with Yolo using VOC 2012 data - inference on image
-# # ========================================================================== ##
-
-# class OutputRescaler(object):
-#     def __init__(self,ANCHORS):
-#         self.ANCHORS = ANCHORS
-
-#     def _sigmoid(self, x):
-#         return 1. / (1. + np.exp(-x))
-#     def _softmax(self, x, axis=-1, t=-100.):
-#         x = x - np.max(x)
-
-#         if np.min(x) < t:
-#             x = x/np.min(x)*t
-
-#         e_x = np.exp(x)
-#         return e_x / e_x.sum(axis, keepdims=True)
-#     def get_shifting_matrix(self,netout):
-        
-#         GRID_H, GRID_W, BOX = netout.shape[:3]
-#         no = netout[...,0]
-        
-#         ANCHORSw = self.ANCHORS[::2]
-#         ANCHORSh = self.ANCHORS[1::2]
-       
-#         mat_GRID_W = np.zeros_like(no)
-#         for igrid_w in range(GRID_W):
-#             mat_GRID_W[:,igrid_w,:] = igrid_w
-
-#         mat_GRID_H = np.zeros_like(no)
-#         for igrid_h in range(GRID_H):
-#             mat_GRID_H[igrid_h,:,:] = igrid_h
-
-#         mat_ANCHOR_W = np.zeros_like(no)
-#         for ianchor in range(BOX):    
-#             mat_ANCHOR_W[:,:,ianchor] = ANCHORSw[ianchor]
-
-#         mat_ANCHOR_H = np.zeros_like(no) 
-#         for ianchor in range(BOX):    
-#             mat_ANCHOR_H[:,:,ianchor] = ANCHORSh[ianchor]
-#         return(mat_GRID_W,mat_GRID_H,mat_ANCHOR_W,mat_ANCHOR_H)
-
-#     def fit(self, netout):    
-#         '''
-#         netout  : np.array of shape (N grid h, N grid w, N anchor, 4 + 1 + N class)
-        
-#         a single image output of model.predict()
-#         '''
-#         GRID_H, GRID_W, BOX = netout.shape[:3]
-        
-#         (mat_GRID_W,
-#          mat_GRID_H,
-#          mat_ANCHOR_W,
-#          mat_ANCHOR_H) = self.get_shifting_matrix(netout)
-
-
-#         # bounding box parameters
-#         netout[..., 0]   = (self._sigmoid(netout[..., 0]) + mat_GRID_W)/GRID_W # x      unit: range between 0 and 1
-#         netout[..., 1]   = (self._sigmoid(netout[..., 1]) + mat_GRID_H)/GRID_H # y      unit: range between 0 and 1
-#         netout[..., 2]   = (np.exp(netout[..., 2]) * mat_ANCHOR_W)/GRID_W      # width  unit: range between 0 and 1
-#         netout[..., 3]   = (np.exp(netout[..., 3]) * mat_ANCHOR_H)/GRID_H      # height unit: range between 0 and 1
-#         # rescale the confidence to range 0 and 1 
-#         netout[..., 4]   = self._sigmoid(netout[..., 4])
-#         expand_conf      = np.expand_dims(netout[...,4],-1) # (N grid h , N grid w, N anchor , 1)
-#         # rescale the class probability to range between 0 and 1
-#         # Pr(object class = k) = Pr(object exists) * Pr(object class = k |object exists)
-#         #                      = Conf * P^c
-#         netout[..., 5:]  = expand_conf * self._softmax(netout[..., 5:])
-#         # ignore the class probability if it is less than obj_threshold 
-    
-#         return(netout)
-    
-    
-# def find_high_class_probability_bbox(netout_scale, obj_threshold):
+# def get_cell_grid(GRID_W,GRID_H,BATCH_SIZE,BOX): 
 #     '''
-#     == Input == 
-#     netout : y_pred[i] np.array of shape (GRID_H, GRID_W, BOX, 4 + 1 + N class)
+#     Helper function to assure that the bounding box x and y are in the grid cell scale
+#     == output == 
+#     for any i=0,1..,batch size - 1
+#     output[i,5,3,:,:] = array([[3., 5.],
+#                                [3., 5.],
+#                                [3., 5.]], dtype=float32)
+#     '''
+#     ## cell_x.shape = (1, 13, 13, 1, 1)
+#     ## cell_x[:,i,j,:] = [[[j]]]
+#     cell_x = tf.cast(tf.reshape(tf.tile(tf.range(GRID_W), [GRID_H]), (1, GRID_H, GRID_W, 1, 1)), dtype=tf.float32)
+#     ## cell_y.shape = (1, 13, 13, 1, 1)
+#     ## cell_y[:,i,j,:] = [[[i]]]
+#     cell_y = tf.transpose(cell_x, (0,2,1,3,4))
+#     ## cell_gird.shape = (16, 13, 13, 5, 2)
+#     ## for any n, k, i, j
+#     ##    cell_grid[n, i, j, anchor, k] = j when k = 0
+#     ## for any n, k, i, j
+#     ##    cell_grid[n, i, j, anchor, k] = i when k = 1    
+#     cell_grid = tf.tile(tf.concat([cell_x,cell_y], -1), [BATCH_SIZE, 1, 1, BOX, 1])
+#     return(cell_grid) 
+
+# def adjust_scale_prediction(y_pred, cell_grid, ANCHORS):    
+#     """
+#         Adjust prediction
+        
+#         == input ==
+        
+#         y_pred : takes any real values
+#                  tensor of shape = (N batch, NGrid h, NGrid w, NAnchor, 4 + 1 + N class)
+        
+#         ANCHORS : list containing width and height specializaiton of anchor box
+#         == output ==
+        
+#         pred_box_xy : shape = (N batch, N grid x, N grid y, N anchor, 2), contianing [center_y, center_x] rangining [0,0]x[grid_H-1,grid_W-1]
+#           pred_box_xy[irow,igrid_h,igrid_w,ianchor,0] =  center_x
+#           pred_box_xy[irow,igrid_h,igrid_w,ianchor,1] =  center_1
+          
+#           calculation process:
+#           tf.sigmoid(y_pred[...,:2]) : takes values between 0 and 1
+#           tf.sigmoid(y_pred[...,:2]) + cell_grid : takes values between 0 and grid_W - 1 for x coordinate 
+#                                                    takes values between 0 and grid_H - 1 for y coordinate 
+                                                   
+#         pred_Box_wh : shape = (N batch, N grid h, N grid w, N anchor, 2), 
+#                         containing width and height, rangining [0,0]x[grid_H-1,grid_W-1]
+        
+#         pred_box_conf : shape = (N batch, N grid h, N grid w, N anchor, 1), containing confidence to range between 0 and 1
+        
+#         pred_box_class : shape = (N batch, N grid h, N grid w, N anchor, N class), containing 
+#     """
+#     BOX = int(len(ANCHORS)/2)
+#     ## cell_grid is of the shape of 
     
-#              x, w must be a unit of image width
-#              y, h must be a unit of image height
-#              c must be in between 0 and 1
-#              p^c must be in between 0 and 1
-#     == Output ==
+#     ### adjust x and y  
+#     # the bounding box bx and by are rescaled to range between 0 and 1 for given gird.
+#     # Since there are BOX x BOX grids, we rescale each bx and by to range between 0 to BOX + 1
+#     pred_box_xy = tf.sigmoid(y_pred[..., :2]) + cell_grid # bx, by
     
-#     boxes  : list containing bounding box with Pr(object is in class C) > 0 for at least in one class C 
+#     ### adjust w and h
+#     # exp to make width and height positive
+#     # rescale each grid to make some anchor "good" at representing certain shape of bounding box 
+#     pred_box_wh = tf.exp(y_pred[..., 2:4]) * np.reshape(ANCHORS,[1,1,1,BOX,2]) # bw, bh
+
+#     ### adjust confidence 
+#     pred_box_conf = tf.sigmoid(y_pred[..., 4])# prob bb
+
+#     ### adjust class probabilities 
+#     pred_box_class = y_pred[..., 5:] # prC1, prC2, ..., prC20
+    
+#     return(pred_box_xy,pred_box_wh,pred_box_conf,pred_box_class)
+
+# def extract_ground_truth(y_true):    
+#     true_box_xy    = y_true[..., 0:2] # bounding box x, y coordinate in grid cell scale 
+#     true_box_wh    = y_true[..., 2:4] # number of cells accross, horizontally and vertically
+#     true_box_conf  = y_true[...,4]    # confidence 
+#     true_box_class = tf.argmax(y_true[..., 5:], -1)
+#     return(true_box_xy, true_box_wh, true_box_conf, true_box_class)
+
+# def calc_loss_xywh(true_box_conf,
+#                    COORD_SCALE,
+#                    true_box_xy, pred_box_xy,true_box_wh,pred_box_wh):  
+#     '''
+#     coord_mask:      np.array of shape (Nbatch, Ngrid h, N grid w, N anchor, 1)
+#                      lambda_{coord} L_{i,j}^{obj}     
+                         
+#     '''
+    
+#     # lambda_{coord} L_{i,j}^{obj} 
+#     # np.array of shape (Nbatch, Ngrid h, N grid w, N anchor, 1)
+#     coord_mask  = tf.expand_dims(true_box_conf, axis=-1) * COORD_SCALE 
+#     nb_coord_box = tf.reduce_sum(tf.cast(coord_mask > 0.0, dtype=tf.float32))
+#     loss_xy      = tf.reduce_sum(tf.square(true_box_xy-pred_box_xy) * coord_mask) / (nb_coord_box + 1e-6) / 2.
+#     loss_wh      = tf.reduce_sum(tf.square(true_box_wh-pred_box_wh) * coord_mask) / (nb_coord_box + 1e-6) / 2.
+#     return(loss_xy + loss_wh, coord_mask)
+# def calc_loss_class(true_box_conf,CLASS_SCALE, true_box_class,pred_box_class):
+#     '''
+#     == input ==    
+#     true_box_conf  : tensor of shape (N batch, N grid h, N grid w, N anchor)
+#     true_box_class : tensor of shape (N batch, N grid h, N grid w, N anchor), containing class index
+#     pred_box_class : tensor of shape (N batch, N grid h, N grid w, N anchor, N class)
+#     CLASS_SCALE    : 1.0
+    
+#     == output ==  
+#     class_mask
+#     if object exists in this (grid_cell, anchor) pair and the class object receive nonzero weight
+#         class_mask[iframe,igridy,igridx,ianchor] = 1 
+#     else: 
+#         0 
+#     '''   
+#     class_mask   = true_box_conf  * CLASS_SCALE ## L_{i,j}^obj * lambda_class
+    
+#     nb_class_box = tf.reduce_sum(tf.cast(class_mask > 0.0, dtype=tf.float32))
+#     loss_class   = tf.nn.sparse_softmax_cross_entropy_with_logits(labels = true_box_class, 
+#                                                                   logits = pred_box_class)
+#     loss_class   = tf.reduce_sum(loss_class * class_mask) / (nb_class_box + 1e-6)   
+#     return(loss_class)
+
+
+
+# def get_intersect_area(true_xy,true_wh,
+#                        pred_xy,pred_wh):
+#     '''
+#     == INPUT ==
+#     true_xy,pred_xy, true_wh and pred_wh must have the same shape length
+
+#     p1 : pred_mins = (px1,py1)
+#     p2 : pred_maxs = (px2,py2)
+#     t1 : true_mins = (tx1,ty1) 
+#     t2 : true_maxs = (tx2,ty2) 
+#                  p1______________________ 
+#                  |      t1___________   |
+#                  |       |           |  |
+#                  |_______|___________|__|p2 
+#                          |           |rmax
+#                          |___________|
+#                                       t2
+#     intersect_mins : rmin = t1  = (tx1,ty1)
+#     intersect_maxs : rmax = (rmaxx,rmaxy)
+#     intersect_wh   : (rmaxx - tx1, rmaxy - ty1)
+        
+#     '''
+#     true_wh_half = true_wh / 2.
+#     true_mins    = true_xy - true_wh_half
+#     true_maxes   = true_xy + true_wh_half
+    
+#     pred_wh_half = pred_wh / 2.
+#     pred_mins    = pred_xy - pred_wh_half
+#     pred_maxes   = pred_xy + pred_wh_half    
+    
+#     intersect_mins  = tf.maximum(pred_mins,  true_mins)
+#     intersect_maxes = tf.minimum(pred_maxes, true_maxes)
+#     intersect_wh    = tf.maximum(intersect_maxes - intersect_mins, 0.)
+#     intersect_areas = intersect_wh[..., 0] * intersect_wh[..., 1]
+    
+#     true_areas = true_wh[..., 0] * true_wh[..., 1]
+#     pred_areas = pred_wh[..., 0] * pred_wh[..., 1]
+
+#     union_areas = pred_areas + true_areas - intersect_areas
+#     iou_scores  = tf.truediv(intersect_areas, union_areas)    
+#     return(iou_scores)
+
+# def calc_IOU_pred_true_assigned(true_box_conf,
+#                                 true_box_xy, true_box_wh,
+#                                 pred_box_xy,  pred_box_wh):
+#     ''' 
+#     == input ==
+    
+#     true_box_conf : tensor of shape (N batch, N grid h, N grid w, N anchor )
+#     true_box_xy   : tensor of shape (N batch, N grid h, N grid w, N anchor , 2)
+#     true_box_wh   : tensor of shape (N batch, N grid h, N grid w, N anchor , 2)
+#     pred_box_xy   : tensor of shape (N batch, N grid h, N grid w, N anchor , 2)
+#     pred_box_wh   : tensor of shape (N batch, N grid h, N grid w, N anchor , 2)
+        
+#     == output ==
+    
+#     true_box_conf : tensor of shape (N batch, N grid h, N grid w, N anchor)
+    
+#     true_box_conf value depends on the predicted values 
+#     true_box_conf = IOU_{true,pred} if objecte exist in this anchor else 0
+#     '''
+#     iou_scores        =  get_intersect_area(true_box_xy,true_box_wh,
+#                                             pred_box_xy,pred_box_wh)
+#     true_box_conf_IOU = iou_scores * true_box_conf
+#     return(true_box_conf_IOU)
+
+
+# def calc_IOU_pred_true_best(pred_box_xy,pred_box_wh,true_boxes):   
+#     '''
+#     == input ==
+#     pred_box_xy : tensor of shape (N batch, N grid h, N grid w, N anchor, 2)
+#     pred_box_wh : tensor of shape (N batch, N grid h, N grid w, N anchor, 2)
+#     true_boxes  : tensor of shape (N batch, N grid h, N grid w, N anchor, 2)
+    
+#     == output == 
+    
+#     best_ious
+    
+#     for each iframe,
+#         best_ious[iframe,igridy,igridx,ianchor] contains
+        
+#         the IOU of the object that is most likely included (or best fitted) 
+#         within the bounded box recorded in (grid_cell, anchor) pair
+        
+#         NOTE: a same object may be contained in multiple (grid_cell, anchor) pair
+#               from best_ious, you cannot tell how may actual objects are captured as the "best" object
+#     '''
+#     true_xy = true_boxes[..., 0:2]           # (N batch, 1, 1, 1, TRUE_BOX_BUFFER, 2)
+#     true_wh = true_boxes[..., 2:4]           # (N batch, 1, 1, 1, TRUE_BOX_BUFFER, 2)
+    
+#     pred_xy = tf.expand_dims(pred_box_xy, 4) # (N batch, N grid_h, N grid_w, N anchor, 1, 2)
+#     pred_wh = tf.expand_dims(pred_box_wh, 4) # (N batch, N grid_h, N grid_w, N anchor, 1, 2)
+    
+#     iou_scores  =  get_intersect_area(true_xy,
+#                                       true_wh,
+#                                       pred_xy,
+#                                       pred_wh) # (N batch, N grid_h, N grid_w, N anchor, 50)   
+
+#     best_ious = tf.reduce_max(iou_scores, axis=4) # (N batch, N grid_h, N grid_w, N anchor)
+#     return(best_ious)
+# def get_conf_mask(best_ious, true_box_conf, true_box_conf_IOU,LAMBDA_NO_OBJECT, LAMBDA_OBJECT):    
+#     '''
+#     == input == 
+    
+#     best_ious           : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
+#     true_box_conf       : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
+#     true_box_conf_IOU   : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
+#     LAMBDA_NO_OBJECT    : 1.0
+#     LAMBDA_OBJECT       : 5.0
+    
+#     == output ==
+#     conf_mask : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
+    
+#     conf_mask[iframe, igridy, igridx, ianchor] = 0
+#                when there is no object assigned in (grid cell, anchor) pair and the region seems useless i.e. 
+#                y_true[iframe,igridx,igridy,4] = 0 "and" the predicted region has no object that has IoU > 0.6
+               
+#     conf_mask[iframe, igridy, igridx, ianchor] =  NO_OBJECT_SCALE
+#                when there is no object assigned in (grid cell, anchor) pair but region seems to include some object
+#                y_true[iframe,igridx,igridy,4] = 0 "and" the predicted region has some object that has IoU > 0.6
+               
+#     conf_mask[iframe, igridy, igridx, ianchor] =  OBJECT_SCALE
+#               when there is an object in (grid cell, anchor) pair        
+#     '''
+
+#     conf_mask = tf.cast(best_ious < 0.6,dtype=tf.float32) * (1 - true_box_conf) * LAMBDA_NO_OBJECT
+#     # penalize the confidence of the boxes, which are reponsible for corresponding ground truth box
+#     conf_mask = conf_mask + true_box_conf_IOU * LAMBDA_OBJECT
+#     return(conf_mask)
+
+# def calc_loss_conf(conf_mask,true_box_conf_IOU, pred_box_conf):  
+#     '''
+#     == input ==
+    
+#     conf_mask         : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
+#     true_box_conf_IOU : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
+#     pred_box_conf     : tensor of shape (Nbatch, N grid h, N grid w, N anchor)
+#     '''
+#     # the number of (grid cell, anchor) pair that has an assigned object or
+#     # that has no assigned object but some objects may be in bounding box.
+#     # N conf
+#     nb_conf_box  = tf.reduce_sum(tf.cast(conf_mask  > 0.0, dtype=tf.float32))
+#     loss_conf    = tf.reduce_sum(tf.square(true_box_conf_IOU-pred_box_conf) * conf_mask)  / (nb_conf_box  + 1e-6) / 2.
+#     return(loss_conf)
+
+# def custom_loss_core(y_true,
+#                      y_pred,
+#                      true_boxes,
+#                      GRID_W,
+#                      GRID_H,
+#                      BATCH_SIZE,
+#                      ANCHORS,
+#                      LAMBDA_COORD,
+#                      LAMBDA_CLASS,
+#                      LAMBDA_NO_OBJECT, 
+#                      LAMBDA_OBJECT):
+#     '''
+#     y_true : (N batch, N grid h, N grid w, N anchor, 4 + 1 + N classes)
+#     y_true[irow, i_gridh, i_gridw, i_anchor, :4] = center_x, center_y, w, h
+    
+#         center_x : The x coordinate center of the bounding box.
+#                    Rescaled to range between 0 and N gird  w (e.g., ranging between [0,13)
+#         center_y : The y coordinate center of the bounding box.
+#                    Rescaled to range between 0 and N gird  h (e.g., ranging between [0,13)
+#         w        : The width of the bounding box.
+#                    Rescaled to range between 0 and N gird  w (e.g., ranging between [0,13)
+#         h        : The height of the bounding box.
+#                    Rescaled to range between 0 and N gird  h (e.g., ranging between [0,13)
+                   
+#     y_true[irow, i_gridh, i_gridw, i_anchor, 4] = ground truth confidence
+        
+#         ground truth confidence is 1 if object exists in this (anchor box, gird cell) pair
+    
+#     y_true[irow, i_gridh, i_gridw, i_anchor, 5 + iclass] = 1 if the object is in category <iclass> else 0
+    
+#     =====================================================
+#     tensor that connect to the YOLO model's hack input 
+#     =====================================================    
+    
+#     true_boxes    
+    
+#     =========================================
+#     training parameters specification example 
+#     =========================================
+#     GRID_W             = 13
+#     GRID_H             = 13
+#     BATCH_SIZE         = 34
+#     ANCHORS = np.array([1.07709888,  1.78171903,  # anchor box 1, width , height
+#                         2.71054693,  5.12469308,  # anchor box 2, width,  height
+#                        10.47181473, 10.09646365,  # anchor box 3, width,  height
+#                         5.48531347,  8.11011331]) # anchor box 4, width,  height
+#     LAMBDA_NO_OBJECT = 1.0
+#     LAMBDA_OBJECT    = 5.0
+#     LAMBDA_COORD     = 1.0
+#     LAMBDA_CLASS     = 1.0
+#     ''' 
+#     BOX = int(len(ANCHORS)/2)    
+#     # Step 1: Adjust prediction output
+#     cell_grid   = get_cell_grid(GRID_W,GRID_H,BATCH_SIZE,BOX)
+#     pred_box_xy, pred_box_wh, pred_box_conf, pred_box_class = adjust_scale_prediction(y_pred,cell_grid,ANCHORS)
+#     # Step 2: Extract ground truth output
+#     true_box_xy, true_box_wh, true_box_conf, true_box_class = extract_ground_truth(y_true)
+#     # Step 3: Calculate loss for the bounding box parameters
+#     loss_xywh, coord_mask = calc_loss_xywh(true_box_conf,LAMBDA_COORD,
+#                                            true_box_xy, pred_box_xy,true_box_wh,pred_box_wh)
+#     # Step 4: Calculate loss for the class probabilities
+#     loss_class  = calc_loss_class(true_box_conf,LAMBDA_CLASS,
+#                                    true_box_class,pred_box_class)
+#     # Step 5: For each (grid cell, anchor) pair, 
+#     #         calculate the IoU between predicted and ground truth bounding box
+#     true_box_conf_IOU = calc_IOU_pred_true_assigned(true_box_conf,
+#                                                     true_box_xy, true_box_wh,
+#                                                     pred_box_xy, pred_box_wh)
+#     # Step 6: For each predicted bounded box from (grid cell, anchor box), 
+#     #         calculate the best IOU, regardless of the ground truth anchor box that each object gets assigned.
+#     best_ious = calc_IOU_pred_true_best(pred_box_xy,pred_box_wh,true_boxes)
+#     # Step 7: For each grid cell, calculate the L_{i,j}^{noobj}
+#     conf_mask = get_conf_mask(best_ious, true_box_conf, true_box_conf_IOU,LAMBDA_NO_OBJECT, LAMBDA_OBJECT)
+#     # Step 8: Calculate loss for the confidence
+#     loss_conf = calc_loss_conf(conf_mask,true_box_conf_IOU, pred_box_conf)
+    
+#     loss = loss_xywh + loss_conf + loss_class
+#     return(loss)
+
+# def custom_loss(y_true, y_pred):
+#     loss = custom_loss_core(y_true,
+#                      y_pred,
+#                      true_boxes,
+#                      GRID_W,
+#                      GRID_H,
+#                      BATCH_SIZE,
+#                      ANCHORS,
+#                      LAMBDA_COORD,
+#                      LAMBDA_CLASS,
+#                      LAMBDA_NO_OBJECT, 
+#                      LAMBDA_OBJECT)
+
+    
+#     return loss
+
+
+# # # ========================================================================== ##
+# # # Part 6 Object Detection with Yolo using VOC 2012 data - inference on image
+# # # ========================================================================== ##
+
+# # class OutputRescaler(object):
+# #     def __init__(self,ANCHORS):
+# #         self.ANCHORS = ANCHORS
+
+# #     def _sigmoid(self, x):
+# #         return 1. / (1. + np.exp(-x))
+# #     def _softmax(self, x, axis=-1, t=-100.):
+# #         x = x - np.max(x)
+
+# #         if np.min(x) < t:
+# #             x = x/np.min(x)*t
+
+# #         e_x = np.exp(x)
+# #         return e_x / e_x.sum(axis, keepdims=True)
+# #     def get_shifting_matrix(self,netout):
+        
+# #         GRID_H, GRID_W, BOX = netout.shape[:3]
+# #         no = netout[...,0]
+        
+# #         ANCHORSw = self.ANCHORS[::2]
+# #         ANCHORSh = self.ANCHORS[1::2]
+       
+# #         mat_GRID_W = np.zeros_like(no)
+# #         for igrid_w in range(GRID_W):
+# #             mat_GRID_W[:,igrid_w,:] = igrid_w
+
+# #         mat_GRID_H = np.zeros_like(no)
+# #         for igrid_h in range(GRID_H):
+# #             mat_GRID_H[igrid_h,:,:] = igrid_h
+
+# #         mat_ANCHOR_W = np.zeros_like(no)
+# #         for ianchor in range(BOX):    
+# #             mat_ANCHOR_W[:,:,ianchor] = ANCHORSw[ianchor]
+
+# #         mat_ANCHOR_H = np.zeros_like(no) 
+# #         for ianchor in range(BOX):    
+# #             mat_ANCHOR_H[:,:,ianchor] = ANCHORSh[ianchor]
+# #         return(mat_GRID_W,mat_GRID_H,mat_ANCHOR_W,mat_ANCHOR_H)
+
+# #     def fit(self, netout):    
+# #         '''
+# #         netout  : np.array of shape (N grid h, N grid w, N anchor, 4 + 1 + N class)
+        
+# #         a single image output of model.predict()
+# #         '''
+# #         GRID_H, GRID_W, BOX = netout.shape[:3]
+        
+# #         (mat_GRID_W,
+# #          mat_GRID_H,
+# #          mat_ANCHOR_W,
+# #          mat_ANCHOR_H) = self.get_shifting_matrix(netout)
+
+
+# #         # bounding box parameters
+# #         netout[..., 0]   = (self._sigmoid(netout[..., 0]) + mat_GRID_W)/GRID_W # x      unit: range between 0 and 1
+# #         netout[..., 1]   = (self._sigmoid(netout[..., 1]) + mat_GRID_H)/GRID_H # y      unit: range between 0 and 1
+# #         netout[..., 2]   = (np.exp(netout[..., 2]) * mat_ANCHOR_W)/GRID_W      # width  unit: range between 0 and 1
+# #         netout[..., 3]   = (np.exp(netout[..., 3]) * mat_ANCHOR_H)/GRID_H      # height unit: range between 0 and 1
+# #         # rescale the confidence to range 0 and 1 
+# #         netout[..., 4]   = self._sigmoid(netout[..., 4])
+# #         expand_conf      = np.expand_dims(netout[...,4],-1) # (N grid h , N grid w, N anchor , 1)
+# #         # rescale the class probability to range between 0 and 1
+# #         # Pr(object class = k) = Pr(object exists) * Pr(object class = k |object exists)
+# #         #                      = Conf * P^c
+# #         netout[..., 5:]  = expand_conf * self._softmax(netout[..., 5:])
+# #         # ignore the class probability if it is less than obj_threshold 
+    
+# #         return(netout)
+    
+    
+# # def find_high_class_probability_bbox(netout_scale, obj_threshold):
+# #     '''
+# #     == Input == 
+# #     netout : y_pred[i] np.array of shape (GRID_H, GRID_W, BOX, 4 + 1 + N class)
+    
+# #              x, w must be a unit of image width
+# #              y, h must be a unit of image height
+# #              c must be in between 0 and 1
+# #              p^c must be in between 0 and 1
+# #     == Output ==
+    
+# #     boxes  : list containing bounding box with Pr(object is in class C) > 0 for at least in one class C 
     
              
-#     '''
-#     GRID_H, GRID_W, BOX = netout_scale.shape[:3]
+# #     '''
+# #     GRID_H, GRID_W, BOX = netout_scale.shape[:3]
     
-#     boxes = []
-#     for row in range(GRID_H):
-#         for col in range(GRID_W):
-#             for b in range(BOX):
-#                 # from 4th element onwards are confidence and class classes
-#                 classes = netout_scale[row,col,b,5:]
+# #     boxes = []
+# #     for row in range(GRID_H):
+# #         for col in range(GRID_W):
+# #             for b in range(BOX):
+# #                 # from 4th element onwards are confidence and class classes
+# #                 classes = netout_scale[row,col,b,5:]
                 
-#                 if np.sum(classes) > 0:
-#                     # first 4 elements are x, y, w, and h
-#                     x, y, w, h = netout_scale[row,col,b,:4]
-#                     confidence = netout_scale[row,col,b,4]
-#                     box = BoundBox(x-w/2, y-h/2, x+w/2, y+h/2, confidence, classes)
-#                     if box.get_score() > obj_threshold:
-#                         boxes.append(box)
-#     return(boxes)
+# #                 if np.sum(classes) > 0:
+# #                     # first 4 elements are x, y, w, and h
+# #                     x, y, w, h = netout_scale[row,col,b,:4]
+# #                     confidence = netout_scale[row,col,b,4]
+# #                     box = BoundBox(x-w/2, y-h/2, x+w/2, y+h/2, confidence, classes)
+# #                     if box.get_score() > obj_threshold:
+# #                         boxes.append(box)
+# #     return(boxes)
 
-# import cv2, copy
-# import seaborn as sns
-# def draw_boxes(_image, boxes, labels, obj_baseline=0.05,verbose=False):
-#     '''
-#     image : np.array of shape (N height, N width, 3)
-#     '''
-#     def adjust_minmax(c,_max):
-#         if c < 0:
-#             c = 0   
-#         if c > _max:
-#             c = _max
-#         return c
+# # import cv2, copy
+# # import seaborn as sns
+# # def draw_boxes(_image, boxes, labels, obj_baseline=0.05,verbose=False):
+# #     '''
+# #     image : np.array of shape (N height, N width, 3)
+# #     '''
+# #     def adjust_minmax(c,_max):
+# #         if c < 0:
+# #             c = 0   
+# #         if c > _max:
+# #             c = _max
+# #         return c
     
-#     image = copy.deepcopy(_image)
-#     image_h, image_w, _ = image.shape
-#     score_rescaled  = np.array([box.get_score() for box in boxes])
-#     score_rescaled /= obj_baseline
-#     color_rect,color_text = sns.color_palette("husl", 2)
-#     for sr, box in zip(score_rescaled,boxes):
-#         xmin = adjust_minmax(int(box.xmin*image_w),image_w)
-#         ymin = adjust_minmax(int(box.ymin*image_h),image_h)
-#         xmax = adjust_minmax(int(box.xmax*image_w),image_w)
-#         ymax = adjust_minmax(int(box.ymax*image_h),image_h)
+# #     image = copy.deepcopy(_image)
+# #     image_h, image_w, _ = image.shape
+# #     score_rescaled  = np.array([box.get_score() for box in boxes])
+# #     score_rescaled /= obj_baseline
+# #     color_rect,color_text = sns.color_palette("husl", 2)
+# #     for sr, box in zip(score_rescaled,boxes):
+# #         xmin = adjust_minmax(int(box.xmin*image_w),image_w)
+# #         ymin = adjust_minmax(int(box.ymin*image_h),image_h)
+# #         xmax = adjust_minmax(int(box.xmax*image_w),image_w)
+# #         ymax = adjust_minmax(int(box.ymax*image_h),image_h)
  
         
-#         text = "{:10} {:4.3f}".format(labels[box.label], box.get_score())
-#         if verbose:
-#             print("{} xmin={:4.0f},ymin={:4.0f},xmax={:4.0f},ymax={:4.0f}".format(text,xmin,ymin,xmax,ymax,text))
-#         cv2.rectangle(image, 
-#                       pt1       = (xmin,ymin), 
-#                       pt2       = (xmax,ymax), 
-#                       color     = color_rect, 
-#                       thickness = sr)
-#         cv2.putText(img       = image, 
-#                     text      = text, 
-#                     org       = (xmin+ 13, ymin + 13),
-#                     fontFace  = cv2.FONT_HERSHEY_SIMPLEX,
-#                     fontScale = 1e-3 * image_h,
-#                     color     = color_text,
-#                     thickness = 1)
+# #         text = "{:10} {:4.3f}".format(labels[box.label], box.get_score())
+# #         if verbose:
+# #             print("{} xmin={:4.0f},ymin={:4.0f},xmax={:4.0f},ymax={:4.0f}".format(text,xmin,ymin,xmax,ymax,text))
+# #         cv2.rectangle(image, 
+# #                       pt1       = (xmin,ymin), 
+# #                       pt2       = (xmax,ymax), 
+# #                       color     = color_rect, 
+# #                       thickness = sr)
+# #         cv2.putText(img       = image, 
+# #                     text      = text, 
+# #                     org       = (xmin+ 13, ymin + 13),
+# #                     fontFace  = cv2.FONT_HERSHEY_SIMPLEX,
+# #                     fontScale = 1e-3 * image_h,
+# #                     color     = color_text,
+# #                     thickness = 1)
         
-#     return image
+# #     return image
 
 
 
-# def nonmax_suppression(boxes,iou_threshold,obj_threshold):
-#     '''
-#     boxes : list containing "good" BoundBox of a frame
-#             [BoundBox(),BoundBox(),...]
-#     '''
-#     bestAnchorBoxFinder    = BestAnchorBoxFinder([])
+# # def nonmax_suppression(boxes,iou_threshold,obj_threshold):
+# #     '''
+# #     boxes : list containing "good" BoundBox of a frame
+# #             [BoundBox(),BoundBox(),...]
+# #     '''
+# #     bestAnchorBoxFinder    = BestAnchorBoxFinder([])
     
-#     CLASS    = len(boxes[0].classes)
-#     index_boxes = []   
-#     # suppress non-maximal boxes
-#     for c in range(CLASS):
-#         # extract class probabilities of the c^th class from multiple bbox
-#         class_probability_from_bbxs = [box.classes[c] for box in boxes]
+# #     CLASS    = len(boxes[0].classes)
+# #     index_boxes = []   
+# #     # suppress non-maximal boxes
+# #     for c in range(CLASS):
+# #         # extract class probabilities of the c^th class from multiple bbox
+# #         class_probability_from_bbxs = [box.classes[c] for box in boxes]
 
-#         #sorted_indices[i] contains the i^th largest class probabilities
-#         sorted_indices = list(reversed(np.argsort( class_probability_from_bbxs)))
+# #         #sorted_indices[i] contains the i^th largest class probabilities
+# #         sorted_indices = list(reversed(np.argsort( class_probability_from_bbxs)))
 
-#         for i in range(len(sorted_indices)):
-#             index_i = sorted_indices[i]
+# #         for i in range(len(sorted_indices)):
+# #             index_i = sorted_indices[i]
             
-#             # if class probability is zero then ignore
-#             if boxes[index_i].classes[c] == 0:  
-#                 continue
-#             else:
-#                 index_boxes.append(index_i)
-#                 for j in range(i+1, len(sorted_indices)):
-#                     index_j = sorted_indices[j]
+# #             # if class probability is zero then ignore
+# #             if boxes[index_i].classes[c] == 0:  
+# #                 continue
+# #             else:
+# #                 index_boxes.append(index_i)
+# #                 for j in range(i+1, len(sorted_indices)):
+# #                     index_j = sorted_indices[j]
                     
-#                     # check if the selected i^th bounding box has high IOU with any of the remaining bbox
-#                     # if so, the remaining bbox' class probabilities are set to 0.
-#                     bbox_iou = bestAnchorBoxFinder.bbox_iou(boxes[index_i], boxes[index_j])
-#                     if bbox_iou >= iou_threshold:
-#                         classes = boxes[index_j].classes
-#                         classes[c] = 0
-#                         boxes[index_j].set_class(classes)
+# #                     # check if the selected i^th bounding box has high IOU with any of the remaining bbox
+# #                     # if so, the remaining bbox' class probabilities are set to 0.
+# #                     bbox_iou = bestAnchorBoxFinder.bbox_iou(boxes[index_i], boxes[index_j])
+# #                     if bbox_iou >= iou_threshold:
+# #                         classes = boxes[index_j].classes
+# #                         classes[c] = 0
+# #                         boxes[index_j].set_class(classes)
                         
-#     newboxes = [ boxes[i] for i in index_boxes if boxes[i].get_score() > obj_threshold ]                
+# #     newboxes = [ boxes[i] for i in index_boxes if boxes[i].get_score() > obj_threshold ]                
     
-#     return newboxes  
+# #     return newboxes  
   
-# ## =========================== ##    
-# ## Load Pre-trained weights     
-# ## =========================== ##    
+# # ## =========================== ##    
+# # ## Load Pre-trained weights     
+# # ## =========================== ##    
 
-# class PreTrainedYOLODetector(object):
-#     def __init__(self):
-#         self.LABELS = ['aeroplane',  'bicycle', 'bird',  'boat',      'bottle', 
-#                        'bus',        'car',      'cat',  'chair',     'cow',
-#                        'diningtable','dog',    'horse',  'motorbike', 'person',
-#                        'pottedplant','sheep',  'sofa',   'train',   'tvmonitor']
-#         self.ANCHORS = np.array([1.07709888,  1.78171903,  # anchor box 1, width , height
-#                                  2.71054693,  5.12469308,  # anchor box 2, width,  height
-#                                 10.47181473, 10.09646365,  # anchor box 3, width,  height
-#                                  5.48531347,  8.11011331]) # anchor box 4, width,  height
-#         self.BOX                    = int(len(self.ANCHORS)/2)
-#         self.TRUE_BOX_BUFFER        = 50
-#         self.IMAGE_H, self.IMAGE_W  = 416, 416
-#         self.GRID_H,  self.GRID_W   = 13 , 13
-#         self.CLASS                  = len(self.LABELS)
-#         self.outputRescaler         = OutputRescaler(ANCHORS = self.ANCHORS)
-#         self.imageReader            = ImageReader(self.IMAGE_H,
-#                                                   self.IMAGE_W, 
-#                                                   norm = lambda image : image / 255.)
-#     def load(self,path_to_weights):
-#         model, _          = define_YOLOv2(self.IMAGE_H,
-#                                           self.IMAGE_W,
-#                                           self.GRID_H,
-#                                           self.GRID_W,
-#                                           self.TRUE_BOX_BUFFER,
-#                                           self.BOX,
-#                                           self.CLASS, 
-#                                   trainable = False)
-#         self.model = model.load_weights(path_to_weights)
-#         print("Pretrained weights are loaded")
-#     def predict(self,X):
-#         if len(X.shape) == 3:
-#             X = X.reshape(1,X.shape[0],X.shape[1],X.shape[2])
-#             dummy_array  = np.zeros((X.shape[0],1,1,1,self.TRUE_BOX_BUFFER,4))
-#         y_pred   =  self.model.predict([X,dummy_array])
-#         return(y_pred)
+# # class PreTrainedYOLODetector(object):
+# #     def __init__(self):
+# #         self.LABELS = ['aeroplane',  'bicycle', 'bird',  'boat',      'bottle', 
+# #                        'bus',        'car',      'cat',  'chair',     'cow',
+# #                        'diningtable','dog',    'horse',  'motorbike', 'person',
+# #                        'pottedplant','sheep',  'sofa',   'train',   'tvmonitor']
+# #         self.ANCHORS = np.array([1.07709888,  1.78171903,  # anchor box 1, width , height
+# #                                  2.71054693,  5.12469308,  # anchor box 2, width,  height
+# #                                 10.47181473, 10.09646365,  # anchor box 3, width,  height
+# #                                  5.48531347,  8.11011331]) # anchor box 4, width,  height
+# #         self.BOX                    = int(len(self.ANCHORS)/2)
+# #         self.TRUE_BOX_BUFFER        = 50
+# #         self.IMAGE_H, self.IMAGE_W  = 416, 416
+# #         self.GRID_H,  self.GRID_W   = 13 , 13
+# #         self.CLASS                  = len(self.LABELS)
+# #         self.outputRescaler         = OutputRescaler(ANCHORS = self.ANCHORS)
+# #         self.imageReader            = ImageReader(self.IMAGE_H,
+# #                                                   self.IMAGE_W, 
+# #                                                   norm = lambda image : image / 255.)
+# #     def load(self,path_to_weights):
+# #         model, _          = define_YOLOv2(self.IMAGE_H,
+# #                                           self.IMAGE_W,
+# #                                           self.GRID_H,
+# #                                           self.GRID_W,
+# #                                           self.TRUE_BOX_BUFFER,
+# #                                           self.BOX,
+# #                                           self.CLASS, 
+# #                                   trainable = False)
+# #         self.model = model.load_weights(path_to_weights)
+# #         print("Pretrained weights are loaded")
+# #     def predict(self,X):
+# #         if len(X.shape) == 3:
+# #             X = X.reshape(1,X.shape[0],X.shape[1],X.shape[2])
+# #             dummy_array  = np.zeros((X.shape[0],1,1,1,self.TRUE_BOX_BUFFER,4))
+# #         y_pred   =  self.model.predict([X,dummy_array])
+# #         return(y_pred)
