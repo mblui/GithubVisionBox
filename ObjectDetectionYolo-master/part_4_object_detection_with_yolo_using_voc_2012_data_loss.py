@@ -442,20 +442,17 @@ print("define tensor graph")
 y_pred_tf = tf.constant(y_pred,dtype="float32")
 cell_grid = get_cell_grid(GRID_W,GRID_H,BATCH_SIZE,BOX)
 (pred_box_xy_tf,   pred_box_wh_tf, 
- pred_box_conf_tf, pred_box_class_tf) = adjust_scale_prediction(y_pred_tf, 
-                                                                cell_grid, 
-                                                                ANCHORS)
+ pred_box_conf_tf, pred_box_class_tf) = adjust_scale_prediction(y_pred_tf, cell_grid, ANCHORS)
+
 print("HI THERE!")
 print("*"*30 + "\nouput\n" + "*"*30) 
 ## ADDED BY MART
 #tf.executing
 #tf.compat.v1.disable_eager_execution()
 tf.compat.v1.disable_eager_execution()
-with  tf.compat.v1.Session() as sess:
-    (pred_box_xy,   pred_box_wh, 
-     pred_box_conf, pred_box_class) = sess.run(
-        [pred_box_xy_tf,   pred_box_wh_tf,
-         pred_box_conf_tf, pred_box_class_tf])
+#with  tf.compat.v1.Session() as sess:
+sess = tf.compat.v1.Session()    
+(pred_box_xy,   pred_box_wh, pred_box_conf, pred_box_class) = sess.run([pred_box_xy_tf,   pred_box_wh_tf,pred_box_conf_tf, pred_box_class_tf])
     
 print("\npred_box_xy {}".format(pred_box_xy.shape))           
 for igrid_w in range(pred_box_xy.shape[2]):
