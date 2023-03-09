@@ -229,7 +229,7 @@ model.fit(train_batch_generator,
             #validation_data  = valid_batch,
             #validation_steps = len(valid_batch),
             callbacks        = [early_stop, checkpoint], 
-            max_queue_size   = 3)
+            max_queue_size   = 1)
 
 # """[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
 #  contains this ipython notebook and all the functions that I defined in this notebook. 
