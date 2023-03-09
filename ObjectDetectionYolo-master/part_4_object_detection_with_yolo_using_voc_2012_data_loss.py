@@ -448,7 +448,7 @@ cell_grid = get_cell_grid(GRID_W,GRID_H,BATCH_SIZE,BOX)
 print("HI THERE!")
 print("*"*30 + "\nouput\n" + "*"*30) 
 ## ADDED BY MART
-tf.compat.v1.disable_eager_execution()
+#tf.compat.v1.disable_eager_execution()
 
 with  tf.compat.v1.Session() as sess:
     (pred_box_xy,   pred_box_wh, 
