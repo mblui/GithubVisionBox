@@ -51,7 +51,7 @@ import os, sys
 import tensorflow as tf
 print(sys.version)
 # %matplotlib inline
-
+plt.figure(figsize=(15,15))
 
 """## Define anchor box
 <code>ANCHORS</code> defines the number of anchor boxes and the shape of each anchor box.
