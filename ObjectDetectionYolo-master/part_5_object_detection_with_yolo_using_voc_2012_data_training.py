@@ -204,12 +204,13 @@ except:
 
 BATCH_SIZE   = 32
 generator_config['BATCH_SIZE'] = BATCH_SIZE
-
+print("Ik ben hiero")
 early_stop = EarlyStopping(monitor='loss', 
                            min_delta=0.001, 
                            patience=3, 
                            mode='min', 
                            verbose=1)
+print("Ik ben hiero2")
 
 checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5', 
                              monitor='loss', 
@@ -219,6 +220,7 @@ checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5',
                              save_freq='epoch', 
                              period=10)
 
+print("Ik ben hiero3")
 
 optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 optimizer = SGD(lr=1e-4, decay=0.0005, momentum=0.9)
