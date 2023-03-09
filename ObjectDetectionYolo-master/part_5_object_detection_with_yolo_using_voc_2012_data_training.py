@@ -215,13 +215,14 @@ checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5',
                              monitor='loss', 
                              verbose=1, 
                              save_best_only=True, 
-                             mode='min', 
-                             period=1)
+                             mode='min',
+                             save_freq='epoch', 
+                             period=10)
 
 
-# optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
-# #optimizer = SGD(lr=1e-4, decay=0.0005, momentum=0.9)
-# #optimizer = RMSprop(lr=1e-4, rho=0.9, epsilon=1e-08, decay=0.0)
+optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+optimizer = SGD(lr=1e-4, decay=0.0005, momentum=0.9)
+optimizer = RMSprop(lr=1e-4, rho=0.9, epsilon=1e-08, decay=0.0)
 
 # model.compile(loss=custom_loss, optimizer=optimizer)
 
