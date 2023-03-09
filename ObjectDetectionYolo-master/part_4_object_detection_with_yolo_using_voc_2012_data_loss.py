@@ -52,6 +52,7 @@ import tensorflow as tf
 print(sys.version)
 # %matplotlib inline
 
+
 """## Define anchor box
 <code>ANCHORS</code> defines the number of anchor boxes and the shape of each anchor box.
 The choice of the anchor box specialization is already discussed in [Part 1 Object Detection using YOLOv2 on Pascal VOC2012 - anchor box clustering](https://fairyonice.github.io/Part_1_Object_Detection_with_Yolo_for_VOC_2014_data_anchor_box_clustering.html). 
@@ -82,8 +83,8 @@ This script can be downloaded at [my Github repository, FairyOnIce/ObjectDetecti
 """
 
 ### The location where the VOC2012 data is saved.
-train_image_folder = "../ObjectDetectionRCNN/VOCdevkit/VOC2012/JPEGImages/"
-train_annot_folder = "../ObjectDetectionRCNN/VOCdevkit/VOC2012/Annotations/"
+train_image_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/JPEGImages/"
+train_annot_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/Annotations/"
 
 np.random.seed(1)
 from backend import parse_annotation
