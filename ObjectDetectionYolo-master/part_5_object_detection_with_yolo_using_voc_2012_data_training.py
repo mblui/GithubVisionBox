@@ -202,7 +202,7 @@ except:
     pass
 
 
-BATCH_SIZE   = 32
+BATCH_SIZE   = 16
 generator_config['BATCH_SIZE'] = BATCH_SIZE
 print("*"*30)
 print("Ik ben hiero")
@@ -231,7 +231,6 @@ print("Ik ben hiero4")
 model.compile(loss=custom_loss, optimizer=optimizer)
 print("*"*30)
 print("Ik ben hiero5")
-model.fit()
 model.fit(train_batch_generator, 
             steps_per_epoch  = len(train_batch_generator), 
             epochs           = 5, 
