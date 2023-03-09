@@ -204,33 +204,23 @@ except:
 
 BATCH_SIZE   = 16
 generator_config['BATCH_SIZE'] = BATCH_SIZE
-print("*"*30)
-print("Ik ben hiero")
 early_stop = EarlyStopping(monitor='loss', 
                            min_delta=0.001, 
                            patience=3, 
                            mode='min', 
                            verbose=1)
-print("*"*30)
-print("Ik ben hiero2")
-
 checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5', 
                              monitor='loss', 
                              verbose=1, 
                              save_best_only=True, 
                              mode='min',
                              save_freq='epoch')
-print("*"*30)
-print("Ik ben hiero3")
 
 optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 #optimizer = SGD(lr=1e-4, decay=0.0005, momentum=0.9)
 #optimizer = RMSprop(lr=1e-4, rho=0.9, epsilon=1e-08, decay=0.0)
-print("*"*30)
-print("Ik ben hiero4")
-model.compile(loss=custom_loss, optimizer=optimizer)
-print("*"*30)
-print("Ik ben hiero5")
+tf.disable_eager_execution()
+model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False)
 model.fit(train_batch_generator, 
             steps_per_epoch  = len(train_batch_generator), 
             epochs           = 5, 
