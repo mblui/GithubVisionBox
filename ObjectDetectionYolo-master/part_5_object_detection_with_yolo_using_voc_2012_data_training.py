@@ -138,7 +138,8 @@ The initialization of weights are already discussed in [Part 3 Object Detection 
 All the codes from [Part 3](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html) are stored at [my Github](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py).
 """
 
-path_to_weight = "./yolov2.weights"
+#path_to_weight = "./yolov2.weights"
+path_to_weight = "/home/jetson/Documents/GithHub/GithubVisionBox/ObjectDetectionYolo-master/yolov2.weights"
 nb_conv        = 22
 model          = set_pretrained_weight(model,nb_conv, path_to_weight)
 layer          = model.layers[-4] # the last convolutional layer
