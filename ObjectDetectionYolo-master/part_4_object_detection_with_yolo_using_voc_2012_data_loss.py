@@ -446,6 +446,9 @@ cell_grid = get_cell_grid(GRID_W,GRID_H,BATCH_SIZE,BOX)
                                                                 cell_grid, 
                                                                 ANCHORS)
 print("*"*30 + "\nouput\n" + "*"*30) 
+## ADDED BY MART
+tf.compat.v1.disable_eager_execution()
+
 with  tf.compat.v1.Session() as sess:
     (pred_box_xy,   pred_box_wh, 
      pred_box_conf, pred_box_class) = sess.run(
@@ -764,6 +767,7 @@ print("true_box_conf_IOU.shape = {}".format(true_box_conf_IOU.shape))
 vec  = true_box_conf_IOU.flatten()
 pick = vec!=0
 vec  = vec[pick]
+plt.figure(figsize=(15,15))
 plt.hist(vec)
 plt.title("Histogram\nN (%) nonzero true_box_conf_IOU = {} ({:5.2f}%)".format(np.sum(pick),
                                                              100*np.mean(pick)))
