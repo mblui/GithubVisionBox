@@ -446,7 +446,7 @@ cell_grid = get_cell_grid(GRID_W,GRID_H,BATCH_SIZE,BOX)
                                                                 cell_grid, 
                                                                 ANCHORS)
 print("*"*30 + "\nouput\n" + "*"*30) 
-with tf.Session() as sess:
+with  tf.compat.v1.Session() as sess:
     (pred_box_xy,   pred_box_wh, 
      pred_box_conf, pred_box_class) = sess.run(
         [pred_box_xy_tf,   pred_box_wh_tf,
@@ -524,7 +524,7 @@ y_batch_tf = tf.constant(y_batch,dtype="float32")
 
 print("*"*30 + "\nouput\n" + "*"*30) 
 
-with tf.Session() as sess:
+with  tf.compat.v1.Session() as sess:
         (true_box_xy, true_box_wh, 
          true_box_conf, true_box_class) = sess.run(
                     [true_box_xy_tf,   true_box_wh_tf, 
@@ -595,7 +595,7 @@ loss_xywh_tf, coord_mask_tf  = calc_loss_xywh(true_box_conf_tf,LAMBDA_COORD,
 
 print("*"*30 + "\nouput\n" + "*"*30) 
 
-with tf.Session() as sess:
+with  tf.compat.v1.Session() as sess:
         loss_xywh = sess.run([loss_xywh_tf])[0]
 print("loss_xywh = {:4.3f}".format(loss_xywh))
 
@@ -638,7 +638,7 @@ def calc_loss_class(true_box_conf,CLASS_SCALE, true_box_class,pred_box_class):
 
 #arr  = tf.constant(indices)
 #temp = tf.gather(np.array([100,-20]), arr)
-#with tf.Session() as sess:
+#with  tf.compat.v1.Session() as sess:
 #    t = sess.run(temp)
 #print(t)
 
@@ -652,7 +652,7 @@ LAMBDA_CLASS   = 1
 loss_class_tf  = calc_loss_class(true_box_conf_tf,LAMBDA_CLASS,
                                  true_box_class_tf,pred_box_class_tf)
 print("*"*30 + "\nouput\n" + "*"*30) 
-with tf.Session() as sess:
+with  tf.compat.v1.Session() as sess:
         loss_class = sess.run(loss_class_tf)
 print("loss_class = {:4.3f}".format(loss_class))
 
@@ -751,7 +751,7 @@ true_box_conf_IOU_tf = calc_IOU_pred_true_assigned(
                             true_box_conf_tf,
                             true_box_xy_tf, true_box_wh_tf,
                             pred_box_xy_tf,  pred_box_wh_tf)
-with tf.Session() as sess:
+with  tf.compat.v1.Session() as sess:
     true_box_conf_IOU = sess.run(true_box_conf_IOU_tf)
 print("*"*30 + "\ninput\n" + "*"*30)    
 print("true_box_conf_tf = {}".format(true_box_conf_tf))
@@ -839,7 +839,7 @@ true_boxes_tf = tf.constant(b_batch,dtype="float32")
 best_ious_tf = calc_IOU_pred_true_best(pred_box_xy_tf,
                                        pred_box_wh_tf,
                                        true_boxes_tf)
-with tf.Session() as sess:
+with  tf.compat.v1.Session() as sess:
     best_ious = sess.run(best_ious_tf)
     
 print("*"*30 + "\ninput\n" + "*"*30)    
@@ -916,7 +916,7 @@ print("true_box_conf     = {}".format(true_box_conf_tf))
 print("true_box_conf_IOU = {}".format(true_box_conf_IOU_tf))
 print("LAMBDA_NO_OBJECT  = {}".format(LAMBDA_NO_OBJECT)) 
 print("LAMBDA_OBJECT     = {}".format(LAMBDA_OBJECT))
-with tf.Session() as sess:
+with  tf.compat.v1.Session() as sess:
     conf_mask = sess.run(conf_mask_tf)
 print("*"*30 + "\noutput\n" + "*"*30)      
 print("conf_mask shape = {}".format(conf_mask.shape))
@@ -967,7 +967,7 @@ print("true_box_conf_IOU_tf = {}".format(true_box_conf_IOU_tf))
 print("pred_box_conf_tf     = {}".format(pred_box_conf_tf))
 
 loss_conf_tf = calc_loss_conf(conf_mask_tf,true_box_conf_IOU_tf, pred_box_conf_tf)
-with tf.Session() as sess:
+with  tf.compat.v1.Session() as sess:
     loss_conf = sess.run(loss_conf_tf) 
     
 print("*"*30 + "\noutput\n" + "*"*30)      
@@ -1037,7 +1037,7 @@ def custom_loss(y_true, y_pred):
 
 true_boxes = tf.Variable(np.zeros_like(b_batch),dtype="float32")
 loss_tf    = custom_loss(y_batch_tf, y_pred_tf) 
-with tf.Session() as sess:
+with  tf.compat.v1.Session() as sess:
     loss = sess.run(loss_tf,
                     feed_dict = {true_boxes: b_batch})
 loss
