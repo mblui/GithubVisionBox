@@ -45,6 +45,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os, sys
 import tensorflow as tf
+print(" ### Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+gpus = tf.config.list_physical_devices('GPU')
+for gpu in gpus:
+    tf.config.experimental.set_memory_growth(gpu, True)
+    print("DONE", gpu)
 print(sys.version)
 # %matplotlib inline
 
@@ -76,8 +81,8 @@ This <code>parse_annoation</code> function is already used in [Part 1 Object Det
 This script can be downloaded at [my Github repository, FairyOnIce/ObjectDetectionYolo/backend](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py)."""
 
 ### The location where the VOC2012 data is saved.
-train_image_folder = "../ObjectDetectionRCNN/VOCdevkit/VOC2012/JPEGImages/"
-train_annot_folder = "../ObjectDetectionRCNN/VOCdevkit/VOC2012/Annotations/"
+train_image_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/JPEGImages/"
+train_annot_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/Annotations/"
 
 np.random.seed(1)
 from backend import parse_annotation
