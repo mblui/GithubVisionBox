@@ -450,7 +450,7 @@ print("*"*30 + "\nouput\n" + "*"*30)
 ## ADDED BY MART
 #tf.executing
 #tf.compat.v1.disable_eager_execution()
-
+tf.compat.v1.disable_eager_execution()
 with  tf.compat.v1.Session() as sess:
     (pred_box_xy,   pred_box_wh, 
      pred_box_conf, pred_box_class) = sess.run(
