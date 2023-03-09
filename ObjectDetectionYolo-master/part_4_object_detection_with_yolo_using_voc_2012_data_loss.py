@@ -445,6 +445,7 @@ cell_grid = get_cell_grid(GRID_W,GRID_H,BATCH_SIZE,BOX)
  pred_box_conf_tf, pred_box_class_tf) = adjust_scale_prediction(y_pred_tf, 
                                                                 cell_grid, 
                                                                 ANCHORS)
+print("HI THERE!")
 print("*"*30 + "\nouput\n" + "*"*30) 
 ## ADDED BY MART
 tf.compat.v1.disable_eager_execution()
