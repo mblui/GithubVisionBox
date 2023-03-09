@@ -408,7 +408,7 @@ class SimpleBatchGenerator(tf.keras.utils.Sequence):
 
 # the function to implement the orgnization layer (thanks to github.com/allanzelener/YAD2K)
 def space_to_depth_x2(x):
-    return tf.space_to_depth(x, block_size=2)
+    return tf.nn.space_to_depth(x, block_size=2)
 
 def ConvBatchLReLu(x,filters,kernel_size,index,trainable):
     # when strides = None, strides = pool_size.
