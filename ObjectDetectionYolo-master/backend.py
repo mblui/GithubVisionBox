@@ -405,8 +405,9 @@ class SimpleBatchGenerator(tf.keras.utils.Sequence):
 #from tensorflow.keras.utils import * #import Sequence
 #from tensorflow.keras import Sequence   # NEW MART
 
+# TODO
 # from tensorflow.keras.models import Sequential, Model
-# from tensorflow.keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, BatchNormalization, Flatten, Dense, Lambda
+from tensorflow.keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, BatchNormalization, Flatten, Dense, Lambda
 # from tensorflow.keras.layers import LeakyReLU
 # from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
 # from tensorflow.keras.optimizers import SGD, Adam, RMSprop
