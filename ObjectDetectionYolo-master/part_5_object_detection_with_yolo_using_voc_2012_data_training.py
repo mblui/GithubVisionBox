@@ -108,8 +108,8 @@ This script can be downloaded at [my Github repository, FairyOnIce/ObjectDetecti
 
 from backend import SimpleBatchGenerator
 
-BATCH_SIZE        = 5           # Initial: 500
-IMAGE_H, IMAGE_W  = 416, 416    # Initial: 416, 416
+BATCH_SIZE        = 2           # Initial: 500
+IMAGE_H, IMAGE_W  = 208, 208    # Initial: 416, 416
 GRID_H,  GRID_W   = 13 , 13     # Initial: 13,13
 TRUE_BOX_BUFFER   = 50          # Initial: 50
 BOX               = int(len(ANCHORS)/2)
