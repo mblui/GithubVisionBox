@@ -214,7 +214,7 @@ except:
 BATCH_SIZE   = 5
 generator_config['BATCH_SIZE'] = BATCH_SIZE
 early_stop = EarlyStopping(monitor='loss', 
-                           min_delta=0.001, 
+                           min_delta=0.01, 
                            patience=3, 
                            mode='min', 
                            verbose=0)
@@ -238,7 +238,7 @@ print("From here start compiling HERE!")
 model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False, run_eagerly=False)
 model.run_eagerly = False
 model.fit(train_batch_generator, 
-            steps_per_epoch  = 50, # len(train_batch_generator), 
+            steps_per_epoch  = 20, # len(train_batch_generator), 
             epochs           = 3, 
             verbose          = 1,
             #validation_data  = valid_batch,
