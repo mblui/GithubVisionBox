@@ -77,7 +77,10 @@ CLASS             = len(LABELS)
 model, _          = define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, 
                                   trainable=False)
 
-model.load_weights("weights_yolo_on_voc2012.h5")
+#model.load_weights("weights_yolo_on_voc2012.h5")
+nb_conv        = 22
+model          = set_pretrained_weight(model,nb_conv, path_to_weight)
+
 print("#"*50)
 print("HOI")
 
