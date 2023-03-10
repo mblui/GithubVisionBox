@@ -88,7 +88,6 @@ for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu, True)
     print("DONE", gpu)
 
-FRAC= 0.4
 #tf.config.gpu.set_per_process_memory_fraction(FRAC)
 tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.4)
 #gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.4)

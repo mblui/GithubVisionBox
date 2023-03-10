@@ -139,6 +139,7 @@ CLASS             = len(LABELS)
 model, true_boxes = define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, 
                                   trainable=False)
 model.summary()
+print(model.summary())
 print("#"*50)
 print("model.summary!")
 # """## Initialize the weights
