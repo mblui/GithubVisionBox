@@ -49,8 +49,9 @@ print(sys.version)
 
 """Read in the hyperparameters to define the YOLOv2 model used during training """
 
-train_image_folder = "../ObjectDetectionRCNN/VOCdevkit/VOC2012/JPEGImages/"
-train_annot_folder = "../ObjectDetectionRCNN/VOCdevkit/VOC2012/Annotations/"
+train_image_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/JPEGImages/"
+train_annot_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/Annotations/"
+path_to_weight = "/home/jetson/Documents/GithHub/GithubVisionBox/ObjectDetectionYolo-master/yolov2.weights"
 
 LABELS = ['aeroplane',  'bicycle', 'bird',  'boat',      'bottle', 
           'bus',        'car',      'cat',  'chair',     'cow',
