@@ -81,12 +81,12 @@ def parse_annotation(ann_dir, img_dir, labels=[]):
 import numpy as np
 import cv2
 import copy
-import tensorflow as tf
-print(" ### Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-gpus = tf.config.list_physical_devices('GPU')
-for gpu in gpus:
-    tf.config.experimental.set_memory_growth(gpu, True)
-    print("DONE", gpu)
+# import tensorflow as tf
+# print(" ### Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+# gpus = tf.config.list_physical_devices('GPU')
+# for gpu in gpus:
+#     tf.config.experimental.set_memory_growth(gpu, True)
+#     print("DONE", gpu)
 
 
 
