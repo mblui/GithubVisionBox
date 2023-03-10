@@ -277,7 +277,7 @@ def draw_boxes(image, boxes, labels, obj_baseline=0.05,verbose=False):
                       pt1=(xmin,ymin), 
                       pt2=(xmax,ymax), 
                       color=color, 
-                      thickness=sr)
+                      thickness=1) #sr)
         cv2.putText(img       = image, 
                     text      = text, 
                     org       = (xmin+ 13, ymin + 13),
