@@ -137,115 +137,118 @@ CLASS             = len(LABELS)
 model, true_boxes = define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, 
                                   trainable=False)
 model.summary()
-
-"""## Initialize the weights
-The initialization of weights are already discussed in [Part 3 Object Detection using YOLOv2 on Pascal VOC2012 - model](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html). 
-All the codes from [Part 3](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html) are stored at [my Github](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py).
-"""
-
-#path_to_weight = "./yolov2.weights"
-path_to_weight = "/home/jetson/Documents/GithHub/GithubVisionBox/ObjectDetectionYolo-master/yolov2.weights"
-nb_conv        = 22
-model          = set_pretrained_weight(model,nb_conv, path_to_weight)
-layer          = model.layers[-4] # the last convolutional layer
-initialize_weight(layer,sd=1/(GRID_H*GRID_W))
-
-"""## Loss function
-We already discussed the loss function of YOLOv2 implemented by [experiencor/keras-yolo2](https://github.com/experiencor/keras-yolo2) in [Part 4 Object Detection using YOLOv2 on Pascal VOC2012 - loss](https://fairyonice.github.io/Part_4_Object_Detection_with_Yolo_using_VOC_2012_data_loss.html).
-I modified the codes and the codes are available at [my Github](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py).
-"""
-
-from backend import custom_loss_core 
-#help(custom_loss_core)
-
-"""Notice that this custom function <code>custom_loss_core</code> depends not only on <code>y_true</code> and <code>y_pred</code> but also the various hayperparameters.
-Unfortunately, Keras's loss function API does not accept any parameters except <code>y_true</code> and <code>y_pred</code>. Therefore, these hyperparameters need to be defined globaly. 
-To do this, I will define a wrapper function <code>custom_loss</code>.
-"""
-
-GRID_W             = 13
-GRID_H             = 13
-BATCH_SIZE         = 34
-LAMBDA_NO_OBJECT = 1.0
-LAMBDA_OBJECT    = 5.0
-LAMBDA_COORD     = 1.0
-LAMBDA_CLASS     = 1.0
-    
-def custom_loss(y_true, y_pred):
-    return(custom_loss_core(
-                     y_true,
-                     y_pred,
-                     true_boxes,
-                     GRID_W,
-                     GRID_H,
-                     BATCH_SIZE,
-                     ANCHORS,
-                     LAMBDA_COORD,
-                     LAMBDA_CLASS,
-                     LAMBDA_NO_OBJECT, 
-                     LAMBDA_OBJECT))
-
-"""## Training starts here! 
-Finally, we start the training here.
-We only train the final 23rd layer and freeze the other weights.
-This is because I am unfortunately using CPU environment.
-"""
-
-
-
-
-dir_log = "logs/"
-try:
-    os.makedirs(dir_log)
-except:
-    pass
-
-
-BATCH_SIZE   = 4
-generator_config['BATCH_SIZE'] = BATCH_SIZE
-early_stop = EarlyStopping(monitor='loss', 
-                           min_delta=0.001, 
-                           patience=3, 
-                           mode='min', 
-                           verbose=1)
-checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5', 
-                             monitor='loss', 
-                             verbose=1, 
-                             save_best_only=True, 
-                             mode='min',
-                             save_freq='epoch')
-
-optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
-#optimizer = SGD(lr=1e-4, decay=0.0005, momentum=0.9)
-#optimizer = RMSprop(lr=1e-4, rho=0.9, epsilon=1e-08, decay=0.0)
-#tf.compat.v1.disable_eager_execution()
 print("#"*30)
 print("I'm HERE!")
-model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False, run_eagerly=True)
-model.run_eagerly = True
-model.fit(train_batch_generator, 
-            steps_per_epoch  = len(train_batch_generator), 
-            epochs           = 1, 
-            verbose          = 1,
-            #validation_data  = valid_batch,
-            #validation_steps = len(valid_batch),
-            callbacks        = [early_stop, checkpoint], 
-            max_queue_size   = 1)
-
-# """[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
-#  contains this ipython notebook and all the functions that I defined in this notebook. 
-
-# By accident, I stopped a notebook.
-# Here, let's resume the training..
+# """## Initialize the weights
+# The initialization of weights are already discussed in [Part 3 Object Detection using YOLOv2 on Pascal VOC2012 - model](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html). 
+# All the codes from [Part 3](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html) are stored at [my Github](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py).
 # """
 
-# model.load_weights('weights_yolo_on_voc2012.h5')
-# model.fit_generator(generator        = train_batch_generator, 
-#                     steps_per_epoch  = len(train_batch_generator), 
-#                     epochs           = 50, 
-#                     verbose          = 1,
-#                     #validation_data  = valid_batch,
-#                     #validation_steps = len(valid_batch),
-#                     callbacks        = [early_stop, checkpoint], 
-#                     max_queue_size   = 3)
+# #path_to_weight = "./yolov2.weights"
+# path_to_weight = "/home/jetson/Documents/GithHub/GithubVisionBox/ObjectDetectionYolo-master/yolov2.weights"
+# nb_conv        = 22
+# model          = set_pretrained_weight(model,nb_conv, path_to_weight)
+# layer          = model.layers[-4] # the last convolutional layer
+# initialize_weight(layer,sd=1/(GRID_H*GRID_W))
+
+# """## Loss function
+# We already discussed the loss function of YOLOv2 implemented by [experiencor/keras-yolo2](https://github.com/experiencor/keras-yolo2) in [Part 4 Object Detection using YOLOv2 on Pascal VOC2012 - loss](https://fairyonice.github.io/Part_4_Object_Detection_with_Yolo_using_VOC_2012_data_loss.html).
+# I modified the codes and the codes are available at [my Github](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py).
+# """
+
+# from backend import custom_loss_core 
+# #help(custom_loss_core)
+
+# """Notice that this custom function <code>custom_loss_core</code> depends not only on <code>y_true</code> and <code>y_pred</code> but also the various hayperparameters.
+# Unfortunately, Keras's loss function API does not accept any parameters except <code>y_true</code> and <code>y_pred</code>. Therefore, these hyperparameters need to be defined globaly. 
+# To do this, I will define a wrapper function <code>custom_loss</code>.
+# """
+# print("#"*30)
+# print("I'm HERE2!")
+# GRID_W             = 13
+# GRID_H             = 13
+# BATCH_SIZE         = 34
+# LAMBDA_NO_OBJECT = 1.0
+# LAMBDA_OBJECT    = 5.0
+# LAMBDA_COORD     = 1.0
+# LAMBDA_CLASS     = 1.0
+    
+# def custom_loss(y_true, y_pred):
+#     return(custom_loss_core(
+#                      y_true,
+#                      y_pred,
+#                      true_boxes,
+#                      GRID_W,
+#                      GRID_H,
+#                      BATCH_SIZE,
+#                      ANCHORS,
+#                      LAMBDA_COORD,
+#                      LAMBDA_CLASS,
+#                      LAMBDA_NO_OBJECT, 
+#                      LAMBDA_OBJECT))
+
+# """## Training starts here! 
+# Finally, we start the training here.
+# We only train the final 23rd layer and freeze the other weights.
+# This is because I am unfortunately using CPU environment.
+# """
+
+
+# print("#"*30)
+# print("I'm HERE1!")
+
+# dir_log = "logs/"
+# try:
+#     os.makedirs(dir_log)
+# except:
+#     pass
+
+
+# BATCH_SIZE   = 4
+# generator_config['BATCH_SIZE'] = BATCH_SIZE
+# early_stop = EarlyStopping(monitor='loss', 
+#                            min_delta=0.001, 
+#                            patience=3, 
+#                            mode='min', 
+#                            verbose=1)
+# checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5', 
+#                              monitor='loss', 
+#                              verbose=1, 
+#                              save_best_only=True, 
+#                              mode='min',
+#                              save_freq='epoch')
+
+# optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+# #optimizer = SGD(lr=1e-4, decay=0.0005, momentum=0.9)
+# #optimizer = RMSprop(lr=1e-4, rho=0.9, epsilon=1e-08, decay=0.0)
+# #tf.compat.v1.disable_eager_execution()
+# print("#"*30)
+# print("I'm HERE!")
+# model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False, run_eagerly=True)
+# model.run_eagerly = True
+# model.fit(train_batch_generator, 
+#             steps_per_epoch  = len(train_batch_generator), 
+#             epochs           = 1, 
+#             verbose          = 1,
+#             #validation_data  = valid_batch,
+#             #validation_steps = len(valid_batch),
+#             callbacks        = [early_stop, checkpoint], 
+#             max_queue_size   = 1)
+
+# # """[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
+# #  contains this ipython notebook and all the functions that I defined in this notebook. 
+
+# # By accident, I stopped a notebook.
+# # Here, let's resume the training..
+# # """
+
+# # model.load_weights('weights_yolo_on_voc2012.h5')
+# # model.fit_generator(generator        = train_batch_generator, 
+# #                     steps_per_epoch  = len(train_batch_generator), 
+# #                     epochs           = 50, 
+# #                     verbose          = 1,
+# #                     #validation_data  = valid_batch,
+# #                     #validation_steps = len(valid_batch),
+# #                     callbacks        = [early_stop, checkpoint], 
+# #                     max_queue_size   = 3)
 
