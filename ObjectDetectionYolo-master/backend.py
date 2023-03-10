@@ -88,6 +88,9 @@ for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu, True)
     print("DONE", gpu)
 
+gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.4)
+session = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
+
 
 
 class ImageReader(object):

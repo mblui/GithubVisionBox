@@ -104,43 +104,43 @@ This script can be downloaded at [my Github repository, FairyOnIce/ObjectDetecti
 
 from backend import SimpleBatchGenerator
 
-# BATCH_SIZE        = 5
-# IMAGE_H, IMAGE_W  = 208, 208
-# GRID_H,  GRID_W   = 13 , 13
-# TRUE_BOX_BUFFER   = 50
-# BOX               = int(len(ANCHORS)/2)
+BATCH_SIZE        = 5
+IMAGE_H, IMAGE_W  = 208, 208
+GRID_H,  GRID_W   = 13 , 13
+TRUE_BOX_BUFFER   = 50
+BOX               = int(len(ANCHORS)/2)
 
-# generator_config = {
-#     'IMAGE_H'         : IMAGE_H, 
-#     'IMAGE_W'         : IMAGE_W,
-#     'GRID_H'          : GRID_H,  
-#     'GRID_W'          : GRID_W,
-#     'LABELS'          : LABELS,
-#     'ANCHORS'         : ANCHORS,
-#     'BATCH_SIZE'      : BATCH_SIZE,
-#     'TRUE_BOX_BUFFER' : TRUE_BOX_BUFFER,
-# }
+generator_config = {
+    'IMAGE_H'         : IMAGE_H, 
+    'IMAGE_W'         : IMAGE_W,
+    'GRID_H'          : GRID_H,  
+    'GRID_W'          : GRID_W,
+    'LABELS'          : LABELS,
+    'ANCHORS'         : ANCHORS,
+    'BATCH_SIZE'      : BATCH_SIZE,
+    'TRUE_BOX_BUFFER' : TRUE_BOX_BUFFER,
+}
 
-# print("#"*50)
-# print("I'm HERE!")
+print("#"*50)
+print("I'm HERE!")
 
-# def normalize(image):
-#     return image / 255.
-# train_batch_generator = SimpleBatchGenerator(train_image, generator_config,
-#                                              norm=normalize, shuffle=True)
+def normalize(image):
+    return image / 255.
+train_batch_generator = SimpleBatchGenerator(train_image, generator_config,
+                                             norm=normalize, shuffle=True)
 
-# """## Define model
-# We define a YOLO model.
-# The model defenition function is already discussed in [Part 3 Object Detection using YOLOv2 on Pascal VOC2012 - model](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html) and all the codes are available at [my Github](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py).
-# """
+"""## Define model
+We define a YOLO model.
+The model defenition function is already discussed in [Part 3 Object Detection using YOLOv2 on Pascal VOC2012 - model](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html) and all the codes are available at [my Github](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py).
+"""
 
-# from backend import define_YOLOv2, set_pretrained_weight, initialize_weight
-# CLASS             = len(LABELS)
-# model, true_boxes = define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, 
-#                                   trainable=False)
-# model.summary()
-# print("#"*50)
-# print("model.summary!")
+from backend import define_YOLOv2, set_pretrained_weight, initialize_weight
+CLASS             = len(LABELS)
+model, true_boxes = define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, 
+                                  trainable=False)
+model.summary()
+print("#"*50)
+print("model.summary!")
 # """## Initialize the weights
 # The initialization of weights are already discussed in [Part 3 Object Detection using YOLOv2 on Pascal VOC2012 - model](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html). 
 # All the codes from [Part 3](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html) are stored at [my Github](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py).
