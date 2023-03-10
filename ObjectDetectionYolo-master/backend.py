@@ -83,6 +83,8 @@ import cv2
 import copy
 import tensorflow as tf
 import os
+
+
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 print(" ### Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
@@ -93,6 +95,8 @@ for gpu in gpus:
 
 #tf.config.gpu.set_per_process_memory_fraction(FRAC)
 tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.4)
+from tensorflow.python.framework.ops import disable_eager_execution
+disable_eager_execution()
 #gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.4)
 #session = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 
