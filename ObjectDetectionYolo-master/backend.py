@@ -81,12 +81,12 @@ def parse_annotation(ann_dir, img_dir, labels=[]):
 import numpy as np
 import cv2
 import copy
-# import tensorflow as tf
-# print(" ### Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-# gpus = tf.config.list_physical_devices('GPU')
-# for gpu in gpus:
-#     tf.config.experimental.set_memory_growth(gpu, True)
-#     print("DONE", gpu)
+import tensorflow as tf
+print(" ### Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+gpus = tf.config.list_physical_devices('GPU')
+for gpu in gpus:
+    tf.config.experimental.set_memory_growth(gpu, True)
+    print("DONE", gpu)
 
 
 
@@ -405,14 +405,13 @@ class SimpleBatchGenerator(tf.keras.utils.Sequence):
 #from tensorflow.keras.utils import * #import Sequence
 #from tensorflow.keras import Sequence   # NEW MART
 
-# TODO
-# from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, BatchNormalization, Flatten, Dense, Lambda
-# from tensorflow.keras.layers import LeakyReLU
-# from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
-# from tensorflow.keras.optimizers import SGD, Adam, RMSprop
-# from tensorflow.keras.layers import concatenate
-# import tensorflow.keras.backend as K
+from tensorflow.keras.layers import LeakyReLU
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
+from tensorflow.keras.optimizers import SGD, Adam, RMSprop
+from tensorflow.keras.layers import concatenate
+import tensorflow.keras.backend as K
 
 # the function to implement the orgnization layer (thanks to github.com/allanzelener/YAD2K)
 def space_to_depth_x2(x):

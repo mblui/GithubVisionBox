@@ -44,17 +44,17 @@ This repository contains all the ipython notebooks in this blog series and the f
 import matplotlib.pyplot as plt
 import numpy as np
 import os, sys
-from tensorflow.keras.callbacks import EarlyStopping 
-from tensorflow.keras.callbacks import ModelCheckpoint
-from tensorflow.keras.optimizers import SGD 
-from tensorflow.keras.optimizers import Adam 
-from tensorflow.keras.optimizers import RMSprop
-import tensorflow as tf
-print(" ### Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-gpus = tf.config.list_physical_devices('GPU')
-for gpu in gpus:
-    tf.config.experimental.set_memory_growth(gpu, True)
-    print("DONE", gpu)
+# from tensorflow.keras.callbacks import EarlyStopping 
+# from tensorflow.keras.callbacks import ModelCheckpoint
+# from tensorflow.keras.optimizers import SGD 
+# from tensorflow.keras.optimizers import Adam 
+# from tensorflow.keras.optimizers import RMSprop
+# import tensorflow as tf
+# print(" ### Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+# gpus = tf.config.list_physical_devices('GPU')
+# for gpu in gpus:
+#     tf.config.experimental.set_memory_growth(gpu, True)
+#     print("DONE", gpu)
 print(sys.version)
 # %matplotlib inline
 
