@@ -45,7 +45,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os, sys
 from tensorflow.keras.callbacks import EarlyStopping 
-print("END OF SCRIPT")
 from tensorflow.keras.callbacks import ModelCheckpoint
 from tensorflow.keras.optimizers import SGD 
 from tensorflow.keras.optimizers import Adam 
