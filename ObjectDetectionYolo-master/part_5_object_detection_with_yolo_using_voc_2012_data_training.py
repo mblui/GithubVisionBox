@@ -235,15 +235,15 @@ optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 #tf.compat.v1.disable_eager_execution()
 print("#"*50)
 print("From here start compiling HERE!")
-model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False, run_eagerly=True)
-model.run_eagerly = True
+model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False, run_eagerly=False)
+model.run_eagerly = False
 model.fit(train_batch_generator, 
             steps_per_epoch  = len(train_batch_generator), 
             epochs           = 3, 
             verbose          = 1,
             #validation_data  = valid_batch,
             #validation_steps = len(valid_batch),
-            callbacks        = [early_stop, checkpoint], 
+            callbacks        = [checkpoint], #[early_stop, checkpoint], 
             max_queue_size   = 3)
 
 # """[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
