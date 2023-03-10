@@ -277,7 +277,7 @@ def draw_boxes(image, boxes, labels, obj_baseline=0.05,verbose=False):
                       pt1=(xmin,ymin), 
                       pt2=(xmax,ymax), 
                       color=color, 
-                      thickness=1) #sr)
+                      thickness=5) #sr)
         cv2.putText(img       = image, 
                     text      = text, 
                     org       = (xmin+ 13, ymin + 13),
@@ -369,39 +369,39 @@ plt.figure(figsize=figsize)
 plt.imshow(ima); 
 plt.show()
 
-"""# More examples """
+# """# More examples """
 
-np.random.seed(1)
-Nsample   = 20
-image_nms = list(np.random.choice(os.listdir(train_image_folder),Nsample))
+# np.random.seed(1)
+# Nsample   = 20
+# image_nms = list(np.random.choice(os.listdir(train_image_folder),Nsample))
 
-outputRescaler = OutputRescaler(ANCHORS=ANCHORS)
-imageReader    = ImageReader(IMAGE_H,IMAGE_W=IMAGE_W, norm=lambda image : image / 255.)
-X_test         = []
-for img_nm in image_nms:
-    _path    = os.path.join(train_image_folder,img_nm)
-    out      = imageReader.fit(_path)
-    X_test.append(out)
+# outputRescaler = OutputRescaler(ANCHORS=ANCHORS)
+# imageReader    = ImageReader(IMAGE_H,IMAGE_W=IMAGE_W, norm=lambda image : image / 255.)
+# X_test         = []
+# for img_nm in image_nms:
+#     _path    = os.path.join(train_image_folder,img_nm)
+#     out      = imageReader.fit(_path)
+#     X_test.append(out)
 
-X_test = np.array(X_test)
+# X_test = np.array(X_test)
 
-## model
-dummy_array    = np.zeros((len(X_test),1,1,1,TRUE_BOX_BUFFER,4))
-y_pred         = model.predict([X_test,dummy_array])
+# ## model
+# dummy_array    = np.zeros((len(X_test),1,1,1,TRUE_BOX_BUFFER,4))
+# y_pred         = model.predict([X_test,dummy_array])
 
-for iframe in range(len(y_pred)):
-        netout         = y_pred[iframe] 
-        netout_scale   = outputRescaler.fit(netout)
-        boxes          = find_high_class_probability_bbox(netout_scale,obj_threshold)
-        if len(boxes) > 0:
-            final_boxes    = nonmax_suppression(boxes,
-                                                iou_threshold=iou_threshold,
-                                                obj_threshold=obj_threshold)
-            ima = draw_boxes(X_test[iframe],final_boxes,LABELS,verbose=True)
-            plt.figure(figsize=figsize)
-            plt.imshow(ima); 
-            plt.show()
+# for iframe in range(len(y_pred)):
+#         netout         = y_pred[iframe] 
+#         netout_scale   = outputRescaler.fit(netout)
+#         boxes          = find_high_class_probability_bbox(netout_scale,obj_threshold)
+#         if len(boxes) > 0:
+#             final_boxes    = nonmax_suppression(boxes,
+#                                                 iou_threshold=iou_threshold,
+#                                                 obj_threshold=obj_threshold)
+#             ima = draw_boxes(X_test[iframe],final_boxes,LABELS,verbose=True)
+#             plt.figure(figsize=figsize)
+#             plt.imshow(ima); 
+#             plt.show()
 
-"""[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
- contains this ipython notebook and all the functions that I defined in this notebook. 
-"""
+# """[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
+#  contains this ipython notebook and all the functions that I defined in this notebook. 
+# """
