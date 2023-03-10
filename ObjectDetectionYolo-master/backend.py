@@ -418,7 +418,7 @@ from tensorflow.keras.models import Sequential, Model
 #from tensorflow.keras.layers import LeakyReLU
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
 from tensorflow.keras.optimizers import SGD, Adam, RMSprop
-from tensorflow.keras.layers import concatenate
+#from tensorflow.keras.layers import concatenate
 import tensorflow.keras.backend as K
 
 # the function to implement the orgnization layer (thanks to github.com/allanzelener/YAD2K)
@@ -493,7 +493,7 @@ def define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, train
                                      kernel_size=(1,1),index=21,trainable=trainable)
     skip_connection = tf.keras.layers.Lambda(space_to_depth_x2)(skip_connection)
 
-    x = concatenate([skip_connection, x])
+    x = tf.keras.layers.concatenate([skip_connection, x])
 
     # Layer 22
     x = ConvBatchLReLu(x,filters=1024,kernel_size=(3,3),index=22,trainable=trainable)
