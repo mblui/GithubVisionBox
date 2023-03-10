@@ -238,7 +238,7 @@ print("From here start compiling HERE!")
 model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False, run_eagerly=False)
 model.run_eagerly = False
 model.fit(train_batch_generator, 
-            steps_per_epoch  = 10, # len(train_batch_generator), 
+            steps_per_epoch  = len(train_batch_generator), 
             epochs           = 3, 
             verbose          = 1,
             #validation_data  = valid_batch,
