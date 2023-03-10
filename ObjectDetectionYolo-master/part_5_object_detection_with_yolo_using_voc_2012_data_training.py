@@ -108,7 +108,7 @@ This script can be downloaded at [my Github repository, FairyOnIce/ObjectDetecti
 
 from backend import SimpleBatchGenerator
 
-BATCH_SIZE        = 1           # Initial: 500
+BATCH_SIZE        = 5           # Initial: 500
 IMAGE_H, IMAGE_W  = 416, 416    # Initial: 416, 416
 GRID_H,  GRID_W   = 13 , 13     # Initial: 13,13
 TRUE_BOX_BUFFER   = 50          # Initial: 50
@@ -174,7 +174,7 @@ To do this, I will define a wrapper function <code>custom_loss</code>.
 
 GRID_W             = 13
 GRID_H             = 13
-BATCH_SIZE         = 34
+#BATCH_SIZE         = 34
 LAMBDA_NO_OBJECT = 1.0
 LAMBDA_OBJECT    = 5.0
 LAMBDA_COORD     = 1.0
@@ -211,7 +211,7 @@ except:
     pass
 
 
-BATCH_SIZE   = 5
+#BATCH_SIZE   = 5
 generator_config['BATCH_SIZE'] = BATCH_SIZE
 early_stop = EarlyStopping(monitor='loss', 
                            min_delta=0.001, 
