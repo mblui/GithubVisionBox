@@ -413,7 +413,7 @@ class SimpleBatchGenerator(tf.keras.utils.Sequence):
 #from tensorflow.keras.utils import * #import Sequence
 #from tensorflow.keras import Sequence   # NEW MART
 
-from tensorflow.keras.models import Sequential, Model
+#from tensorflow.keras.models import Sequential, Model
 #from tensorflow.keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, BatchNormalization, Flatten, Dense, Lambda
 #from tensorflow.keras.layers import LeakyReLU
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
@@ -506,7 +506,7 @@ def define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, train
     # for more information: https://github.com/fchollet/keras/issues/2790
     output = tf.keras.layers.Lambda(lambda args: args[0],name="hack_layer")([output, true_boxes])
 
-    model = Model([input_image, true_boxes], output)
+    model = tf.keras.models.Model([input_image, true_boxes], output)
     return(model, true_boxes)
 
 class WeightReader:
