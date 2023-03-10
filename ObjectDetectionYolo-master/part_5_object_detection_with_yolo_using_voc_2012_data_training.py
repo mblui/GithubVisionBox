@@ -44,8 +44,8 @@ This repository contains all the ipython notebooks in this blog series and the f
 import matplotlib.pyplot as plt
 import numpy as np
 import os, sys
-# from tensorflow.keras.callbacks import EarlyStopping 
-# from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.callbacks import EarlyStopping 
+from tensorflow.keras.callbacks import ModelCheckpoint
 # from tensorflow.keras.optimizers import SGD 
 # from tensorflow.keras.optimizers import Adam 
 # from tensorflow.keras.optimizers import RMSprop
@@ -167,8 +167,7 @@ print("imported custom_loss_core!")
 Unfortunately, Keras's loss function API does not accept any parameters except <code>y_true</code> and <code>y_pred</code>. Therefore, these hyperparameters need to be defined globaly. 
 To do this, I will define a wrapper function <code>custom_loss</code>.
 """
-print("#"*30)
-print("I'm HERE2!")
+
 GRID_W             = 13
 GRID_H             = 13
 BATCH_SIZE         = 34
@@ -190,37 +189,41 @@ def custom_loss(y_true, y_pred):
                      LAMBDA_CLASS,
                      LAMBDA_NO_OBJECT, 
                      LAMBDA_OBJECT))
+print("#"*30)
+print("Training Starts Here!")
 
-# """## Training starts here! 
-# Finally, we start the training here.
-# We only train the final 23rd layer and freeze the other weights.
-# This is because I am unfortunately using CPU environment.
-# """
-
-
-# print("#"*30)
-# print("I'm HERE1!")
-
-# dir_log = "logs/"
-# try:
-#     os.makedirs(dir_log)
-# except:
-#     pass
+"""## Training starts here! 
+Finally, we start the training here.
+We only train the final 23rd layer and freeze the other weights.
+This is because I am unfortunately using CPU environment.
+"""
 
 
-# BATCH_SIZE   = 4
-# generator_config['BATCH_SIZE'] = BATCH_SIZE
-# early_stop = EarlyStopping(monitor='loss', 
-#                            min_delta=0.001, 
-#                            patience=3, 
-#                            mode='min', 
-#                            verbose=1)
-# checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5', 
-#                              monitor='loss', 
-#                              verbose=1, 
-#                              save_best_only=True, 
-#                              mode='min',
-#                              save_freq='epoch')
+
+dir_log = "logs/"
+try:
+    os.makedirs(dir_log)
+except:
+    pass
+
+
+BATCH_SIZE   = 4
+generator_config['BATCH_SIZE'] = BATCH_SIZE
+early_stop = EarlyStopping(monitor='loss', 
+                           min_delta=0.001, 
+                           patience=3, 
+                           mode='min', 
+                           verbose=1)
+checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5', 
+                             monitor='loss', 
+                             verbose=1, 
+                             save_best_only=True, 
+                             mode='min',
+                             save_freq='epoch')
+
+print("#"*30)
+print("earlystop_and_checkpoint!")
+
 
 # optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 # #optimizer = SGD(lr=1e-4, decay=0.0005, momentum=0.9)
