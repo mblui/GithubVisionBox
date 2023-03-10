@@ -92,6 +92,7 @@ This script can be downloaded at [my Github repository, FairyOnIce/ObjectDetecti
 ### The location where the VOC2012 data is saved.
 train_image_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/JPEGImages/"
 train_annot_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/Annotations/"
+path_to_weight = "/home/jetson/Documents/GithHub/GithubVisionBox/ObjectDetectionYolo-master/yolov2.weights"
 
 np.random.seed(1)
 from backend import parse_annotation
