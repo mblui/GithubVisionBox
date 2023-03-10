@@ -71,7 +71,7 @@ GRID_H,  GRID_W   = 13 , 13
 
 """Load the weights trained in [Part 5](https://fairyonice.github.io/Part_5_Object_Detection_with_Yolo_using_VOC_2012_data_training.html)"""
 
-from backend import define_YOLOv2
+from backend import define_YOLOv2, set_pretrained_weight
 
 CLASS             = len(LABELS)
 model, _          = define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, 
