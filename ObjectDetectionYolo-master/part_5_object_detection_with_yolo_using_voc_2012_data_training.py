@@ -108,10 +108,10 @@ This script can be downloaded at [my Github repository, FairyOnIce/ObjectDetecti
 
 from backend import SimpleBatchGenerator
 
-BATCH_SIZE        = 2           # Initial: 500
-IMAGE_H, IMAGE_W  = 208, 208    # Initial: 416, 416
+BATCH_SIZE        = 5           # Initial: 500
+IMAGE_H, IMAGE_W  = 416, 416    # Initial: 416, 416
 GRID_H,  GRID_W   = 13 , 13     # Initial: 13,13
-TRUE_BOX_BUFFER   = 20          # Initial: 50
+TRUE_BOX_BUFFER   = 50          # Initial: 50
 BOX               = int(len(ANCHORS)/2)
 
 generator_config = {
@@ -236,7 +236,7 @@ optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 print("#"*50)
 print("From here start compiling HERE!")
 #model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False, run_eagerly=True)
-model.compile(loss=custom_loss, optimizer=optimizer)
+model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False, run_eagerly=True)
 model.run_eagerly = True
 model.fit(train_batch_generator, 
             steps_per_epoch  = len(train_batch_generator), 
