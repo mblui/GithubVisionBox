@@ -211,13 +211,13 @@ except:
     pass
 
 
-BATCH_SIZE   = 4
+BATCH_SIZE   = 1
 generator_config['BATCH_SIZE'] = BATCH_SIZE
 early_stop = EarlyStopping(monitor='loss', 
                            min_delta=0.001, 
                            patience=3, 
                            mode='min', 
-                           verbose=1)
+                           verbose=0)
 checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5', 
                              monitor='loss', 
                              verbose=1, 
