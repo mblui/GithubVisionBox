@@ -44,8 +44,11 @@ This repository contains all the ipython notebooks in this blog series and the f
 import matplotlib.pyplot as plt
 import numpy as np
 import os, sys
-from tensorflow.keras.callbacks import EarlyStopping 
-from tensorflow.keras.callbacks import ModelCheckpoint
+
+from backend import EarlyStopping
+from backend import ModelCheckpoint
+#from tensorflow.keras.callbacks import EarlyStopping 
+#from tensorflow.keras.callbacks import ModelCheckpoint
 # from tensorflow.keras.optimizers import SGD 
 # from tensorflow.keras.optimizers import Adam 
 # from tensorflow.keras.optimizers import RMSprop
