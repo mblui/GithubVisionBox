@@ -139,58 +139,57 @@ CLASS             = len(LABELS)
 model, true_boxes = define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, 
                                   trainable=False)
 model.summary()
-print(model.summary())
 print("#"*50)
 print("model.summary!")
-# """## Initialize the weights
-# The initialization of weights are already discussed in [Part 3 Object Detection using YOLOv2 on Pascal VOC2012 - model](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html). 
-# All the codes from [Part 3](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html) are stored at [my Github](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py).
-# """
+"""## Initialize the weights
+The initialization of weights are already discussed in [Part 3 Object Detection using YOLOv2 on Pascal VOC2012 - model](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html). 
+All the codes from [Part 3](https://fairyonice.github.io/Part_3_Object_Detection_with_Yolo_using_VOC_2012_data_model.html) are stored at [my Github](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py).
+"""
 
-# #path_to_weight = "./yolov2.weights"
-# path_to_weight = "/home/jetson/Documents/GithHub/GithubVisionBox/ObjectDetectionYolo-master/yolov2.weights"
-# nb_conv        = 22
-# model          = set_pretrained_weight(model,nb_conv, path_to_weight)
-# layer          = model.layers[-4] # the last convolutional layer
-# initialize_weight(layer,sd=1/(GRID_H*GRID_W))
+#path_to_weight = "./yolov2.weights"
+path_to_weight = "/home/jetson/Documents/GithHub/GithubVisionBox/ObjectDetectionYolo-master/yolov2.weights"
+nb_conv        = 22
+model          = set_pretrained_weight(model,nb_conv, path_to_weight)
+layer          = model.layers[-4] # the last convolutional layer
+initialize_weight(layer,sd=1/(GRID_H*GRID_W))
 
-# """## Loss function
-# We already discussed the loss function of YOLOv2 implemented by [experiencor/keras-yolo2](https://github.com/experiencor/keras-yolo2) in [Part 4 Object Detection using YOLOv2 on Pascal VOC2012 - loss](https://fairyonice.github.io/Part_4_Object_Detection_with_Yolo_using_VOC_2012_data_loss.html).
-# I modified the codes and the codes are available at [my Github](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py).
-# """
+"""## Loss function
+We already discussed the loss function of YOLOv2 implemented by [experiencor/keras-yolo2](https://github.com/experiencor/keras-yolo2) in [Part 4 Object Detection using YOLOv2 on Pascal VOC2012 - loss](https://fairyonice.github.io/Part_4_Object_Detection_with_Yolo_using_VOC_2012_data_loss.html).
+I modified the codes and the codes are available at [my Github](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py).
+"""
 
 from backend import custom_loss_core 
 #help(custom_loss_core)
 print("#"*30)
 print("imported custom_loss_core!")
 
-# """Notice that this custom function <code>custom_loss_core</code> depends not only on <code>y_true</code> and <code>y_pred</code> but also the various hayperparameters.
-# Unfortunately, Keras's loss function API does not accept any parameters except <code>y_true</code> and <code>y_pred</code>. Therefore, these hyperparameters need to be defined globaly. 
-# To do this, I will define a wrapper function <code>custom_loss</code>.
-# """
-# print("#"*30)
-# print("I'm HERE2!")
-# GRID_W             = 13
-# GRID_H             = 13
-# BATCH_SIZE         = 34
-# LAMBDA_NO_OBJECT = 1.0
-# LAMBDA_OBJECT    = 5.0
-# LAMBDA_COORD     = 1.0
-# LAMBDA_CLASS     = 1.0
+"""Notice that this custom function <code>custom_loss_core</code> depends not only on <code>y_true</code> and <code>y_pred</code> but also the various hayperparameters.
+Unfortunately, Keras's loss function API does not accept any parameters except <code>y_true</code> and <code>y_pred</code>. Therefore, these hyperparameters need to be defined globaly. 
+To do this, I will define a wrapper function <code>custom_loss</code>.
+"""
+print("#"*30)
+print("I'm HERE2!")
+GRID_W             = 13
+GRID_H             = 13
+BATCH_SIZE         = 34
+LAMBDA_NO_OBJECT = 1.0
+LAMBDA_OBJECT    = 5.0
+LAMBDA_COORD     = 1.0
+LAMBDA_CLASS     = 1.0
     
-# def custom_loss(y_true, y_pred):
-#     return(custom_loss_core(
-#                      y_true,
-#                      y_pred,
-#                      true_boxes,
-#                      GRID_W,
-#                      GRID_H,
-#                      BATCH_SIZE,
-#                      ANCHORS,
-#                      LAMBDA_COORD,
-#                      LAMBDA_CLASS,
-#                      LAMBDA_NO_OBJECT, 
-#                      LAMBDA_OBJECT))
+def custom_loss(y_true, y_pred):
+    return(custom_loss_core(
+                     y_true,
+                     y_pred,
+                     true_boxes,
+                     GRID_W,
+                     GRID_H,
+                     BATCH_SIZE,
+                     ANCHORS,
+                     LAMBDA_COORD,
+                     LAMBDA_CLASS,
+                     LAMBDA_NO_OBJECT, 
+                     LAMBDA_OBJECT))
 
 # """## Training starts here! 
 # Finally, we start the training here.
