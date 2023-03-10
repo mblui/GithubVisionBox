@@ -211,10 +211,10 @@ except:
     pass
 
 
-BATCH_SIZE   = 1
+BATCH_SIZE   = 5
 generator_config['BATCH_SIZE'] = BATCH_SIZE
 early_stop = EarlyStopping(monitor='loss', 
-                           min_delta=0.01, 
+                           min_delta=0.001, 
                            patience=3, 
                            mode='min', 
                            verbose=0)
@@ -246,7 +246,6 @@ model.fit(train_batch_generator,
             callbacks        = [checkpoint], #[early_stop, checkpoint], 
             max_queue_size   = 1)
 
-#test
 # """[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
 #  contains this ipython notebook and all the functions that I defined in this notebook. 
 
