@@ -211,7 +211,7 @@ except:
     pass
 
 
-BATCH_SIZE   = 10
+BATCH_SIZE   = 5
 generator_config['BATCH_SIZE'] = BATCH_SIZE
 early_stop = EarlyStopping(monitor='loss', 
                            min_delta=0.001, 
