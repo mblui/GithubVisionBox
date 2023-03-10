@@ -89,7 +89,7 @@ for gpu in gpus:
     print("DONE", gpu)
 
 #tf.config.gpu.set_per_process_memory_fraction(FRAC)
-tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.4)
+tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.45)
 #gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.4)
 #session = tf.Session(config=tf.ConfigProto(gpu_options=gpu_options))
 

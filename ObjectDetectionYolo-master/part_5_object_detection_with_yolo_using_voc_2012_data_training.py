@@ -47,6 +47,7 @@ import os, sys
 
 from backend import EarlyStopping
 from backend import ModelCheckpoint
+from backend import Adam
 #from tensorflow.keras.callbacks import EarlyStopping 
 #from tensorflow.keras.callbacks import ModelCheckpoint
 # from tensorflow.keras.optimizers import SGD 
@@ -228,37 +229,37 @@ print("#"*30)
 print("earlystop_and_checkpoint!")
 
 
-# optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
-# #optimizer = SGD(lr=1e-4, decay=0.0005, momentum=0.9)
-# #optimizer = RMSprop(lr=1e-4, rho=0.9, epsilon=1e-08, decay=0.0)
-# #tf.compat.v1.disable_eager_execution()
-# print("#"*30)
-# print("I'm HERE!")
-# model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False, run_eagerly=True)
-# model.run_eagerly = True
-# model.fit(train_batch_generator, 
-#             steps_per_epoch  = len(train_batch_generator), 
-#             epochs           = 1, 
-#             verbose          = 1,
-#             #validation_data  = valid_batch,
-#             #validation_steps = len(valid_batch),
-#             callbacks        = [early_stop, checkpoint], 
-#             max_queue_size   = 1)
+optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
+#optimizer = SGD(lr=1e-4, decay=0.0005, momentum=0.9)
+#optimizer = RMSprop(lr=1e-4, rho=0.9, epsilon=1e-08, decay=0.0)
+#tf.compat.v1.disable_eager_execution()
+print("#"*50)
+print("From here start compiling HERE!")
+model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False, run_eagerly=True)
+model.run_eagerly = True
+model.fit(train_batch_generator, 
+            steps_per_epoch  = len(train_batch_generator), 
+            epochs           = 3, 
+            verbose          = 1,
+            #validation_data  = valid_batch,
+            #validation_steps = len(valid_batch),
+            callbacks        = [early_stop, checkpoint], 
+            max_queue_size   = 3)
 
-# # """[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
-# #  contains this ipython notebook and all the functions that I defined in this notebook. 
+# """[FairyOnIce/ObjectDetectionYolo](https://github.com/FairyOnIce/ObjectDetectionYolo)
+#  contains this ipython notebook and all the functions that I defined in this notebook. 
 
-# # By accident, I stopped a notebook.
-# # Here, let's resume the training..
-# # """
+# By accident, I stopped a notebook.
+# Here, let's resume the training..
+# """
 
-# # model.load_weights('weights_yolo_on_voc2012.h5')
-# # model.fit_generator(generator        = train_batch_generator, 
-# #                     steps_per_epoch  = len(train_batch_generator), 
-# #                     epochs           = 50, 
-# #                     verbose          = 1,
-# #                     #validation_data  = valid_batch,
-# #                     #validation_steps = len(valid_batch),
-# #                     callbacks        = [early_stop, checkpoint], 
-# #                     max_queue_size   = 3)
+# model.load_weights('weights_yolo_on_voc2012.h5')
+# model.fit_generator(generator        = train_batch_generator, 
+#                     steps_per_epoch  = len(train_batch_generator), 
+#                     epochs           = 50, 
+#                     verbose          = 1,
+#                     #validation_data  = valid_batch,
+#                     #validation_steps = len(valid_batch),
+#                     callbacks        = [early_stop, checkpoint], 
+#                     max_queue_size   = 3)
 
