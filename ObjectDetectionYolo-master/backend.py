@@ -414,8 +414,8 @@ class SimpleBatchGenerator(tf.keras.utils.Sequence):
 #from tensorflow.keras import Sequence   # NEW MART
 
 from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, BatchNormalization, Flatten, Dense, Lambda
-from tensorflow.keras.layers import LeakyReLU
+#from tensorflow.keras.layers import Reshape, Activation, Conv2D, Input, MaxPooling2D, BatchNormalization, Flatten, Dense, Lambda
+#from tensorflow.keras.layers import LeakyReLU
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, TensorBoard
 from tensorflow.keras.optimizers import SGD, Adam, RMSprop
 from tensorflow.keras.layers import concatenate
@@ -427,11 +427,11 @@ def space_to_depth_x2(x):
 
 def ConvBatchLReLu(x,filters,kernel_size,index,trainable):
     # when strides = None, strides = pool_size.
-    x = Conv2D(filters, kernel_size, strides=(1,1), 
+    x = tf.keras.layers.Conv2D(filters, kernel_size, strides=(1,1), 
                padding='same', name='conv_{}'.format(index), 
                use_bias=False, trainable=trainable)(x)
-    x = BatchNormalization(name='norm_{}'.format(index), trainable=trainable)(x)
-    x = LeakyReLU(alpha=0.1)(x)
+    x = tf.keras.layers.BatchNormalization(name='norm_{}'.format(index), trainable=trainable)(x)
+    x = tf.keras.layers.LeakyReLU(alpha=0.1)(x)
     return(x)
 def ConvBatchLReLu_loop(x,index,convstack,trainable):
     for para in convstack:
@@ -461,29 +461,29 @@ def define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, train
                        {"filters":1024, "kernel_size":(3,3)}, # 19
                        {"filters":1024, "kernel_size":(3,3)}] # 20
     
-    input_image = Input(shape=(IMAGE_H, IMAGE_W, 3),name="input_image")
-    true_boxes  = Input(shape=(1, 1, 1, TRUE_BOX_BUFFER , 4),name="input_hack")    
+    input_image = tf.keras.layers.Input(shape=(IMAGE_H, IMAGE_W, 3),name="input_image")
+    true_boxes  = tf.keras.layers.Input(shape=(1, 1, 1, TRUE_BOX_BUFFER , 4),name="input_hack")    
     # Layer 1
     x = ConvBatchLReLu(input_image,filters=32,kernel_size=(3,3),index=1,trainable=trainable)
     
-    x = MaxPooling2D(pool_size=(2, 2),name="maxpool1_416to208")(x)
+    x = tf.keras.layers.MaxPooling2D(pool_size=(2, 2),name="maxpool1_416to208")(x)
     # Layer 2
     x = ConvBatchLReLu(x,filters=64,kernel_size=(3,3),index=2,trainable=trainable)
-    x = MaxPooling2D(pool_size=(2, 2),name="maxpool1_208to104")(x)
+    x = tf.keras.layers.MaxPooling2D(pool_size=(2, 2),name="maxpool1_208to104")(x)
     
     # Layer 3 - 5
     x = ConvBatchLReLu_loop(x,3,convstack3to5,trainable)
-    x = MaxPooling2D(pool_size=(2, 2),name="maxpool1_104to52")(x)
+    x = tf.keras.layers.MaxPooling2D(pool_size=(2, 2),name="maxpool1_104to52")(x)
     
     # Layer 6 - 8 
     x = ConvBatchLReLu_loop(x,6,convstack6to8,trainable)
-    x = MaxPooling2D(pool_size=(2, 2),name="maxpool1_52to26")(x) 
+    x = tf.keras.layers.MaxPooling2D(pool_size=(2, 2),name="maxpool1_52to26")(x) 
 
     # Layer 9 - 13
     x = ConvBatchLReLu_loop(x,9,convstack9to13,trainable)
         
     skip_connection = x
-    x = MaxPooling2D(pool_size=(2, 2),name="maxpool1_26to13")(x)
+    x = tf.keras.layers.MaxPooling2D(pool_size=(2, 2),name="maxpool1_26to13")(x)
     
     # Layer 14 - 20
     x = ConvBatchLReLu_loop(x,14,convstack14to20,trainable)
@@ -491,7 +491,7 @@ def define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, train
     # Layer 21
     skip_connection = ConvBatchLReLu(skip_connection,filters=64,
                                      kernel_size=(1,1),index=21,trainable=trainable)
-    skip_connection = Lambda(space_to_depth_x2)(skip_connection)
+    skip_connection = tf.keras.layers.Lambda(space_to_depth_x2)(skip_connection)
 
     x = concatenate([skip_connection, x])
 
@@ -499,12 +499,12 @@ def define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, train
     x = ConvBatchLReLu(x,filters=1024,kernel_size=(3,3),index=22,trainable=trainable)
 
     # Layer 23
-    x = Conv2D(BOX * (4 + 1 + CLASS), (1,1), strides=(1,1), padding='same', name='conv_23')(x)
-    output = Reshape((GRID_H, GRID_W, BOX, 4 + 1 + CLASS),name="final_output")(x)
+    x = tf.keras.layers.Conv2D(BOX * (4 + 1 + CLASS), (1,1), strides=(1,1), padding='same', name='conv_23')(x)
+    output = tf.keras.layers.Reshape((GRID_H, GRID_W, BOX, 4 + 1 + CLASS),name="final_output")(x)
 
     # small hack to allow true_boxes to be registered when Keras build the model 
     # for more information: https://github.com/fchollet/keras/issues/2790
-    output = Lambda(lambda args: args[0],name="hack_layer")([output, true_boxes])
+    output = tf.keras.layers.Lambda(lambda args: args[0],name="hack_layer")([output, true_boxes])
 
     model = Model([input_image, true_boxes], output)
     return(model, true_boxes)
