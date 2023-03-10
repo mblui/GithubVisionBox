@@ -43,7 +43,7 @@ This repository contains all the ipython notebooks in this blog series and the f
 # Commented out IPython magic to ensure Python compatibility.
 import matplotlib.pyplot as plt
 import numpy as np
-import os, sys
+import os #, sys
 
 from backend import EarlyStopping
 from backend import ModelCheckpoint
@@ -59,7 +59,7 @@ from backend import Adam
 # for gpu in gpus:
 #     tf.config.experimental.set_memory_growth(gpu, True)
 #     print("DONE", gpu)
-print(sys.version)
+#print(sys.version)
 # %matplotlib inline
 
 """## Define anchor box
@@ -108,7 +108,7 @@ This script can be downloaded at [my Github repository, FairyOnIce/ObjectDetecti
 
 from backend import SimpleBatchGenerator
 
-BATCH_SIZE        = 5           # Initial: 500
+BATCH_SIZE        = 1           # Initial: 500
 IMAGE_H, IMAGE_W  = 416, 416    # Initial: 416, 416
 GRID_H,  GRID_W   = 13 , 13     # Initial: 13,13
 TRUE_BOX_BUFFER   = 50          # Initial: 50
