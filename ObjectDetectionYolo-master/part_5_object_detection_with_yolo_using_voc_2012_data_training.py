@@ -211,10 +211,10 @@ except:
     pass
 
 
-BATCH_SIZE   = 2
+BATCH_SIZE   = 4
 generator_config['BATCH_SIZE'] = BATCH_SIZE
 early_stop = EarlyStopping(monitor='loss', 
-                           min_delta=0.01, 
+                           min_delta=0.001, 
                            patience=3, 
                            mode='min', 
                            verbose=1)
@@ -235,7 +235,6 @@ optimizer = Adam(lr=0.5e-4, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)
 #tf.compat.v1.disable_eager_execution()
 print("#"*50)
 print("From here start compiling HERE!")
-#model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False, run_eagerly=True)
 model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_function=False, run_eagerly=True)
 model.run_eagerly = True
 model.fit(train_batch_generator, 
