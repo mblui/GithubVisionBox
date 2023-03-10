@@ -76,7 +76,10 @@ from backend import define_YOLOv2
 CLASS             = len(LABELS)
 model, _          = define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, 
                                   trainable=False)
+
 model.load_weights("weights_yolo_on_voc2012.h5")
+print("#"*50)
+print("HOI")
 
 """# Perform detection on sample image
 
