@@ -445,7 +445,7 @@ def ConvBatchLReLu_loop(x,index,convstack,trainable):
 def define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, trainable=False):
     convstack3to5  = [{"filters":128, "kernel_size":(3,3)},  # 3
                       {"filters":64,  "kernel_size":(1,1)},  # 4
-                      {"filters":64, "kernel_size":(3,3)}]  # 5
+                      {"filters":128, "kernel_size":(3,3)}]  # 5
                     
     convstack6to8  = [{"filters":64, "kernel_size":(3,3)},  # 6
                       {"filters":64, "kernel_size":(1,1)},  # 7
@@ -468,11 +468,11 @@ def define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, train
     input_image = tf.keras.layers.Input(shape=(IMAGE_H, IMAGE_W, 3),name="input_image")
     true_boxes  = tf.keras.layers.Input(shape=(1, 1, 1, TRUE_BOX_BUFFER , 4),name="input_hack")    
     # Layer 1
-    x = ConvBatchLReLu(input_image,filters=16,kernel_size=(3,3),index=1,trainable=trainable)
+    x = ConvBatchLReLu(input_image,filters=32,kernel_size=(3,3),index=1,trainable=trainable)
     
     x = tf.keras.layers.MaxPooling2D(pool_size=(2, 2),name="maxpool1_416to208")(x)
     # Layer 2
-    x = ConvBatchLReLu(x,filters=16,kernel_size=(3,3),index=2,trainable=trainable)
+    x = ConvBatchLReLu(x,filters=64,kernel_size=(3,3),index=2,trainable=trainable)
     x = tf.keras.layers.MaxPooling2D(pool_size=(2, 2),name="maxpool1_208to104")(x)
     
     # Layer 3 - 5
