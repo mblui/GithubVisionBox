@@ -240,7 +240,7 @@ model.compile(loss=custom_loss, optimizer=optimizer, experimental_run_tf_functio
 model.run_eagerly = False
 model.fit(train_batch_generator, 
             steps_per_epoch  = len(train_batch_generator), 
-            epochs           = 3, 
+            epochs           = 5, 
             verbose          = 1,
             #validation_data  = valid_batch,
             #validation_steps = len(valid_batch),
