@@ -90,8 +90,8 @@ This <code>parse_annoation</code> function is already used in [Part 1 Object Det
 This script can be downloaded at [my Github repository, FairyOnIce/ObjectDetectionYolo/backend](https://github.com/FairyOnIce/ObjectDetectionYolo/blob/master/backend.py)."""
 
 ### The location where the VOC2012 data is saved.
-train_image_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/JPEGImages/"
-train_annot_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012/Annotations/"
+train_image_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012_backup/JPEGImages/"
+train_annot_folder = "/home/jetson/Desktop/VOCdevkit/VOC2012_backup/Annotations/"
 path_to_weight = "/home/jetson/Documents/GithHub/GithubVisionBox/ObjectDetectionYolo-master/yolov2.weights"
 
 np.random.seed(1)
