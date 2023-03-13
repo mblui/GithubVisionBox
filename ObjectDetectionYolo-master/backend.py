@@ -94,7 +94,7 @@ for gpu in gpus:
     print("DONE", gpu)
 
 #tf.config.gpu.set_per_process_memory_fraction(FRAC)
-#tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.95)
+tf.compat.v1.GPUOptions(per_process_gpu_memory_fraction=0.95)
 from tensorflow.python.framework.ops import disable_eager_execution
 disable_eager_execution()
 #gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.4)
@@ -447,23 +447,23 @@ def define_YOLOv2(IMAGE_H,IMAGE_W,GRID_H,GRID_W,TRUE_BOX_BUFFER,BOX,CLASS, train
                       {"filters":64,  "kernel_size":(1,1)},  # 4
                       {"filters":128, "kernel_size":(3,3)}]  # 5
                     
-    convstack6to8  = [{"filters":64, "kernel_size":(3,3)},  # 6
-                      {"filters":64, "kernel_size":(1,1)},  # 7
-                      {"filters":64, "kernel_size":(3,3)}]  # 8
+    convstack6to8  = [{"filters":256, "kernel_size":(3,3)},  # 6
+                      {"filters":128, "kernel_size":(1,1)},  # 7
+                      {"filters":256, "kernel_size":(3,3)}]  # 8
     
-    convstack9to13 = [{"filters":64, "kernel_size":(3,3)},  # 9
-                      {"filters":64, "kernel_size":(1,1)},  # 10
-                      {"filters":64, "kernel_size":(3,3)},  # 11
-                      {"filters":64, "kernel_size":(1,1)},  # 12
-                      {"filters":64, "kernel_size":(3,3)}]  # 13
+    convstack9to13 = [{"filters":512, "kernel_size":(3,3)},  # 9
+                      {"filters":256, "kernel_size":(1,1)},  # 10
+                      {"filters":512, "kernel_size":(3,3)},  # 11
+                      {"filters":256, "kernel_size":(1,1)},  # 12
+                      {"filters":512, "kernel_size":(3,3)}]  # 13
         
-    convstack14to20 = [{"filters":64, "kernel_size":(3,3)}, # 14 
-                       {"filters":64,  "kernel_size":(1,1)}, # 15
-                       {"filters":64, "kernel_size":(3,3)}, # 16
-                       {"filters":64,  "kernel_size":(1,1)}, # 17
-                       {"filters":64, "kernel_size":(3,3)}, # 18
-                       {"filters":64, "kernel_size":(3,3)}, # 19
-                       {"filters":64, "kernel_size":(3,3)}] # 20
+    convstack14to20 = [{"filters":1024, "kernel_size":(3,3)}, # 14 
+                       {"filters":512,  "kernel_size":(1,1)}, # 15
+                       {"filters":1024, "kernel_size":(3,3)}, # 16
+                       {"filters":512,  "kernel_size":(1,1)}, # 17
+                       {"filters":1024, "kernel_size":(3,3)}, # 18
+                       {"filters":1024, "kernel_size":(3,3)}, # 19
+                       {"filters":1024, "kernel_size":(3,3)}] # 20
     
     input_image = tf.keras.layers.Input(shape=(IMAGE_H, IMAGE_W, 3),name="input_image")
     true_boxes  = tf.keras.layers.Input(shape=(1, 1, 1, TRUE_BOX_BUFFER , 4),name="input_hack")    
