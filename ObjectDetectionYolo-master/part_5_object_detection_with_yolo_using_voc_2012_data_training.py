@@ -109,7 +109,7 @@ This script can be downloaded at [my Github repository, FairyOnIce/ObjectDetecti
 
 from backend import SimpleBatchGenerator
 
-BATCH_SIZE        = 500          # Initial: 500
+BATCH_SIZE        = 200          # Initial: 500
 IMAGE_H, IMAGE_W  = 416, 416    # Initial: 416, 416
 GRID_H,  GRID_W   = 13 , 13     # Initial: 13,13
 TRUE_BOX_BUFFER   = 50          # Initial: 50
@@ -212,13 +212,13 @@ except:
     pass
 
 
-#BATCH_SIZE   = 5
+BATCH_SIZE   = 32
 generator_config['BATCH_SIZE'] = BATCH_SIZE
 early_stop = EarlyStopping(monitor='loss', 
                            min_delta=0.001, 
                            patience=3, 
                            mode='min', 
-                           verbose=0)
+                           verbose=1)
 checkpoint = ModelCheckpoint('weights_yolo_on_voc2012.h5', 
                              monitor='loss', 
                              verbose=1, 
