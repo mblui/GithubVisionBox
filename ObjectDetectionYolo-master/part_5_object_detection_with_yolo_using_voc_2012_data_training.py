@@ -175,7 +175,7 @@ To do this, I will define a wrapper function <code>custom_loss</code>.
 
 GRID_W             = 13
 GRID_H             = 13
-BATCH_SIZE         = 34
+#BATCH_SIZE         = 34
 LAMBDA_NO_OBJECT = 1.0
 LAMBDA_OBJECT    = 5.0
 LAMBDA_COORD     = 1.0
